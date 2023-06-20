@@ -1,0 +1,88 @@
+\documentclass{article}
+% Choose a conveniently small page size
+% PACKAGES
+\usepackage[margin = 1in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{amsthm}
+\usepackage{dsfont}
+\usepackage{hyperref}
+
+% MACROS
+% Set Theory
+\def\N{\mathbb{N}}
+\def\R{\mathbb{R}}
+\def\C{\mathbb{C}}
+\def\Z{\mathbb{Z}}
+%\def\^{\hat}
+\def\-{\vec}
+\def\d{\partial}
+\def\!{\boldsymbol}
+\def\X{\times}
+%\def\-{\bar}
+\def\bf{\textbf}
+\def\l{\left}
+\def\r{\right}
+\title{Meeting Agendas}
+\author{Damien}
+\begin{document}
+\maketitle
+\newpage
+\section*{June 14, 2023}
+Participants: Amanda and Damien
+\subsection*{Agenda}
+Today, we are discussing the following three papers
+\begin{itemize}
+	\item Multifidelity PINN: \url{https://arxiv.org/pdf/1903.00104.pdf}
+	\item Multifidelity DeepONets: \url{https://arxiv.org/pdf/2204.09157.pdf}
+	\item Multifidelity Continual Learning: \url{https://arxiv.org/pdf/2304.03894.pdf} 
+\end{itemize}
+\subsection*{Questions}
+\subsubsection*{Multifidelity PINNs}
+\begin{itemize}
+	\item[Q] We do not have to train the final final neural network that takes in $y_H$ and outputs $f_e$, correct? This is simply used for penalization?
+	\item[A] This is correct.
+	\item[Q] Does penalizing the gradient force the solution to converge to an approximation that is locally at least first order?
+	\item[A] They penalize the gradient because it trains better. 
+	\item[Q] Can you discuss in more detail how each sub-network is trained?
+	\item[A] Training is done separately generally for each network separately. However, linear and nonlinear are trained simultaneously. The low-fidelity method can be trained separately. Training can be done all simultaneously?
+	\item[Q] How is data used for training in Figure 3? Did they train on data not in Figure 3a?
+	\item[A] Figure 3a contains all the training data. There is probably more testing data.
+\end{itemize}
+\subsubsection*{Multifidelity DeepONets}
+\begin{itemize}
+	\item[Q] What are the essential differences between PINNs and DeepONets?
+	\begin{itemize}
+		\item For DeepONets you DO need to train the last network since you do not know the functional form of the operator, correct?
+		\item[A] PINNs train for one initial condition. Deep operator networks attempt to learn how all initial conditions map to solutions. The operator form is known, so the last part is known. We do not need to train the operator.
+		\item What are the key differences in how PINNs and ONets are trained?
+		\item[A] Need smaller time steps and more data for DeepONets as opposed to PINNs.
+	\end{itemize}
+	\item[Q] How are $M_L$ and $P_L$ related in Figure 1?
+	\item[A] $M_L$ contains the points/data needed to get a unique solution of the differential equation. $P_L$ are simply data that we interpolate.
+	\item[Q] How is data used for training in Figure 2? Did they train on data not in Figure 2a? How many epochs did it take?
+	\item[A]
+\end{itemize}
+\subsubsection*{Continual Learning}
+\begin{itemize}
+	\item[Q] You talked about this a bit yesterday, but what are the assumptions we make as far as knowledge about the low-fidelity model we are given? 
+	\begin{itemize}
+		\item Even if we do not know the data the low-fidelity model was trained on, do we know the domain that data was in?
+		\item[A] We assume that the low-fidelity network is correlated with the solution on the new data set. We do not necessarily even know what domain the previous network was trained on.
+		\item If the previous answer is yes, then why are we treating $\mathcal{NN}_{i-1}$ as a low-fidelity predictor on $\Omega_{i-1}$?
+	\end{itemize}
+	\item[Q] Why do we need to train a single fidelity and a multifidelity PINN on $\Omega_1$? 
+	\item[A] The results were better when you initialize the multifidelity approach in this manner.
+\end{itemize}
+\subsubsection*{General Questions}
+\begin{itemize}
+	\item[Q] Have you performed experiments with noise? Are these methods robust to noisy data?
+	\item[A] There is error added to the low-fidelity data in Burger's equation in the ONet paper. The high-fidelity data helps compensate for this noise.
+\end{itemize}
+
+\end{document}
