@@ -1,0 +1,79 @@
+\documentclass[11pt]{article}
+\usepackage{C:/Users/damie/OneDrive/Tex-Style/article-preamble/article}
+\date{August 2022}
+\providecommand{\keywords}[1]
+{
+  \small	
+  \textbf{\textit{Keywords---}} #1
+}
+
+\title{Machine Learning for Chaotic Dynamical Systems}
+\author{Damien Beecroft$^{1}$  \\
+        \small $^{1}$ \it{University of Washington, Applied Mathematics} \\
+}
+\begin{document}
+\maketitle
+\begin{abstract}
+FILL IN ABSTRACT
+\end{abstract} \hspace{10pt}
+
+\keywords{Machine Learning, Dynamical Systems, Chaos, Physics Informed Neural Networks}
+\section{Introduction}
+Summary of Papers:
+\begin{itemize}
+\item PINNs: A PINN penalizes the solution if it does not satisfy the physical constraints of the differential equation. PINNs train on a single initial condition of the differential equation.
+\item Multifidelity PINNs: These are PINNs that are capable of learning from a combination of low and high fidelity data. To this end, MPINNs learn correlations between the different data fidelitites and use this correlation to overcome sparse high fidelity data.
+\item Multifidelity DeepONets: Multifidelity DeepONets use multifidelity data just like MPINNs. However, DeepONets learn the differential equation for all initial conditions.
+\item Multifidelity Continual Learning: This method attempts to increase the domain of accuracy of a neural network. Suppose we have a neural net, $\mathcal{NN}_{i-1}$, that can solve a PDE on $\Omega_{i-1}$. $\mathcal{NN}_{i-1}$ is used as a low fidelity approximation train a neural net $\mathcal{NN}_i$ to solve the PDE on $\Omega_i$.
+\item Fixed Points in PINNs: PINNs have a tendency to converge to fixed points that satisfy the physical constraints of the PDE, but not the initial or boundary conditions. This problem is less prevalent when one trains the PINN on a shorter time interval.
+\item MDD for PINNs: This method iteratively partitions the domain of the PDE into a sequence of overlapping sub-domains and trains PINNs on each sub-domains. The PINN trained on the previous level is used as a low-fidelity approximation for the PINNs on the lower levels.
+\item Point Selection for PINNs: This paper introduces a probability distribution for sampling new points to compute the PINN residual and improve training.
+This paper introduces a probability distribution using the residual that is used to find the best locations to sample the residual and train the PINN.
+\item How and Why PINNs Fail to Train: Uses the neural tangent kernel to classify issues in PINN convergence. (Need to read this more)
+\item Respecting Causality: This paper introduces an adjustment to the PINN loss function that encourages the PINN to solve the differential equation at earlier time steps before the later ones. This helps improve performance.
+\end{itemize}
+\section*{Hard Bias in PINNs to Satisfy Structure of Dynamical Systems}
+Within the PINNs 
+Physics informed neural networks struggle to capture When analyzing a dynamical system, there are a variety of features that one uses to characterize the solution behavior. These features include
+\begin{itemize}
+	\item Fixed points: 
+\end{itemize}
+\pagebreak
+\bibliographystyle{plain} % We choose the "plain" reference style
+\bibliography{../mybib} % Entries are in the mybib.bib file
+\end{document}
+
+%\section*{Glossary}
+%\subsection*{Notes}
+%Throughout the entirety of this paper we will use uppercase bold symbols to indicate matrices, lowercase bold symbols to indicate vectors, and italicized lowercase symbols to indicate real numbers or integers.
+
+%\subsection*{Terminology}
+%\begin{itemize}
+%\item[Collimator:] A lead sheet filled with many very small holes.
+%\item[Voxel:] a three dimensional pixel
+%\item[SPECT:] Single Proton Emission Computed Tomography
+%\item[CD:] Computed Detection (same imaging as SPECT, minus the collimator)
+%\end{itemize}
+%\subsection*{Notation}
+%\subsubsection*{Notation Particular to this Paper}
+%\begin{itemize}
+%\item[$\mu$] non-negative weight parameter for the regularization problem in equation \ref{eq:opt_prob}.
+%\item[$\lambda_j$] the rate of the Poisson random variable associated with the $j$th detector.
+%\item[$m$] number of sensors in the proton emission detectors.
+%\item[$n$] number of voxels or points in space being analyzed for the image.
+%\item[$\!i$] vector of voxel activations achieved by optimizing equation \ref{eq:opt_prob}. We use $\!i$ for image.
+%\item[$\!d$] vector of the expected number of detector activations. This could be computed if we know the rates of the Poisson processes corresponding to every sensor. (We do not have access to $\!d$ in practice.) We use $\!d$ for the true \textit{detection}.
+%\item[$\!\epsilon$] vector of Poisson noise with mean zero.
+%\item[$\!n$] vector of detector activations from data. The $k$th entry of this vector is a Poisson random variable with rate $\lambda_k$. (These are the actual measurement the machine outputs.) We use $\!{n = d + \epsilon}$ for \textit{noisy} detection. 
+%\item[$\!{P}$] an $m \times n$ matrix. Each column is acquired by positioning a light in a specific point in space (this light position is a voxel location) and recording the sensor activations of the detector from the projections of the light source. The light is put in $n$ distinct voxel locations to acquire $n$ columns. We use $\!{P}$ for projection.
+%\item[$\star _c$] a subscript $u$ is added to vectors and matrices when the data was produced using CD. For instance, $\!{P}_c$ is the linear system generated with a CD detector. If a subscript is omitted it means that the data could come from either a SPECT or CD machine.
+%\item[$\star _s$] a subscript $s$ is added to vectors and matrices when the data was produced using SPECT. For instance, $\!{n}_s$ is the sensor data generated with a SPECT detector. If a subscript is omitted it means that the data could come from either a SPECT or CD machine.
+%\end{itemize}
+%\subsubsection*{General Notation}
+%\begin{itemize}
+%\item[$\!0$] a vector containing all zeros. The length of this vector is what it needs to be for equations to make sense.
+%\item[$\preceq$] component-wise inequality of vectors.
+%\item[$||\star||$] place-holder for some arbitrary norm of $\star$.
+%\item[$||\star||_2$] the two-norm of $\star$.
+%\item[$E(\star)$] expected value of $\star$.
+%\end{itemize}
