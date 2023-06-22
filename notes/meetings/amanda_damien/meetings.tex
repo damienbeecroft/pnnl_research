@@ -65,8 +65,6 @@ Today, we are discussing the following three papers
 	\end{itemize}
 	\item[Q] How are $M_L$ and $P_L$ related in Figure 1?
 	\item[A] $M_L$ contains the points/data needed to get a unique solution of the differential equation. $P_L$ are simply data that we interpolate.
-	\item[Q] How is data used for training in Figure 2? Did they train on data not in Figure 2a? How many epochs did it take?
-	\item[A]
 \end{itemize}
 \subsubsection*{Continual Learning}
 \begin{itemize}
@@ -84,5 +82,34 @@ Today, we are discussing the following three papers
 	\item[Q] Have you performed experiments with noise? Are these methods robust to noisy data?
 	\item[A] There is error added to the low-fidelity data in Burger's equation in the ONet paper. The high-fidelity data helps compensate for this noise.
 \end{itemize}
-
+\newpage
+\section*{June 22, 2023}
+Participants: Amanda and Damien
+\subsection*{Agenda}
+I am having a hard time running the code on Marianas. The pendulum code works fine on my local machine, but there is something wrong still.
+\subsubsection*{Comments}
+\begin{itemize}
+\item The code works when I run it on my machine, so this has to be a problem with the environment.
+\item I have tried running two different slurm scripts: \verb|mybatch.slurm| and \verb|batch.slurm|. Both \verb|.slurm| files give the same output.
+\end{itemize}
+\subsection*{Questions}
+\begin{itemize}
+\item[Q] Once I have run the lines listed below, do I need to run them again every time? Do the lines following \verb|conda create --name jax-cuda| create a permanent environment that I can just load with \verb|conda activate jax-cuda| from now on? Do I need to run the following lines again?
+\begin{itemize}
+\item \verb|module purge|
+\item \verb|module load cuda/11.4|
+\item \verb|module load python/miniconda3.9|
+\item \verb|source /share/apps/python/miniconda3.9/etc/profile.d/conda.sh|
+\item \verb|conda create --name jax-cuda|
+\item \verb|conda activate jax-cuda|
+ 
+\item \verb|conda install scipy=1.10.0|
+\item \verb|pip install --upgrade pip|
+\item \verb|pip install --upgrade "jax[cuda11_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html|
+\item \verb|conda install tqdm|
+\item \verb|pip install torch|
+\item \verb|conda install cudnn|
+\end{itemize}
+\item[Q] I put the above lines into a .sh file and the output when I run the .sh file is different than when I run the code otherwise. Is there a reason for this? I feel like it should be the same?
+\end{itemize}
 \end{document}
