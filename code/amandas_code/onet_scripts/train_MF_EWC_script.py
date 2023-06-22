@@ -91,9 +91,10 @@ if __name__ == "__main__":
     batch_size_res = int(batch_size/2)
 
     steps_to_train = np.arange(6)
-    reload = [True, True, True, False, False, False]
-    
-    reloadA = True
+    # reload = [True, True, True, False, False, False] # This was the original line
+    reload = [False, False, False, False, False, False]
+    # reloadA = True # This was the original line
+    reloadA = False
     
     
 
@@ -151,7 +152,8 @@ if __name__ == "__main__":
     results_dir = results_dir_A
     model_A = DNN_class_EWC(layers_A, ics_weight, res_weight, data_weight, [], lr)
     if reloadA:
-        params_A = model_A.unravel_params(np.load(results_dir+ '/params.npy'))
+        # params_A = model_A.unravel_params(np.load(results_dir+ '/params.npy')) # This was the original line
+        params_A = model_A.unravel_params(np.load(results_dir + 'params.npy'))
 
     
     else:
@@ -209,7 +211,8 @@ if __name__ == "__main__":
 
         
         if reload[step]:
-            params = model.unravel_params(np.load(results_dir + '/params.npy'))
+            # params = model.unravel_params(np.load(results_dir + '/params.npy')) # this was the original line
+            params = model.unravel_params(np.load(results_dir + 'params.npy'))
         
         else:     
             model.train(ic_dataset, res_dataset, data_dataset, nIter=epochsA2)

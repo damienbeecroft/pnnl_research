@@ -1,5 +1,0 @@
-ModuleCmd_Load.c(208):ERROR:105: Unable to locate a modulefile for 'jax'
-Traceback (most recent call last):
-  File "/people/beec613/pnnl_research/code/amandas_code/onet_scripts/onet_scripts/train_MF_EWC_script.py", line 15, in <module>
-    import jax
-ModuleNotFoundError: No module named 'jax'
