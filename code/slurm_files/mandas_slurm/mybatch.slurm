@@ -17,9 +17,7 @@ module purge
 module load cuda/11.4
 module load python/miniconda3.9
 source /share/apps/python/miniconda3.9/etc/profile.d/conda.sh
-conda activate jax-cuda
+conda activate test-env
 
-
-# python -u ./SF_script.py
 python -u /people/beec613/pnnl_research/code/amandas_code/onet_scripts/train_MF_EWC_script.py
 
