@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.6.20)  22 JUN 2023 16:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.6.20)  23 JUN 2023 10:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -522,14 +522,14 @@ Overfull \hbox (149.49002pt too wide) in paragraph at lines 108--109
 ge.googleapis.com/jax-releases/jax_cuda_releases.html 
  []
 
-[4] (meetings.aux)
+[4] [5] (meetings.aux)
 Package rerunfilecheck Info: File `meetings.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 10644 strings out of 476331
- 166863 string characters out of 5786821
- 1861660 words of memory out of 5000000
+ 10645 strings out of 476331
+ 166869 string characters out of 5786821
+ 1862660 words of memory out of 5000000
  30922 multiletter control sequences out of 15000+600000
  520653 words of font info for 65 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -548,9 +548,9 @@ pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
 /amsfonts/cm/cmsy10.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/t
 ype1/public/amsfonts/cm/cmsy7.pfb><C:/Users/beec613/AppData/Local/Programs/MiKT
 eX/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on meetings.pdf (4 pages, 141456 bytes).
+Output written on meetings.pdf (5 pages, 146355 bytes).
 PDF statistics:
- 100 PDF objects out of 1000 (max. 8388607)
- 16 named destinations out of 1000 (max. 500000)
+ 104 PDF objects out of 1000 (max. 8388607)
+ 17 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -110,6 +110,28 @@ I am having a hard time running the code on Marianas. The pendulum code works fi
 \item \verb|pip install torch|
 \item \verb|conda install cudnn|
 \end{itemize}
+\item[A] No, you do not need to re-install the packages in the environment every time.
 \item[Q] I put the above lines into a .sh file and the output when I run the .sh file is different than when I run the code otherwise. Is there a reason for this? I feel like it should be the same?
+\item[A] Just put lines directly into the terminal since you do not need to run the code every time.
+\item[Q] What is \verb|SF_script.py|? Should I have access to this file?
+\end{itemize}
+Amanda's Comments:
+\begin{itemize}
+\item Possible reasons for error:
+\begin{itemize}
+\item The version of cuDNN may not be compatible with what I need to do.
+\item Try to re-install jax in the CUDA environment
+\item This could be a memory error, so run on dl and not dl-shared
+\item If it is a memory error, then it could be that the system is pre-allocating memory that does not exist
+\item Take the line: \verb|os.environ["XLA_PYTHON_CLIENT_PREALLOCATE"]="false"|. Put it in the script between when you import all the packages and when you start the code
+\item If the code is not running on Marianas, developing locally is a good thing to do. 
+\end{itemize}
+\end{itemize}
+Multi-fidelity PINN Stuff:
+\begin{itemize}
+\item Amanda sent me an Overleaf for the multi-fidelity domain decomposition.
+\item Currently the code is not smart about how it selects points.
+\item There will be a running list of problems to work on in the Overleaf.
+
 \end{itemize}
 \end{document}
