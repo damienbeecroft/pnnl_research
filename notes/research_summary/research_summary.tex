@@ -1,5 +1,32 @@
 \documentclass[11pt]{article}
-\usepackage{C:/Users/damie/OneDrive/Tex-Style/article-preamble/article}
+% PACKAGES
+\usepackage[margin = 1in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{amsthm}
+\usepackage{dsfont}
+\usepackage{hyperref}
+
+% MACROS
+% Set Theory
+\def\N{\mathbb{N}}
+\def\R{\mathbb{R}}
+\def\C{\mathbb{C}}
+\def\Z{\mathbb{Z}}
+%\def\^{\hat}
+\def\-{\vec}
+\def\d{\partial}
+\def\!{\boldsymbol}
+\def\X{\times}
+%\def\-{\bar}
+\def\bf{\textbf}
+\def\l{\left}
+\def\r{\right}
 \date{August 2022}
 \providecommand{\keywords}[1]
 {
@@ -21,15 +48,15 @@ FILL IN ABSTRACT
 \section{Introduction}
 Summary of Papers:
 \begin{itemize}
-\item PINNs: A PINN penalizes the solution if it does not satisfy the physical constraints of the differential equation. PINNs train on a single initial condition of the differential equation.
+\item PINNs: A PINN penalizes the solution if it does not satisfy the physical constraints of the differential equation. PINNs train on a single initial condition.
 \item Multifidelity PINNs: These are PINNs that are capable of learning from a combination of low and high fidelity data. To this end, MPINNs learn correlations between the different data fidelitites and use this correlation to overcome sparse high fidelity data.
 \item Multifidelity DeepONets: Multifidelity DeepONets use multifidelity data just like MPINNs. However, DeepONets learn the differential equation for all initial conditions.
-\item Multifidelity Continual Learning: This method attempts to increase the domain of accuracy of a neural network. Suppose we have a neural net, $\mathcal{NN}_{i-1}$, that can solve a PDE on $\Omega_{i-1}$. $\mathcal{NN}_{i-1}$ is used as a low fidelity approximation train a neural net $\mathcal{NN}_i$ to solve the PDE on $\Omega_i$.
+\item Multifidelity Continual Learning: This method attempts to increase the domain of accuracy of a neural network. Suppose we have a neural net, $\mathcal{NN}_{i-1}$, that can solve a PDE on $\Omega_{i-1}$. $\mathcal{NN}_{i-1}$ is used as a low fidelity approximation train a neural net $\mathcal{NN}_i$ to solve the PDE on a larger set: $\Omega_i$.
 \item Fixed Points in PINNs: PINNs have a tendency to converge to fixed points that satisfy the physical constraints of the PDE, but not the initial or boundary conditions. This problem is less prevalent when one trains the PINN on a shorter time interval.
 \item MDD for PINNs: This method iteratively partitions the domain of the PDE into a sequence of overlapping sub-domains and trains PINNs on each sub-domains. The PINN trained on the previous level is used as a low-fidelity approximation for the PINNs on the lower levels.
 \item Point Selection for PINNs: This paper introduces a probability distribution for sampling new points to compute the PINN residual and improve training.
 This paper introduces a probability distribution using the residual that is used to find the best locations to sample the residual and train the PINN.
-\item How and Why PINNs Fail to Train: Uses the neural tangent kernel to classify issues in PINN convergence. (Need to read this more)
+\item How and Why PINNs Fail to Train: This paper linearizes the neural network about the initial parametrization, $\theta^0$, and performs analysis on the path of the continuous gradient descent of the neural network using this linearization. A variety of very strong assumptions are needed for this analysis to be useful.
 \item Respecting Causality: This paper introduces an adjustment to the PINN loss function that encourages the PINN to solve the differential equation at earlier time steps before the later ones. This helps improve performance.
 \end{itemize}
 \section*{Hard Bias in PINNs to Satisfy Structure of Dynamical Systems}
@@ -40,7 +67,6 @@ Physics informed neural networks struggle to capture When analyzing a dynamical 
 	\item 
 	\end{itemize}
 \end{itemize}
-WHAT
 \pagebreak
 \bibliographystyle{plain} % We choose the "plain" reference style
 \bibliography{../mybib} % Entries are in the mybib.bib file
