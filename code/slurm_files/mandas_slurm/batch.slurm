@@ -20,5 +20,5 @@ source /share/apps/python/miniconda3.9/etc/profile.d/conda.sh
 conda activate jax-cuda
 
 
-# python -u ./SF_script.py
-python /people/beec613/pnnl_research/code/amandas_code/onet_scripts/train_MF_EWC_script.py
+python -u ./SF_script.py
+# python /people/beec613/pnnl_research/code/amandas_code/onet_scripts/train_MF_EWC_script.py
