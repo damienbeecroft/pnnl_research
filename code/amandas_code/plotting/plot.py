@@ -1,0 +1,70 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy.io as sio
+import pdb
+
+if __name__=="__main__":
+    t_train_range = np.linspace(0, 50, 2000)
+
+    data0 = sio.loadmat("C:/Users/beec613/Desktop/pnnl_research/code/amandas_code/results_0/MF_loop/beta_test.mat")
+    s = np.squeeze(data0['S_pred'])
+    plt.plot(t_train_range,s[0,:],label='y')
+    plt.plot(t_train_range,s[1,:],label='y\'')
+    plt.title("Solution for pendulum with results_0")
+    plt.xlabel('t')
+    plt.legend()
+    plt.show()
+
+    data1 = sio.loadmat("C:/Users/beec613/Desktop/pnnl_research/code/amandas_code/results_1/MF_loop/beta_test.mat")
+    s = np.squeeze(data1['S_pred'])
+    plt.plot(t_train_range,s[0,:],label='y')
+    plt.plot(t_train_range,s[1,:],label='y\'')
+    plt.title("Solution for pendulum with results_1")
+    plt.xlabel('t')
+    plt.legend()
+    plt.show()
+
+    data2 = sio.loadmat("C:/Users/beec613/Desktop/pnnl_research/code/amandas_code/results_2/MF_loop/beta_test.mat")
+    s = np.squeeze(data2['S_pred'])
+    plt.plot(t_train_range,s[0,:],label='y')
+    plt.plot(t_train_range,s[1,:],label='y\'')
+    plt.title("Solution for pendulum with results_2")
+    plt.xlabel('t')
+    plt.legend()
+    plt.show()
+
+    data3 = sio.loadmat("C:/Users/beec613/Desktop/pnnl_research/code/amandas_code/results_3/MF_loop/beta_test.mat")
+    s = np.squeeze(data3['S_pred'])
+    plt.plot(t_train_range,s[0,:],label='y')
+    plt.plot(t_train_range,s[1,:],label='y\'')
+    plt.title("Solution for pendulum with results_3")
+    plt.xlabel('t')
+    plt.legend()
+    plt.show()
+
+    data4 = sio.loadmat("C:/Users/beec613/Desktop/pnnl_research/code/amandas_code/results_4/MF_loop/beta_test.mat")
+    s = np.squeeze(data4['S_pred'])
+    plt.plot(t_train_range,s[0,:],label='y')
+    plt.plot(t_train_range,s[1,:],label='y\'')
+    plt.title("Solution for pendulum with results_0")
+    plt.xlabel('t')
+    plt.legend()
+    plt.show()
+
+    data5 = sio.loadmat("C:/Users/beec613/Desktop/pnnl_research/code/amandas_code/results_5/MF_loop/beta_test.mat")
+    s = np.squeeze(data5['S_pred'])
+    plt.plot(t_train_range,s[0,:],label='y')
+    plt.plot(t_train_range,s[1,:],label='y\'')
+    plt.title("Solution for pendulum with results_5")
+    plt.xlabel('t')
+    plt.legend()
+    plt.show()
+
+    dataA = sio.loadmat("C:/Users/beec613/Desktop/pnnl_research/code/amandas_code/results_A/MF_loop/beta_test.mat")
+    s = np.squeeze(dataA['S_pred'])
+    plt.plot(t_train_range,s[0,:],label='y')
+    plt.plot(t_train_range,s[1,:],label='y\'')
+    plt.title("Solution for pendulum with results_A")
+    plt.xlabel('t')
+    plt.legend()
+    plt.show()    
