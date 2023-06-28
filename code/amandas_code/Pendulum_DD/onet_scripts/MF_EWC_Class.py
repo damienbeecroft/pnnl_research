@@ -210,7 +210,7 @@ class MF_class_EWC:
         loss_res1 = np.mean((res1_pred)**2)
         loss_res2 = np.mean((res2_pred)**2)
         loss_res = loss_res1 + loss_res2
-        return loss_res   
+        return loss_res
 
     # Define total loss
     def loss(self, params, ic_batch, res_batch, val_batch):

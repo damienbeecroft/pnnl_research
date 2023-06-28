@@ -118,7 +118,8 @@ if __name__ == "__main__":
     data_range = np.arange(0,int(2*min_B))
 
 
-    d_vx = scipy.io.loadmat("../data.mat")
+    # d_vx = scipy.io.loadmat("../data.mat") # This was the original line
+    d_vx = scipy.io.loadmat("C:/Users/beec613/Desktop/pnnl_research/code/amandas_code/Pendulum_DD/data.mat")
     t_data_full, s_data_full = (d_vx["u"].astype(np.float32), 
                d_vx["s"].astype(np.float32))
 
@@ -197,7 +198,8 @@ if __name__ == "__main__":
     
     Ndomains = []
     for step in steps_to_train:
-        results_dir = "../results_" + str(step) + "/"+save_str+"/"
+        # results_dir = "../results_" + str(step) + "/"+save_str+"/" # This is the original line
+        results_dir = "C:/Users/beec613/Desktop/pnnl_research/code/amandas_code/Pendulum_DD/results_" + str(step) + "/"+save_str+"/"
         if not os.path.exists(results_dir):
             os.makedirs(results_dir)
         
@@ -213,6 +215,7 @@ if __name__ == "__main__":
         
         if reload[step]:
             params = model.unravel_params(np.load(results_dir + '/params.npy'))
+
         
         else:     
             model.train(ic_dataset, res_dataset, data_dataset, nIter=epochsA2)

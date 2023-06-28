@@ -160,10 +160,11 @@ In this meeting we are discussing goals and expectations for the upcoming weeks.
 	\item What is going to be the official document for the write up?
 \end{itemize}
 \newpage
-\section*{June *, 2023}
+\section*{June 28, 2023}
 \subsection*{Agenda}
 In this meeting I want to clarify any remaining questions that I have about the code in \verb|onet_scripts|. Note: I use verbatim font when I am referencing something in the code. Also note: I added some comments, so the line numbers may not be precise (sorry about that).
 \subsection*{Questions}
+\subsubsection*{Original Code}
 \begin{itemize}
 	\item[Q] It seems that there are seven total neural networks trained: \verb|0| through \verb|5| and \verb|A|. Exactly how are these neural networks related to each other? On what data is each network trained?
 	\item[A] \verb|A| is the single fidelity network. Networks 0 through 5 are a series of multifidelity networks. Each network uses the most recently trained network as the low fidelity approximation. Each network is trained on a different, randomly sampled subset on the time points on the interval $[0,10]$. 
@@ -174,10 +175,13 @@ In this meeting I want to clarify any remaining questions that I have about the 
 	\item[Q] \verb|DNN_EWC_Class.py, 215|: How does the \verb|item(res_dataset)| line work? I know it generates new batches of data, but I don't exactly understand the logic.
 	\item[Q] \verb|train_MF_EWC_script.py, 202|: What is the class \verb|DataGenerator_res2| for? Why do we need a second residual class?
 	\item[Q] What is the low fidelity model for each neural network? Is it simply the previous trained network? Is it some combination of all the previously trained networks?
-	\item[Q] \verb|utils_fs_v2.py, 46|:What does the explicit definition of the \verb|__getitem__| method doing? How does it get the batch?
+%	\item[Q] \verb|utils_fs_v2.py, 46|: What does the explicit definition of the \verb|__getitem__| method doing? How does it get the batch?
 	\item[Q] \verb|train_MF_EWC_script.py, 216|: In this line we are passing in \verb|params_A|, which is the set of parameters from the initial single-fidelity network. We also pass in all the parameters from all of the previous networks, \verb|params_prev|. Why are we passing in all the previous networks? It feels like we should only need to pass in the previous network.
 	\item[Q] \verb|MF_EWC_Class.py, 58-59|: These lines are setting the parameters of the nonlinear and linear networks to the value that was computed in the previous network?
 %	\item[Q] Where is the domain decomposition part in the \verb|Pendulum_DD| file? It just seems like the same thing with a few extra files.
-	
+\end{itemize}
+\subsubsection*{Pendulum\_DD}
+\begin{itemize}
+	\item \verb|MF_EWC_Class.py, 201, 207| Can you talk about how this line works?
 \end{itemize}
 \end{document}
