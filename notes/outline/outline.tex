@@ -50,9 +50,40 @@ We will consider a multifidelity domain decomposition approach, where a PINN is 
 \end{itemize}
 \bf{Coding}:
 \begin{itemize}
-\item Run Amanda's code on Marianas
+\item Figure out how to run code on Marianas
+	\item Pendulum
+	\begin{itemize}
+		\item Run the domain decomposition code in \verb|Pendulum_DD|
+		\item Point selection and evaluation
+		\begin{itemize}
+			\item Make sure that the code does not evaluate every network at all points. Only evaluate networks on points within the support of their weight function. There are two potential methods for how to do this.
+			\begin{itemize}
+				\item Change the data generator function to only generate output points in a given domain 
+				\item Once you are given a point, check whether or not the point is in the support of the weight function.
+			\end{itemize}
+			\item Work on parallelization of neural networks defined on different sub-domains.
+			\item Testing
+			\begin{itemize}
+				\item Running with and without the residual driven point selection
+				\item Look at the sensitivity of the weights of the loss function
+			\end{itemize}
+			\item Do testing on how high we can get the maximum time of the pendulum. Currently it is at 10. Can we get it to 20? 50?
+		\end{itemize}
+	\end{itemize}
+	\item Wave Equation
+%	\begin{itemize}
+%		\item 
+%	\end{itemize}
+	\item Allen-Cahn
+%	\begin{itemize}
+%		\item 
+%	\end{itemize}
+	\item Lorenz
+%	\begin{itemize}
+%		\item 
+%	\end{itemize}
 \end{itemize}
-
+\newpage
 \newpage
 \subsection*{Week 1}
 \bf{Videos}:
@@ -93,21 +124,29 @@ We will consider a multifidelity domain decomposition approach, where a PINN is 
 \end{itemize}
 \newpage
 \subsection*{Week 3} 
-\bf{Reading}:
+\bf{Notes}:
 \begin{itemize}
-\item
+\item I went through the original code Amanda sent me slowly to understand exactly how it works.
+\item I went through the altered code in \verb|Pendulum_DD| to understand exactly how it works.
+\item I realized that the problem of only applying neural networks to points within their domains can be solved with a rather simple sorting algorithm.
 \end{itemize}
-\bf{Coding}:
+\subsection*{Coding}
 \begin{itemize}
-\item Went through Amanda's code meticulously to understand exactly how it works.
-\item 
+\item Implementing domain sorting code.
 \end{itemize}
 \newpage
 \subsection*{Week 4} 
+\newpage
 \subsection*{Week 5} 
+\newpage
 \subsection*{Week 6} 
-\subsection*{Week 7} 
+\newpage
+\subsection*{Week 7}
+\newpage 
 \subsection*{Week 8} 
+\newpage
 \subsection*{Week 9}
+\newpage
 \subsection*{Week 10}  
+\newpage
 \end{document}

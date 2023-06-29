@@ -1,0 +1,49 @@
+\documentclass{article}
+% Choose a conveniently small page size
+% PACKAGES
+\usepackage[margin = 1in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{amsthm}
+\usepackage{dsfont}
+\usepackage{hyperref}
+
+% MACROS
+% Set Theory
+\def\N{\mathbb{N}}
+\def\R{\mathbb{R}}
+\def\C{\mathbb{C}}
+\def\Z{\mathbb{Z}}
+%\def\^{\hat}
+\def\-{\vec}
+\def\d{\partial}
+\def\!{\boldsymbol}
+\def\X{\times}
+%\def\-{\bar}
+\def\bf{\textbf}
+\def\l{\left}
+\def\r{\right}
+\title{Domain Sorting}
+\author{Damien Beecroft}
+\begin{document}
+\maketitle
+	Let $\mathbb{I} \equiv \{i: i \in \mathbb{N}, 1 \leq i \leq N \}$. Suppose that we have a domain $\Omega$. We are given a set of potentially overlapping sub-domains, $\{\Omega_i\}_{i=1}^N$, whose union is $\Omega$. In other words, $\cup_{i=1}^N \Omega_i = \Omega$. We are also given a set of elements of $\Omega$: $X$. We desire an efficient algorithm that tells us for each $x \in X$ which of the sets $\{\Omega_i\}_{i=1}^N$ have $x$ as an element. This is a sorting problem and can be solved efficiently in $\mathcal{O}(N \log(N))$ using a divide and conquer algorithm. In order to implement this algorithm, we must define a hierarchy of subsets of $\Omega$. Suppose this hierarchy consists of $L$ layers. Define the set of subsets on each layer, $l$, as $\{\Omega^{(l)}_i\}_{i=1}^{N^{(l)}}$. We have
+	
+\[
+\Omega_k^{(l)} = \bigcup_{i \in P^{(l)}_k} \Omega_i
+\]
+
+\noindent where $\{P^{(l)}_i\}_{i=1}^{N^{(l)}}$ are disjoint, non-empty subsets of $\mathbb{I}$ whose union is $\mathbb{I}$. We define $\Omega^{(L)}_k \equiv \Omega_k$. This sequence of sets is related in the following manner. 
+
+% Also note that for $\tilde{l} > l$, there exists 
+%	
+%Note that each layer (denoted by the superscript $(l)$) has a different set of subsets of $\mathbb{I}$.
+% We denote $\{P^{(l)}_i\}_{i=1}^{N^{(l)}}$ as $\mathbb{P}^{(l)}$ for simplicity.  
+	
+%$\Omega = \cup_{n=1}^{N_l} \Omega_n^{(l)}$
+\end{document}

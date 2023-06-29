@@ -162,6 +162,42 @@ In this meeting we are discussing goals and expectations for the upcoming weeks.
 \newpage
 \section*{June 28, 2023}
 \subsection*{Agenda}
+In this meeting we are discussing issues with the \verb|Pendulum_DD| code and aspects within it that need to be changed.
+\subsubsection*{Things To Work On}
+\begin{itemize}
+	\item Pendulum
+	\begin{itemize}
+		\item Running the domain decomposition code
+		\item Changing how the point selection is done to be smarter
+		\begin{itemize}
+			\item Find where the neural networks are being evaluated at residual points.
+			\item Make sure that you are not evaluating every network at all the points. Only evaluate networks on points within the support of their weight function.
+			\item THERE ARE TWO OPTIONS FOR CHOOSING WHICH NETWORKS EVALUATE WHICH POINTS: Change the data generator function to generate output points in a given domain OR once you are already given a point, check whether or not the point is in the support of the weight function.
+			\item The data generator function can be smart about parallelization of the points.
+			\item Testing
+			\begin{itemize}
+				\item Running with and without the residual driven point selection
+				\item Look at the sensitivity of the weights of the loss function
+			\end{itemize}
+			\item Do testing on how high we can get the maximum time of the pendulum. Currently it is at 10. Can we get it to 20? 50?
+		\end{itemize}
+	\end{itemize}
+	\item Wave Equation
+	\begin{itemize}
+		\item 
+	\end{itemize}
+	\item Allen-Cahn
+	\begin{itemize}
+		\item 
+	\end{itemize}
+	\item Lorenz
+	\begin{itemize}
+		\item 
+	\end{itemize}
+\end{itemize}
+\newpage
+\section*{June *, 2023}
+\subsection*{Agenda}
 In this meeting I want to clarify any remaining questions that I have about the code in \verb|onet_scripts|. Note: I use verbatim font when I am referencing something in the code. Also note: I added some comments, so the line numbers may not be precise (sorry about that).
 \subsection*{Questions}
 \subsubsection*{Original Code}
@@ -182,6 +218,15 @@ In this meeting I want to clarify any remaining questions that I have about the 
 \end{itemize}
 \subsubsection*{Pendulum\_DD}
 \begin{itemize}
-	\item \verb|MF_EWC_Class.py, 201, 207| Can you talk about how this line works?
+	\item[Q] \verb|MF_EWC_Class.py, 201, 207|: Can you talk about how this line works?
+	\item[Q] \verb|train_MF_EWC_script.py, 239|: What is each of the five indices into \verb|params_prev| for?
+	\item[A]
+	\begin{itemize}
+		\item The fifth index is for choosing between the weight matrix and the shift vector.
+		\item The fourth index chooses which layer of the network you are accessing
+		\item The third index chooses whether you look at the non-linear or the linear network.
+		\item 
+		\item The first index is for choosing which trained network to look at.
+	\end{itemize}
 \end{itemize}
 \end{document}
