@@ -161,6 +161,7 @@ In this meeting we are discussing goals and expectations for the upcoming weeks.
 \end{itemize}
 \newpage
 \section*{June 28, 2023}
+Participants: Damien and Amanda
 \subsection*{Agenda}
 In this meeting we are discussing issues with the \verb|Pendulum_DD| code and aspects within it that need to be changed.
 \subsubsection*{Things To Work On}
@@ -206,27 +207,33 @@ In this meeting I want to clarify any remaining questions that I have about the 
 	\item[A] \verb|A| is the single fidelity network. Networks 0 through 5 are a series of multifidelity networks. Each network uses the most recently trained network as the low fidelity approximation. Each network is trained on a different, randomly sampled subset on the time points on the interval $[0,10]$. 
 	\item[Q] \verb|train_MF_EWC_script.py, 105-106|: What are \verb|epochs| and \verb|epochsA2| used for? What is the difference?
 	\item[A] \verb|epochs| is the number of epochs used in the multifidelity networks. \verb|epochsA2| is the number of epochs used in the single fidelity networks.
+	\item Questions that I had that are not important enough to spend time discussing currentlym (I believe).
+	\begin{itemize}
 	\item[Q] \verb|train_MF_EWC_script.py, 155-156|: What is the purpose of \verb|F| and \verb|lam|?
 	\item[Q] What does \verb|EWC| stand for again?
 	\item[Q] \verb|DNN_EWC_Class.py, 215|: How does the \verb|item(res_dataset)| line work? I know it generates new batches of data, but I don't exactly understand the logic.
 	\item[Q] \verb|train_MF_EWC_script.py, 202|: What is the class \verb|DataGenerator_res2| for? Why do we need a second residual class?
 	\item[Q] What is the low fidelity model for each neural network? Is it simply the previous trained network? Is it some combination of all the previously trained networks?
-%	\item[Q] \verb|utils_fs_v2.py, 46|: What does the explicit definition of the \verb|__getitem__| method doing? How does it get the batch?
+	\item[Q] \verb|utils_fs_v2.py, 46|: What does the explicit definition of the \verb|__getitem__| method doing? How does it get the batch?
 	\item[Q] \verb|train_MF_EWC_script.py, 216|: In this line we are passing in \verb|params_A|, which is the set of parameters from the initial single-fidelity network. We also pass in all the parameters from all of the previous networks, \verb|params_prev|. Why are we passing in all the previous networks? It feels like we should only need to pass in the previous network.
-	\item[Q] \verb|MF_EWC_Class.py, 58-59|: These lines are setting the parameters of the nonlinear and linear networks to the value that was computed in the previous network?
-%	\item[Q] Where is the domain decomposition part in the \verb|Pendulum_DD| file? It just seems like the same thing with a few extra files.
+	\item[Q] \verb|MF_EWC_Class.py, 58-59|: These lines are setting the parameters of the nonlinear and linear networks to the value that was computed in the previous network?	
+	\end{itemize}
+
 \end{itemize}
 \subsubsection*{Pendulum\_DD}
 \begin{itemize}
-	\item[Q] \verb|MF_EWC_Class.py, 201, 207|: Can you talk about how this line works?
 	\item[Q] \verb|train_MF_EWC_script.py, 239|: What is each of the five indices into \verb|params_prev| for?
 	\item[A]
 	\begin{itemize}
-		\item The fifth index is for choosing between the weight matrix and the shift vector.
-		\item The fourth index chooses which layer of the network you are accessing
-		\item The third index chooses whether you look at the non-linear or the linear network.
-		\item 
-		\item The first index is for choosing which trained network to look at.
+		\item The fifth index is for choosing between the weight matrix and the shift vector. 
+		\item The fourth index chooses which layer of the network you are accessing. Has type "tuple".
+		\item The third index chooses whether you look at the non-linear or the linear network. Has type "list".
+		\item The third layer determines which neural network on the corresponding level you are going to look at. Has type "tuple".
+		\item The first index chooses which level of the domain decomposition hierarchy you are looking at. Has type "list".
+		\item \verb|params_prev| holds all of the parameters from all of the neural networks on all of the layers of the domain decomposition. Has type "list".
 	\end{itemize}
+	\item[Q] \verb|MF_EWC_Class.py, 62, 63|: Why are the nonlinear and linear networks being set equal to what they are on these lines?
+	\item[Q] \verb|MF_EWC_Class.py, 116|: What is \verb|u| in the context of the \verb|operator_net| function? What is \verb|ul|?
+	\item[A] It seems that \verb|u| is the set of collocation points where the neural net is analyzed. \verb|ul| is low-fidelity solution at these collocation points. This notation is rather confusing. Be careful.
 \end{itemize}
 \end{document}

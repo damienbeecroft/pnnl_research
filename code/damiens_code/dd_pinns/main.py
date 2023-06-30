@@ -1,87 +1,6 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Aug 26 16:24:15 2019
-
-@author: howa549
-"""
-
-import os
-
-#import numpy as np
-import scipy.io
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
-
-import jax
-import jax.numpy as np
-import time
-from utils_fs_v2 import timing,  DataGenerator, DataGenerator_res, DataGenerator_res2
-import math
-import jax
-import jax.numpy as np
-from jax import random, grad, vmap, jit, hessian
-from jax.example_libraries import optimizers
-from jax.experimental.ode import odeint
-from jax.nn import relu, selu
-from jax.config import config
-#from jax.ops import index_update, index
-from jax import lax
-from jax.flatten_util import ravel_pytree
-
-import itertools
-from functools import partial
-from torch.utils import data
-from tqdm import trange, tqdm
-#import matplotlib.pyplot as plt
-#import pandas as pd
-
-from DNN_EWC_Class import DNN_class_EWC
-from MF_EWC_Class import MF_class_EWC
 
 
-def save_data(model, params,  save_results_to, save_prfx):
-    # ====================================
-    # Saving model
-    # ====================================
-    t_train_range = np.linspace(0, 50, 2000)
-    u_res = t_train_range.reshape([len(t_train_range), 1])
-    flat_params, _  = ravel_pytree(model.get_params(model.opt_state))
-    np.save(save_results_to + 'params_' + save_prfx + '.npy', flat_params)
-
-    S_pred =  model.predict_full(params, u_res)
-
-    fname= save_results_to +"beta_test.mat"
-    scipy.io.savemat(fname, {'U_res':u_res,'S_pred':S_pred})
-    
-    scipy.io.savemat(save_results_to +"losses.mat", 
-                     {'training_loss':model.loss_training_log,
-                      'res_loss':model.loss_res_log,
-                      'ics_loss':model.loss_ics_log,
-                      'data_loss':model.loss_data_log})
-
-def save_dataDNN(model, params,  save_results_to, save_prfx):
-    # ===================================
-    # Saving model
-    # ====================================
-    t_train_range = np.linspace(0, 50, 2000)
-    u_res = t_train_range.reshape([len(t_train_range), 1])
-    flat_params, _  = ravel_pytree(model.get_params(model.opt_state))
-    np.save(save_results_to + 'params_' + save_prfx + '.npy', flat_params)
-
-    S_pred =  model.predict_low(params, u_res)
-
-    fname= save_results_to +"beta_test.mat"
-    scipy.io.savemat(fname, {'U_res':u_res,'S_pred':S_pred})
-    
-    scipy.io.savemat(save_results_to +"losses.mat", 
-                     {'training_loss':model.loss_training_log,
-                      'res_loss':model.loss_res_log,
-                      'ics_loss':model.loss_ics_log,
-                      'data_loss':model.loss_data_log})
-
-    
-
-if __name__ == "__main__":
+if __name__=="__main__":
     ics_weight = 1.0
     res_weight = 1.0 
     data_weight  = 0.0
@@ -91,7 +10,8 @@ if __name__ == "__main__":
     batch_size_res = int(batch_size/2)
 
     steps_to_train = np.arange(6)
-    reload = [True, True, True, False, False, False]
+    # reload = [True, True, True, False, False, False]
+    reload = [True, True, True, True, True, True]
     
     reloadA = True
     
@@ -101,8 +21,8 @@ if __name__ == "__main__":
     c = 0 
 
 
-    epochs = 100
-    epochsA2 = 100
+    epochs = 1000
+    epochsA2 = 100000
     lr = optimizers.exponential_decay(1e-3, decay_steps=2000, decay_rate=0.99)
     N_low = 200 
     N_nl = 80
@@ -245,21 +165,3 @@ if __name__ == "__main__":
         err_norm = err/np.sum(err)                        
       
         res_dataset = DataGenerator_res2(coords, res_pts, err_norm, batch_size_res, batch_size)
-
-      
-            
-
-
-
-
-    
-# =============================================
-# =============================================
-#if __name__ == "__main__":
-    
-    replay = False
-    MAS = False
-    RDPS = False 
-    scaled = False
-   # run_MF(replay, MAS, RDPS, scaled) #MF
-    
