@@ -120,7 +120,7 @@ if __name__ == "__main__":
 
 
     # d_vx = scipy.io.loadmat("../data.mat") # This was the original line
-    d_vx = scipy.io.loadmat("C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/damien_pendulum_dd/data.mat")
+    d_vx = scipy.io.loadmat("C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/toy_pendulum_dd/data.mat")
     t_data_full, s_data_full = (d_vx["u"].astype(np.float32), 
                d_vx["s"].astype(np.float32))
 
@@ -128,7 +128,7 @@ if __name__ == "__main__":
     # saving settings
     # ====================================
     save_str = "MF_loop"
-    results_dir_A = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/damien_pendulum_dd/results_A/"+save_str+"/"
+    results_dir_A = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/toy_pendulum_dd/results_A/"+save_str+"/"
     if not os.path.exists(results_dir_A):
         os.makedirs(results_dir_A)
         
