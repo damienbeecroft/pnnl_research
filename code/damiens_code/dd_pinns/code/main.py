@@ -8,6 +8,7 @@ from jax.example_libraries import optimizers
 import scipy.io
 import jax
 import jax.numpy as np
+from jax.flatten_util import ravel_pytree
 
 # My imports from other packages
 # import dill
@@ -18,51 +19,53 @@ from utils_fs_v2 import  DataGenerator, DataGenerator_res
 from SFDomainNet_Class import DomainNet
 
 # def save_neural_domain_tree(NDTree,path):
+#     save_SFDomainNet(NDTree[0],)
 #     for level in NDTree:
 #         accumulator
 #         for network in level:
 #             net
 
-# def save_data(model, params,  save_results_to, save_prfx):
-#     # ====================================
-#     # Saving model
-#     # ====================================
-#     t_train_range = np.linspace(0, 50, 2000)
-#     u_res = t_train_range.reshape([len(t_train_range), 1])
-#     flat_params, _  = ravel_pytree(model.get_params(model.opt_state))
-#     np.save(save_results_to + 'params_' + save_prfx + '.npy', flat_params)
+def save_MFDomainNet(model, save_results_to, save_prfx):
+    # ====================================
+    # Saving model
+    # ====================================
+    params = model.get_params(model.opt_state)
+    t_train_range = np.linspace(0, 50, 2000)
+    u_res = t_train_range.reshape([len(t_train_range), 1])
+    flat_params, _  = ravel_pytree(model.get_params(model.opt_state))
+    np.save(save_results_to + 'params_' + save_prfx + '.npy', flat_params)
 
-#     S_pred =  model.predict_full(params, u_res)
+    S_pred =  model.predict_full(params, u_res)
 
-#     fname= save_results_to +"beta_test.mat"
-#     scipy.io.savemat(fname, {'U_res':u_res,'S_pred':S_pred})
+    fname= save_results_to + "beta_test.mat"
+    scipy.io.savemat(fname, {'U_res':u_res,'S_pred':S_pred})
     
-#     scipy.io.savemat(save_results_to +"losses.mat", 
-#                      {'training_loss':model.loss_training_log,
-#                       'res_loss':model.loss_res_log,
-#                       'ics_loss':model.loss_ics_log,
-#                       'data_loss':model.loss_data_log})
+    scipy.io.savemat(save_results_to +"losses.mat", 
+                     {'training_loss':model.loss_training_log,
+                      'res_loss':model.loss_res_log,
+                      'ics_loss':model.loss_ics_log,
+                      'data_loss':model.loss_data_log})
 
-# def save_dataDNN(model, params,  save_results_to, save_prfx):
-#     # ===================================
-#     # Saving model
-#     # ====================================
-#     t_train_range = np.linspace(0, 50, 2000)
-#     u_res = t_train_range.reshape([len(t_train_range), 1])
-#     flat_params, _  = ravel_pytree(model.get_params(model.opt_state))
-#     np.save(save_results_to + 'params_' + save_prfx + '.npy', flat_params)
+def save_SFDomainNet(model, save_results_to, save_prfx):
+    # ===================================
+    # Saving model
+    # ====================================
+    params = model.get_params(model.opt_state)
+    t_train_range = np.linspace(0, 50, 2000)
+    u_res = t_train_range.reshape([len(t_train_range), 1])
+    flat_params, _  = ravel_pytree(model.get_params(model.opt_state))
+    np.save(save_results_to + 'params_' + save_prfx + '.npy', flat_params)
 
-#     S_pred =  model.predict_low(params, u_res)
+    S_pred =  model.predict_low(params, u_res)
 
-#     fname= save_results_to +"beta_test.mat"
-#     scipy.io.savemat(fname, {'U_res':u_res,'S_pred':S_pred})
+    fname= save_results_to +"beta_test.mat"
+    scipy.io.savemat(fname, {'U_res':u_res,'S_pred':S_pred})
     
-#     scipy.io.savemat(save_results_to +"losses.mat", 
-#                      {'training_loss':model.loss_training_log,
-#                       'res_loss':model.loss_res_log,
-#                       'ics_loss':model.loss_ics_log,
-#                       'data_loss':model.loss_data_log})
-    
+    scipy.io.savemat(save_results_to +"losses.mat", 
+                     {'training_loss':model.loss_training_log,
+                      'res_loss':model.loss_res_log,
+                      'ics_loss':model.loss_ics_log,
+                      'data_loss':model.loss_data_log})
 
 
 
@@ -108,15 +111,15 @@ if __name__=="__main__":
     # ====================================
     # Saving Settings
     # ====================================
-    results_dir_A = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/dd_pinns/code/output/" # NOTE: Need to make this OS agnostic at some point 
-    if not os.path.exists(results_dir_A):
-        os.makedirs(results_dir_A)
+    output_dir = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/dd_pinns/code/output/" # NOTE: Need to make this OS agnostic at some point 
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
         
     # ====================================
     # Train A
     # ====================================
     
-    u_bc = np.asarray([0]).reshape([1, -1]) # NOTE: What is this for?
+    u_bc = np.asarray([0]).reshape([1, -1]) # time where the boundary condition is imposed
     s_bc = np.asarray([1, 1]).reshape([1, -1]) # pendulum starts with s1=1, s2=1
     u_bc = jax.device_put(u_bc)
     s_bc = jax.device_put(s_bc)
@@ -132,7 +135,7 @@ if __name__=="__main__":
 
     lam = []
     F = []
-    results_dir = results_dir_A
+    results_dir = output_dir
     
     model_A = DomainNet(layers_A, ics_weight, res_weight, data_weight, [], lr,[[min_A],[min_B]])
     model_A.train(ic_dataset, res_dataset, data_dataset, lam, F, [], nIter=epochs)
@@ -143,6 +146,100 @@ if __name__=="__main__":
     print("hello")
 
 
+#     model_A = DNN_class_EWC(layers_A, ics_weight, res_weight, data_weight, [], lr)
+#     if reloadA:
+#         # params_A = model_A.unravel_params(np.load(results_dir+ '/params.npy')) # This was the original line
+#         params_A = model_A.unravel_params(np.load(results_dir + 'params.npy'))
+
+    
+#     else:
+#         model_A.train(ic_dataset, res_dataset, data_dataset, lam, F, [], nIter=epochs)
+#         params_A = model_A.get_params(model_A.opt_state)
+#         save_dataDNN(model_A, params_A,  results_dir +"/", 'A')   
+        
+#         flat_params, _  = ravel_pytree(model_A.get_params(model_A.opt_state))
+#         np.save(results_dir + 'params.npy', flat_params)
+#         print('/n ... A Training done ...')
+        
+#         scipy.io.savemat(results_dir +"losses.mat", 
+#                      {'training_loss':model_A.loss_training_log,
+#                       'res_loss':model_A.loss_res_log,
+#                       'ics_loss':model_A.loss_ics_log,
+#                       'ut_loss':model_A.loss_data_log}, format='4')
+    
+
+#     # ====================================
+#     # DNN model A2
+#     # ====================================
+#   #  res_weight = 100.0
+#     params_prev = []
+    
+
+#     k = 2
+#     c = 0 
+#     key = random.PRNGKey(1234)
+#     batch_size_res = int(batch_size/2)    
+#     batch_size_pts = batch_size - batch_size_res                            
+                                     
+    
+#     key, subkey = random.split(key) 
+
+#     # These lines are computing the residuals at points based on a density function and then
+#     # they compute the error to backpropagate the parameters
+#     res_pts = coords[0] + (coords[1]-coords[0])*random.uniform(key, shape=[20000,1])
+#     res_val = model_A.predict_res(params_A, res_pts)
+#     err = res_val**k/np.mean( res_val**k) + c
+#     err_norm = err/np.sum(err)                        
+#     res_dataset = DataGenerator_res2(coords, res_pts, err_norm, batch_size_res, batch_size)
+    
+    
+    
+#     for step in steps_to_train:
+#         results_dir = "../results_" + str(step) + "/"+save_str+"/"
+#         if not os.path.exists(results_dir):
+#             os.makedirs(results_dir)
+        
+#         if step == 0:
+#             res = 0
+#         else:
+#             res = 1
+ 
+#         model = MF_class_EWC(layers_sizes_nl, layers_sizes_l, layers_A, ics_weight, 
+#                          res_weight, data_weight, pen_weight,lr,  params_A, params_t = params_prev, restart =res)
+
+        
+#         if reload[step]:
+#             # params = model.unravel_params(np.load(results_dir + '/params.npy')) # this was the original line
+#             params = model.unravel_params(np.load(results_dir + 'params.npy'))
+        
+#         else:     
+#             model.train(ic_dataset, res_dataset, data_dataset, nIter=epochsA2)
+
+#             print('/n ... A2 Training done ...')
+#             scipy.io.savemat(results_dir +"losses.mat", 
+#                          {'training_loss':model.loss_training_log,
+#                           'res_loss':model.loss_res_log,
+#                           'ics_loss':model.loss_ics_log,
+#                           'ut_loss':model.loss_data_log})
+        
+#             params = model.get_params(model.opt_state)
+#             flat_params, _  = ravel_pytree(params)
+#             np.save(results_dir + 'params.npy', flat_params)
+        
+#             save_data(model,  params, results_dir, 'B')   
+            
+#         params_prev.append(params)
+        
+#         key, subkey = random.split(key)
+#         res_pts = coords[0] + (coords[1]-coords[0])*random.uniform(key, shape=[20000,1])
+#         res_val = model.predict_res(params, res_pts)
+#         err = res_val**k/np.mean( res_val**k) + c
+#         err_norm = err/np.sum(err)                        
+      
+#         res_dataset = DataGenerator_res2(coords, res_pts, err_norm, batch_size_res, batch_size)
+
+
+#####################################################################################################
     #====================================================================================
     # Load the root
     #====================================================================================
