@@ -12,8 +12,6 @@ import os
 import scipy.io
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
-import jax
-import jax.numpy as np
 import time
 from utils_fs_v2 import timing,  DataGenerator, DataGenerator_res, DataGenerator_res2
 import math
