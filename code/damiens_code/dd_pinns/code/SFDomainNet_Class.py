@@ -48,18 +48,23 @@ class RootUtilities:
     """
     def __init__(self):
         self.levels = [] # list of what classes are on which levels of the domain tree
-        self.predictions
+        # self.predictions
 
-    def tree_level_organizer(self,new_node):
+    def tree_level_organizer(self,new_node): # TESTED
         """
-        This function recognizes which level "new_node" is on and places the class in the appropriate
-        level in "self.levels".
+        "tree_level_organizer" recognizes which level "new_node" is on and places "new_node"
+        in the appropriate level in "self.levels".
+        =================================================================================================
+        INPUT:
+        new_node:   A class that is being added to the tree
+        NOTE: If the node that is being added has children, I do not believe it will add it to self.levels.
+              This is something to work on maybe
         """
         depth = new_node.depth # find the depth of the new node
         if depth >= len(self.levels): # if "new_node" is the first on a new level, add that level to "self.levels"
             self.levels.append([new_node])
         else: # if "new_node" is a member of an existing level, add it to that level of "self.levels"
-            self.levels[depth].append([new_node])
+            self.levels[depth].append(new_node)
 
 class SFDomainNet(RootUtilities,NodeMixin):
 
@@ -70,7 +75,7 @@ class SFDomainNet(RootUtilities,NodeMixin):
                         single fidelity network serves as the root of the domain network tree. Its' children
                         are multifidelity PINNS that use this network as a low fidelity approximation.
     =================================================================================================
-    *args:
+    INPUT:
     sfnet_shape:        The layer structure of the low fidelity network (this is the same as the single 
                         fidelity network)
     ics_weight:         Penalty weight for not satisfying the initial conditions
@@ -79,8 +84,8 @@ class SFDomainNet(RootUtilities,NodeMixin):
     params_prev:        List containing the parameters of a previously trained neural network
     lr:                 Determines the learning rate of the neural network.
     vertices:           Two opposite points on the hyperrectangle used to define the domain. 
-    **kwargs:
     children:           The nodes whose domains are the immediate subsets of the current domain.
+                        NOTE: Every child domain must be a subset of the parent domain
     """
     def __init__(self, sfnet_shape, ics_weight, res_weight, data_weight, params_prev, lr, vertices, children=None): 
 
@@ -89,16 +94,15 @@ class SFDomainNet(RootUtilities,NodeMixin):
         #===========================================================================================
 
         super(SFDomainNet,self).__init__()
-        self.vertices = vertices # two opposite vertices that define the n-dimensional box
+        self.vertices = np.array(vertices) # two opposite vertices that define the n-dimensional box
         self.parent = None # parent domain of the current domain
 
         if children: # set children
             self.children = children
         
         # objects defined for the SFDomain.evaluate_neural_domain_tree(self,pts) function
-        self.pts = np.array([]) # the points on the interior of the root domain
-        self.global_indices = np.arange([100]) # NOTE: This is a hard-coded batch size. This needs to be changed.
-        # self.u_pred = [] # the prediction of the single fidelity networks at the collocation points
+        self.pts = None # the points on the interior of the root domain
+        self.global_indices = None # NOTE: This is inefficient. Find a better way to set this
 
         #===========================================================================================
         # Original Initialization Code
@@ -142,39 +146,78 @@ class SFDomainNet(RootUtilities,NodeMixin):
     # Evaluation
     # =============================================.
 
-    def find_interior_points(self,verts,parent_pts):
+    def find_interior_points(self,vertices,input_pts): # TESTED
         """
-        Creates a mask that communicates the locations of which points in "pts" are in the hyperrectangle
-        defined by verts.
+        "find_interior_points" determines which of the points in "input_pts" are on the interior of
+        the hyperrectangle defined by the points in "vertices".
+        =================================================================================================
+        INPUT:
+        vertices:   A list of two vertices that defines an nD hyperrectangle
+        input_pts:  A list of nD points
+        OUTPUT:
+        indices:    The indices of the points in "input_pts" that are in the hyperrectangle
+        pts:        The subset of points in "input_pts" that are in the hyperrectangle
+        NOTE: This code can be vectorized. The for-loop will be slow.
         """
-        indices = np.array([])
-        pts = np.array([])
-        number_of_points = len(parent_pts)
+        indices = []
+        pts = []
+        number_of_points = len(input_pts)
         for i in range(number_of_points):
-            condition = ((verts[0] <= parent_pts[i]) & (parent_pts[i] <= verts[1])).all()
+            condition = ((vertices[0] < input_pts[i]) & (input_pts[i] < vertices[1])).all()
             if condition:
                 indices.append(i)
-                pts.append(parent_pts[i])
-        return indices, pts
+                pts.append(input_pts[i])
+        return np.array(indices), np.array(pts)
 
-    def evaluate_neural_domain_tree(self,pts):
+    def evaluate_neural_domain_tree(self,pts): # TESTED
         """
-        Evaluate the neural domain tree layer by layer. 
-
+        "evaluate_neural_domain_tree" evaluates the neural domain tree layer by layer.
+        =================================================================================================
+        INPUT:
+        pts:        A list of the collocation points that are to be evaluated by the neural domain tree
+        OUTPUT:
+        u_preds:    A matrix where the ith row corresponds to the prediction coming from the ith level
+                    of the neural domain tree.
         NOTE: The current code only works if the support of the union of the domains at each level is the original domain.
         """
         self.pts = pts # save points to class
-        u_preds = np.array([self.apply_sf(self.params,pts)]) # the first prediction of the solution is the single fidelity net
+        u_pred = self.apply_sf(self.unravel_params,pts)
+        u_preds = np.zeros((len(self.levels),len(pts))) # create array to store predictions
+        u_preds[0,:] = u_pred # the first prediction of the solution is the single fidelity net
+        self.global_indices = np.arange(len(pts)) # NOTE: This is inefficient. Find a better way to set this
+        iter = 1
         for level in self.levels[1:]: # iterates through the levels of the domain tree (skipping the first level which contains the root)
             u_pred = np.zeros(len(pts))
             for mfdomain in level: # iterates through the MFDomains in each level of the tree. NOTE: parallelize this loop
-                parent = mfdomain.parent
+                parent = mfdomain.parent        
                 local_indices, mfdomain.pts = self.find_interior_points(mfdomain.vertices,parent.pts)
                 mfdomain.global_indices = parent.global_indices[local_indices] # get the indices of the points in the support of mfdomain
-                
-                output = mfdomain.apply_mf(mfdomain.params,mfdomain.pts,u_preds[-1][mfdomain.global_indices]) # analyze the local network
-                
+                output = mfdomain.apply_mf(self.unravel_params,mfdomain.pts,u_preds[-1][mfdomain.global_indices]) # analyze the local network
                 u_pred[mfdomain.global_indices] += output # add the output to the prediction of the solution
+            u_preds[iter,:] = u_pred # store the prediction on this level
+            iter += 1
+        return u_preds
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #==========================================================================================================
