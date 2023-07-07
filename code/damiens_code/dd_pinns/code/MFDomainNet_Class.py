@@ -43,33 +43,45 @@ import numpy as onp
 #============================================================================================
 
 class MFDomainNet(NodeMixin):
+    # nonlin_mfnet_shape, lin_mfnet_shape, 
     
-    def __init__(self, layers_branch_nl, layers_branch_l, layers_branch_lf, ics_weight, res_weight, data_weight, pen_weight, lr ,
-                 params_A, restart =0, params_t = []): 
+    def __init__(self, nonlin_mfnet_shape, lin_mfnet_shape, ics_weight, res_weight, data_weight, 
+                 pen_weight, lr, params_prev, vertices, parent = None, children=None):
 
-        self.init_nl, self.apply_nl, self.weight_nl = nonlinear_DNN(layers_branch_nl)
-        self.init_l, self.apply_l = linear_DNN(layers_branch_l)
-        self.init_lf, self.apply_lf = DNN(layers_branch_lf)
+        #===========================================================================================
+        # My Initialization Code
+        #===========================================================================================
 
-        self.params_t = params_t
-        self.params_A = params_A
+        super(MFDomainNet,self).__init__()
+        self.vertices = vertices # two opposite vertices that define the n-dimensional box
+        self.parent = parent # parent domain of the current domain
 
-        if restart == 1 and len(self.params_t) > 0:
-            params_nl = self.params_t[-1][0]
-            params_l = self.params_t[-1][1]
+        if children: # set children
+            self.children = children
+
+        # this is used to record which points in SFDomain.evaluate_neural_domain_tree(self,pts) are
+        # on the interior of the current node's domain          
+        self.global_indices = []
+        self.pts = []
+
+        #===========================================================================================
+        # Original Initialization Code
+        #===========================================================================================
+
+        self.init_nl, self.apply_nl, self.weight_nl = nonlinear_DNN(nonlin_mfnet_shape)
+        self.init_l, self.apply_l = linear_DNN(lin_mfnet_shape)
+
+        if len(params_prev) > 0:
+            params = params_prev
         else:
             params_nl = self.init_nl(random.PRNGKey(13))
             params_l = self.init_l(random.PRNGKey(12345))
-        params = (params_nl, params_l)
-        self.restart = restart
-
+            params = (params_l, params_nl)
 
         self.ics_weight = ics_weight
         self.res_weight = res_weight
         self.data_weight = data_weight
         self.pen_weight = pen_weight
-        
-        
         
         # Use optimizers to set optimizer initialization and update functions
         self.opt_init, \
@@ -83,182 +95,18 @@ class MFDomainNet(NodeMixin):
 
         self.itercount = itertools.count()
 
-
-
         # building loss function
         self.loss_training_log = []
         self.loss_res_log = []
         self.loss_ics_log = []
         self.loss_data_log = []
 
+        self.root.tree_level_organizer(self) # add current node to the level organizer 
+
     # =============================================
-    # evaluation
+    # Evaluation
     # =============================================
 
-    def operator_net(self, params, u):
-    
-        ul = self.apply_lf(self.params_A, u)
-    
-        for i in onp.arange(len(self.params_t)): 
-            paramsB_nl =  self.params_t[i][0]
-            paramsB_l =  self.params_t[i][1]
-            in_u = np.hstack([u, ul])
-    
-            B_lin = self.apply_l(paramsB_l, ul)
-            B_nonlin = self.apply_nl(paramsB_nl, in_u)
-            B_lin = B_lin
-    
-            ul = B_nonlin + B_lin 
-        
-        params_nl, params_l = params
-        y = np.hstack([u, ul])
-
-
-        logits_nl = self.apply_nl(params_nl, y)
-        logits_l = self.apply_l(params_l, ul)
-        
-        s1 = logits_l[:1]+ logits_nl[:1]
-        s2 = logits_l[1:]+ logits_nl[1:]
-          
-        #  print(s1.shape)
-        
-        return s1, s2
-    
-    
-
-
-    # Define ODE residual
-    def residual_net(self, params, u):
-
-        s1, s2 = self.operator_net(params, u)
-     #   print(s1.shape)
-     #   print(u.shape)
-
-
-        def s1_fn(params, u):
-          s1_fn, _ = self.operator_net(params, u)
-       #   print(s1_fn.shape)
-          return s1_fn[0]
-        
-        def s2_fn(params, u):
-          _, s2_fn  = self.operator_net(params, u)
-          return s2_fn[0]
-
-        s1_y = grad(s1_fn, argnums= 1)(params, u)
-        s2_y = grad(s2_fn, argnums= 1)(params, u)
-
-        res_1 = s1_y - s2
-        res_2 = s2_y + 0.05 * s2 + 9.81 * np.sin(s1)
-
-        return res_1, res_2
-
-
-    def loss_data(self, params, batch):
-        # Fetch data
-        inputs, outputs = batch
-        u = inputs
-        
-        s1 = outputs[:, 0:1]
-        s2 = outputs[:, 1:2]
-
-        # Compute forward pass
-        s1_pred, s2_pred =vmap(self.operator_net, (None, 0))(params, u)
-        # Compute loss
-
-        loss_s1 = np.mean((s1.flatten() - s1_pred.flatten())**2)
-        loss_s2 = np.mean((s2.flatten() - s2_pred.flatten())**2)
-
-        loss = loss_s1 + loss_s2
-        return loss
-    
-    # Define residual loss
-    def loss_res(self, params, batch):
-        # Fetch data
-        inputs, outputs = batch
-        u = inputs
-
-        # Compute forward pass
-        res1_pred, res2_pred = vmap(self.residual_net, (None, 0))(params, u)
-        # Compute loss
-
-        loss_res1 = np.mean((res1_pred)**2)
-        loss_res2 = np.mean((res2_pred)**2)
-        loss_res = loss_res1 + loss_res2
-        return loss_res   
-
-    # Define total loss
-    def loss(self, params, ic_batch, res_batch, val_batch):
-        loss_ics = self.loss_data(params, ic_batch)
-        loss_res = self.loss_res(params, res_batch)
-        loss_data = self.loss_data(params, val_batch)
-        loss =  self.ics_weight*loss_ics + self.res_weight*loss_res + self.data_weight*loss_data
-        params_nl, params_l = params
-
-        loss =  self.ics_weight*loss_ics + self.res_weight*loss_res +\
-            self.data_weight*loss_data+ self.pen_weight*(self.weight_nl(params_nl))
-            
-        return loss 
-    
-        # Define a compiled update step
-    @partial(jit, static_argnums=(0,))
-    def step(self, i, opt_state, ic_batch, res_batch, val_batch):
-        params = self.get_params(opt_state)
-
-        g = grad(self.loss)(params, ic_batch, res_batch, val_batch)
-        return self.opt_update(i, g, opt_state)
-    
-
-    # Optimize parameters in a loop
-    def train(self, ic_dataset, res_dataset, val_dataset, nIter = 10000):
-        res_data = iter(res_dataset)
-        ic_data = iter(ic_dataset)
-        val_data = iter(val_dataset)
-
-        pbar = trange(nIter)
-        # Main training loop
-        for it in pbar:
-            # Fetch data
-            res_batch= next(res_data)
-            ic_batch= next(ic_data)
-            val_batch= next(val_data)
-
-            self.opt_state = self.step(next(self.itercount), self.opt_state, 
-                                       ic_batch, res_batch, val_batch)
-            
-            if it % 1000 == 0:
-                params = self.get_params(self.opt_state)
-
-                # Compute losses
-                loss_value = self.loss(params, ic_batch, res_batch, val_batch)
-                res_value = self.loss_res(params, res_batch)
-                ics__value = self.loss_data(params, ic_batch)
-                data_value = self.loss_data(params, val_batch)
-
-                # Store losses
-                self.loss_training_log.append(loss_value)
-                self.loss_res_log.append(res_value)
-                self.loss_ics_log.append(ics__value)
-                self.loss_data_log.append(data_value)
-
-                # Print losses
-                pbar.set_postfix({'Loss': "{0:.4f}".format(loss_value), 
-                                  'Res': "{0:.4f}".format(res_value), 
-                                  'ICS': "{0:.4f}".format(ics__value),
-                                  'Data': "{0:.4f}".format(data_value)})
-
-    # Evaluates predictions at test points  
-    # Evaluates predictions at test points  
-    @partial(jit, static_argnums=(0,))
-    def predict_full(self, params, U_star):
-        s_pred =vmap(self.operator_net, (None, 0))(params, U_star)
-        return s_pred
-    
-    def predict_res(self, params, U_star):
-        res1, res2  =vmap(self.residual_net, (None, 0))(params, U_star)
-        loss_res1 = np.mean((res1)**2, axis=1)
-        loss_res2 = np.mean((res2)**2, axis=1)
-        loss_res = loss_res1 + loss_res2
-        return loss_res    
 
 # #============================================================================================
 # # My Imports
@@ -306,7 +154,7 @@ class MFDomainNet(NodeMixin):
 
 # class MFDomainNet(NodeMixin):
     
-#     def __init__(self, layers_branch_nl, layers_branch_l, layers_branch_lf, ics_weight, res_weight, data_weight, pen_weight, lr ,
+#     def __init__(self, nonlin_mfnet_shape, lin_mfnet_shape, lin_mfnet_shapef, ics_weight, res_weight, data_weight, pen_weight, lr ,
 #                  Ndomains, delta, Tmax, params_A, vertices, parent=None, children=None, restart=0, params_t = []): 
 
 #         #===========================================================================================
@@ -329,12 +177,12 @@ class MFDomainNet(NodeMixin):
 #         # Original Initialization Code
 #         #===========================================================================================
 
-#         self.init_lf, self.apply_lf = DNN(layers_branch_lf) # initialize low fidelity network
+#         self.init_lf, self.apply_lf = DNN(lin_mfnet_shapef) # initialize low fidelity network
 #         self.params_t = params_t # previousl
 
 #         self.Ndomains = Ndomains
-#         self.init_nl, self.apply_nl, self.weight_nl = nonlinear_DNN(layers_branch_nl)
-#         self.init_l, self.apply_l = linear_DNN(layers_branch_l)
+#         self.init_nl, self.apply_nl, self.weight_nl = nonlinear_DNN(nonlin_mfnet_shape)
+#         self.init_l, self.apply_l = linear_DNN(lin_mfnet_shape)
 #         params = []
         
 #         if restart == 0:
