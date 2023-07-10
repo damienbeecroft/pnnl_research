@@ -181,7 +181,9 @@ class SFDomainNet(RootUtilities,NodeMixin):
         NOTE: The current code only works if the support of the union of the domains at each level is the original domain.
         """
         self.pts = pts # save points to class
-        u_pred = self.apply_sf(self.unravel_params,pts)
+        params = self.get_params(self.opt_state)
+        # u_pred = self.apply_sf(params,pts)
+        u_pred = vmap(self.apply_sf,(None,0))(params,pts)
         u_preds = np.zeros((len(self.levels),len(pts))) # create array to store predictions
         u_preds[0,:] = u_pred # the first prediction of the solution is the single fidelity net
         self.global_indices = np.arange(len(pts)) # NOTE: This is inefficient. Find a better way to set this
@@ -189,10 +191,12 @@ class SFDomainNet(RootUtilities,NodeMixin):
         for level in self.levels[1:]: # iterates through the levels of the domain tree (skipping the first level which contains the root)
             u_pred = np.zeros(len(pts))
             for mfdomain in level: # iterates through the MFDomains in each level of the tree. NOTE: parallelize this loop
-                parent = mfdomain.parent        
+                parent = mfdomain.parent     
                 local_indices, mfdomain.pts = self.find_interior_points(mfdomain.vertices,parent.pts)
                 mfdomain.global_indices = parent.global_indices[local_indices] # get the indices of the points in the support of mfdomain
-                output = mfdomain.apply_mf(self.unravel_params,mfdomain.pts,u_preds[-1][mfdomain.global_indices]) # analyze the local network
+                params = mfdomain.get_params(mfdomain.opt_state)
+                output = vmap(mfdomain.apply_mf,(None,0,0))(params,mfdomain.pts,u_preds[-1][mfdomain.global_indices])
+                # output = mfdomain.apply_mf(params,mfdomain.pts,u_preds[-1][mfdomain.global_indices]) # analyze the local network
                 u_pred[mfdomain.global_indices] += output # add the output to the prediction of the solution
             u_preds[iter,:] = u_pred # store the prediction on this level
             iter += 1

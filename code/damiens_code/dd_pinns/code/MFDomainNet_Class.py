@@ -119,8 +119,8 @@ class MFDomainNet(NodeMixin):
         w = w**2
         return w
 
-    def apply_mf(self,pts,u_lf):
-        params = self.unravel_params # NOTE: This is probably wrong. I am not certain what format the two functions below are expecting
+    def apply_mf(self,params,pts,u_lf):
+        # params = self.unravel_params # NOTE: This is probably wrong. I am not certain what format the two functions below are expecting
         u_nl = self.apply_nl(params[1], np.hstack([pts, u_lf]))
         u_l = self.apply_l(params[0], u_lf)
         w = self.weight(pts)

@@ -1,4 +1,3 @@
-
 # Import operating system
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
@@ -153,4 +152,6 @@ if __name__=="__main__":
     pts = np.linspace(0.0,1.0,11)
     
     u_preds = A.evaluate_neural_domain_tree(pts)
+    print("done")
     plt.plot(pts,u_preds[-1])
+    plt.show()
