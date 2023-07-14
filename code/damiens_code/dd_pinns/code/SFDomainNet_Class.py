@@ -4,6 +4,7 @@
 
 from anytree import NodeMixin
 from MFDomainNet_Class import MFDomainNet
+import numpy as onp
 
 #============================================================================================
 # Original Imports
@@ -87,7 +88,7 @@ class SFDomainNet(RootUtilities,NodeMixin):
     children:           The nodes whose domains are the immediate subsets of the current domain.
                         NOTE: Every child domain must be a subset of the parent domain
     """
-    def __init__(self, sfnet_shape, ics_weight, res_weight, data_weight, params_prev, lr, vertices, children=None): 
+    def __init__(self, sfnet_shape, ics_weight, res_weight, data_weight, pen_weight, params_prev, lr, vertices, children=None): 
 
         #===========================================================================================
         # My Initialization Code
@@ -133,6 +134,7 @@ class SFDomainNet(RootUtilities,NodeMixin):
         self.ics_weight = ics_weight
         self.res_weight = res_weight
         self.data_weight = data_weight
+        self.pen_weight = pen_weight
 
         # building loss function
         self.loss_training_log = []
@@ -142,9 +144,29 @@ class SFDomainNet(RootUtilities,NodeMixin):
 
         self.tree_level_organizer(self) # add root to the level organizer
 
-    # =============================================
+    # ===================================================================================================
     # Evaluation
-    # =============================================.
+    # ===================================================================================================
+
+    # ===================================================================================================
+    # Functions that I implemented
+    # ===================================================================================================
+
+    def get_level_parameters(self,level):
+        """
+        "get_level_parameters" iterates through the domain nets contained in the level indicated by "level" 
+        in "self.levels" and creates a list of the neural network parameters contained in the domain nets.
+        =================================================================================================
+        INPUT:
+        level:          The level from which to retrieve the parameters of the domain nets
+        OUTPUT:
+        level_params:   List of the parameters of the neural networks on the current level.=
+        """
+        level_params = []
+        for domain_net in self.levels[level]:
+            params = domain_net.get_params(domain_net.opt_state)
+            level_params.append(params)
+        return level_params
 
     def find_interior_points(self,vertices,input_pts): # TESTED
         """
@@ -168,60 +190,446 @@ class SFDomainNet(RootUtilities,NodeMixin):
                 indices.append(i)
                 pts.append(input_pts[i])
         return np.array(indices), np.array(pts)
-
-    def evaluate_neural_domain_tree(self,pts): # TESTED
+    
+    def singlefidelity_network(self,params,pts):
         """
-        "evaluate_neural_domain_tree" evaluates the neural domain tree layer by layer.
+        "singlefidelity_network" evaluates the root network and outputs the solution at "pts".
+        NOTE: This function is hard coded to solve the pendulum equation
         =================================================================================================
         INPUT:
-        pts:        A list of the collocation points that are to be evaluated by the neural domain tree
+        params:     The parameters to be passed into the neural network
+        pts:        The points that the neural network is to be evaluated at.
         OUTPUT:
-        u_preds:    A matrix where the ith row corresponds to the prediction coming from the ith level
-                    of the neural domain tree.
-        NOTE: The current code only works if the support of the union of the domains at each level is the original domain.
+        s1,s2:      The position and velocity of the pendulum
         """
-        self.pts = pts # save points to class
-        params = self.get_params(self.opt_state)
-        # u_pred = self.apply_sf(params,pts)
-        u_pred = vmap(self.apply_sf,(None,0))(params,pts)
-        u_preds = np.zeros((len(self.levels),len(pts))) # create array to store predictions
-        u_preds[0,:] = u_pred # the first prediction of the solution is the single fidelity net
-        self.global_indices = np.arange(len(pts)) # NOTE: This is inefficient. Find a better way to set this
+        B = self.apply_sf(params[0], pts)
+        s1 = B[:1]
+        s2 = B[1:]
+
+        return s1, s2
+    
+    def multifidelity_network(self, params, pts): # NOT FINISHED
+        self.pts = pts.val # points with the jax array
+        empty_batch = pts.copy()
+        empty_batch.val = np.array([]) # create an empty batch to add points to later
+        params_sf = self.get_params(self.opt_state)
+        u_sf = self.apply_sf(params_sf,pts) # single fidelity prediction
+        u_preds = [u_sf.val] # I am not pre-defining the array this time. I am going to simply append the new solution to the previous one.
+        self.global_indices = np.arange(len(pts)) # NOTE: I am not sure that this works. Even if it does, it is inefficient. Find a better way to set this.
         iter = 1
-        for level in self.levels[1:]: # iterates through the levels of the domain tree (skipping the first level which contains the root)
-            u_pred = np.zeros(len(pts))
+        for level in self.levels[1:-1]: # iterates through the levels of the domain tree (skipping the first and last levels)
+            u_pred = np.zeros(len(pts.val))
             for mfdomain in level: # iterates through the MFDomains in each level of the tree. NOTE: parallelize this loop
-                parent = mfdomain.parent     
+                parent = mfdomain.parent
                 local_indices, mfdomain.pts = self.find_interior_points(mfdomain.vertices,parent.pts)
                 mfdomain.global_indices = parent.global_indices[local_indices] # get the indices of the points in the support of mfdomain
-                params = mfdomain.get_params(mfdomain.opt_state)
-                output = vmap(mfdomain.apply_mf,(None,0,0))(params,mfdomain.pts,u_preds[-1][mfdomain.global_indices])
-                # output = mfdomain.apply_mf(params,mfdomain.pts,u_preds[-1][mfdomain.global_indices]) # analyze the local network
-                u_pred[mfdomain.global_indices] += output # add the output to the prediction of the solution
-            u_preds[iter,:] = u_pred # store the prediction on this level
+                current_params = mfdomain.get_params(mfdomain.opt_state)
+                batch_pts = empty_batch.copy()
+                batch_pts.val = mfdomain.pts # make a batch with mfdomain.pts
+                batch_u_preds = empty_batch.copy()
+                batch_u_preds.val = u_preds[-1][mfdomain.global_indices] # make a batch with u_preds[-1][mfdomain.global_indices]
+                output = mfdomain.apply_mf(current_params,batch_pts,batch_u_preds) # analyze the local network
+                u_pred[mfdomain.global_indices] += output.val # add the output to the prediction of the solution
+            u_preds.append(u_pred)
             iter += 1
+
+        # NEED TO ADD CODE FOR EVALUATING THE FINAL LAYER
         return u_preds
 
+    # Define ODE residual
+    def residual_net(self, params, u, f):
+        s1, s2 = f(params, u)
+
+        def s1_fn(params, u):
+          s1_fn, _ = f(params, u)
+          return s1_fn[0]
+        
+        def s2_fn(params, u):
+          _, s2_fn  = f(params, u)
+          return s2_fn[0]
+
+        s1_y = grad(s1_fn, argnums= 1)(params, u)
+        s2_y = grad(s2_fn, argnums= 1)(params, u)
+
+        res_1 = s1_y - s2
+        res_2 = s2_y + 0.05 * s2 + 9.81 * np.sin(s1)
+
+        return res_1, res_2
+    
+    def loss_data(self, params, batch,f):
+        # Fetch data
+        inputs, outputs = batch
+        u = inputs
+        
+        s1 = outputs[:, 0:1]
+        s2 = outputs[:, 1:2]
+
+        # Compute forward pass
+        s1_pred, s2_pred =vmap(f, (None, 0))(params, u)
+        # Compute loss
+
+        loss_s1 = np.mean((s1.flatten() - s1_pred.flatten())**2)
+        loss_s2 = np.mean((s2.flatten() - s2_pred.flatten())**2)
+
+        loss = loss_s1 + loss_s2
+        return loss
+    
+    # Define residual loss
+    def loss_res(self, params, batch,f):
+        # Fetch data
+        inputs, outputs = batch
+        u = inputs
+
+        # Compute forward pass
+        res1_pred, res2_pred = vmap(self.residual_net, (None, 0, None))(params, u,f)
+        # Compute loss
+
+        loss_res1 = np.mean((res1_pred)**2)
+        loss_res2 = np.mean((res2_pred)**2)
+        loss_res = loss_res1 + loss_res2
+        return loss_res
+    
+    # Define total loss
+    def loss(self, params, ic_batch, res_batch, val_batch, level, f):
+        loss_ics = self.loss_data(params, ic_batch, f)
+        loss_res = self.loss_res(params, res_batch, f)
+        loss_data = self.loss_data(params, val_batch, f)
+
+        # NOTE: These lines penalize the network for having large network weights. I am removing this
+        #       for now to simplify development. I will bring it back later. I also need to figure out how to
+        #       make the weight penalization efficient for both the single fidelity and multifidelity networks
+        #===============================================================================================
+        # weights  = 0
+        # for i in onp.arange(len(self.levels[level])):
+        #      params_nl, params_l = params[i]
+        #      weights += self.weight_nl(params_nl)
+
+        # loss =  self.ics_weight*loss_ics + self.res_weight*loss_res +\
+        #         self.data_weight*loss_data+ self.pen_weight*weights
+        #===============================================================================================
+
+        loss = self.ics_weight*loss_ics + self.res_weight*loss_res + self.data_weight*loss_data
+        return loss 
+
+    # Define a compiled update step
+    @partial(jit, static_argnums=(0,5,6))
+    def step(self, i, ic_batch, res_batch, val_batch, level, f):
+        params = self.get_level_parameters(level)
+        opt_state = self.opt_init(params) # NOTE: I have no idea if this is the correct way to do this
+        # params = self.get_params(opt_state)
+
+        g = grad(self.loss)(params, ic_batch, res_batch, val_batch, level, f)
+        return self.opt_update(i, g, opt_state)
+
+    # Optimize parameters in a loop
+    def train(self, ic_dataset, res_dataset, val_dataset, level, nIter = 10000):
+        res_data = iter(res_dataset)
+        ic_data = iter(ic_dataset)
+        val_data = iter(val_dataset)
+
+        if level == 0:
+            training_function = self.singlefidelity_network
+        else:
+            training_function = self.multifidelity_network
+
+        pbar = trange(nIter)
+        # Main training loop
+        for it in pbar:
+            # Fetch data
+            res_batch= next(res_data)
+            ic_batch= next(ic_data)
+            val_batch= next(val_data)
+
+            self.opt_state = self.step(next(self.itercount), ic_batch, res_batch, val_batch, level, training_function)
+
+            if it % 1000 == 0:
+                params = self.get_params(self.opt_state)
+
+                # Compute losses
+                loss_value = self.loss(params, ic_batch, res_batch, val_batch, level, training_function)
+                res_value = self.loss_res(params, res_batch, training_function)
+                ics__value = self.loss_data(params, ic_batch, training_function)
+                data_value = self.loss_data(params, val_batch, training_function)
+
+                # Store losses
+                self.loss_training_log.append(loss_value)
+                self.loss_res_log.append(res_value)
+                self.loss_ics_log.append(ics__value)
+                self.loss_data_log.append(data_value)
+
+                # Print losses
+                pbar.set_postfix({'Loss': "{0:.4f}".format(loss_value), 
+                                  'Res': "{0:.4f}".format(res_value), 
+                                  'ICS': "{0:.4f}".format(ics__value),
+                                  'Data': "{0:.4f}".format(data_value)})
+
+    # @partial(jit,static_argnums=(0,2))
+    def predict(self,pts,level):
+
+        params = self.get_level_parameters(level)
+
+        if level == 0:
+            training_function = self.singlefidelity_network
+        else:
+            training_function = self.multifidelity_network
+
+        u_pred = vmap(training_function, (None, 0))(params[0],pts)
+        return u_pred
 
 
 
 
+    
 
 
 
 
+    # ===================================================================================================
+    # Functions that were already implemented in MF_EWC_Class.py
+    # ===================================================================================================
+
+    # def operator_net(self, params, u):
+    
+    #     ul = self.apply_lf(self.params_A, u)
+    
+    #     for j in onp.arange(len(self.Ndomains)-1):
+    #         ul_cur = 0
+    #         for i in onp.arange(self.Ndomains[j]):
+                
+    #             paramsB_nl =  self.params_t[j][i][0]
+    #             paramsB_l =  self.params_t[j][i][1]
+    #             y = np.hstack([u, ul])
+
+    #             u_nl = self.apply_nl(paramsB_nl, y)
+    #             u_l = self.apply_l(paramsB_l, ul)
+                
+    #             w = self.w_jl(i, self.Ndomains[j], u)
+    #             ul_cur += w*(u_l + u_nl)
+
+    #         ul = ul_cur
+        
+    #     s1 = 0
+    #     s2 = 0
+    #     for i in onp.arange(self.Ndomains[-1]):
+    #         params_nl, params_l = params[i]
+    #         y = np.hstack([u, ul])
+
+    #         u_nl = self.apply_nl(params_nl, y)
+    #         u_l = self.apply_l(params_l, ul)
+            
+    #         w = self.w_jl(i, self.Ndomains[-1], u)
+    #         s1 += w*(u_l[:1]+ u_nl[:1])
+    #         s2 += w*(u_l[1:]+ u_nl[1:])
+        
+    #     return s1, s2
+    
+
+    # # Define ODE residual
+    # def residual_net(self, params, u):
+
+    #     s1, s2 = self.operator_net(params, u)
+    #  #   print(s1.shape)
+    #  #   print(u.shape)
 
 
+    #     def s1_fn(params, u):
+    #       s1_fn, _ = self.operator_net(params, u)
+    #    #   print(s1_fn.shape)
+    #       return s1_fn[0]
+        
+    #     def s2_fn(params, u):
+    #       _, s2_fn  = self.operator_net(params, u)
+    #       return s2_fn[0]
+
+    #     s1_y = grad(s1_fn, argnums= 1)(params, u)
+    #     s2_y = grad(s2_fn, argnums= 1)(params, u)
+
+    #     res_1 = s1_y - s2
+    #     res_2 = s2_y + 0.05 * s2 + 9.81 * np.sin(s1)
+
+    #     return res_1, res_2
 
 
+    # def loss_data(self, params, batch):
+    #     # Fetch data
+    #     inputs, outputs = batch
+    #     u = inputs
+        
+    #     s1 = outputs[:, 0:1]
+    #     s2 = outputs[:, 1:2]
 
+    #     # Compute forward pass
+    #     s1_pred, s2_pred =vmap(self.operator_net, (None, 0))(params, u)
+    #     # Compute loss
 
+    #     loss_s1 = np.mean((s1.flatten() - s1_pred.flatten())**2)
+    #     loss_s2 = np.mean((s2.flatten() - s2_pred.flatten())**2)
 
+    #     loss = loss_s1 + loss_s2
+    #     return loss
+    
+    # # Define residual loss
+    # def loss_res(self, params, batch):
+    #     # Fetch data
+    #     inputs, outputs = batch
+    #     u = inputs
 
+    #     # Compute forward pass
+    #     res1_pred, res2_pred = vmap(self.residual_net, (None, 0))(params, u)
+    #     # Compute loss
 
+    #     loss_res1 = np.mean((res1_pred)**2)
+    #     loss_res2 = np.mean((res2_pred)**2)
+    #     loss_res = loss_res1 + loss_res2
+    #     return loss_res
 
+    # # Define total loss
+    # def loss(self, params, ic_batch, res_batch, val_batch):
+    #     loss_ics = self.loss_data(params, ic_batch)
+    #     loss_res = self.loss_res(params, res_batch)
+    #     loss_data = self.loss_data(params, val_batch)
+        
+    #     weights  = 0
+    #     for i in onp.arange(self.Ndomains[-1]):
+    #          params_nl, params_l = params[i]
+    #          weights += self.weight_nl(params_nl)
 
+    #     loss =  self.ics_weight*loss_ics + self.res_weight*loss_res +\
+    #         self.data_weight*loss_data+ self.pen_weight*weights
+            
+    #     return loss 
+    
 
+    
+    #     # Define a compiled update step
+    # @partial(jit, static_argnums=(0,))
+    # def step(self, i, opt_state, ic_batch, res_batch, val_batch):
+    #     params = self.get_params(opt_state)
+
+    #     g = grad(self.loss)(params, ic_batch, res_batch, val_batch)
+    #     return self.opt_update(i, g, opt_state)
+    
+
+    # # Optimize parameters in a loop
+    # def train(self, ic_dataset, res_dataset, val_dataset, nIter = 10000):
+    #     res_data = iter(res_dataset)
+    #     ic_data = iter(ic_dataset)
+    #     val_data = iter(val_dataset)
+
+    #     pbar = trange(nIter)
+    #     # Main training loop
+    #     for it in pbar:
+    #         # Fetch data
+    #         res_batch= next(res_data)
+    #         ic_batch= next(ic_data)
+    #         val_batch= next(val_data)
+
+    #         self.opt_state = self.step(next(self.itercount), self.opt_state, 
+    #                                    ic_batch, res_batch, val_batch)
+            
+    #         if it % 1000 == 0:
+    #             params = self.get_params(self.opt_state)
+
+    #             # Compute losses
+    #             loss_value = self.loss(params, ic_batch, res_batch, val_batch)
+    #             res_value = self.loss_res(params, res_batch)
+    #             ics__value = self.loss_data(params, ic_batch)
+    #             data_value = self.loss_data(params, val_batch)
+
+    #             # Store losses
+    #             self.loss_training_log.append(loss_value)
+    #             self.loss_res_log.append(res_value)
+    #             self.loss_ics_log.append(ics__value)
+    #             self.loss_data_log.append(data_value)
+
+    #             # Print losses
+    #             pbar.set_postfix({'Loss': "{0:.4f}".format(loss_value), 
+    #                               'Res': "{0:.4f}".format(res_value), 
+    #                               'ICS': "{0:.4f}".format(ics__value),
+    #                               'Data': "{0:.4f}".format(data_value)})
+
+    # # Evaluates predictions at test points  
+    # # Evaluates predictions at test points  
+    # @partial(jit, static_argnums=(0,))
+    # def predict_full(self, params, U_star):
+    #     s_pred =vmap(self.operator_net, (None, 0))(params, U_star)
+    #     return s_pred
+
+    # def predict_res(self, params, U_star):
+    #     res1, res2  =vmap(self.residual_net, (None, 0))(params, U_star)
+    #     loss_res1 = np.mean((res1)**2, axis=1)
+    #     loss_res2 = np.mean((res2)**2, axis=1)
+    #     loss_res = loss_res1 + loss_res2
+    #     return loss_res    
+
+#==========================================================================================================
+# Tested code for seeing how to evaluate the network layer by layer
+#==========================================================================================================
+
+    # def evaluate_neural_domain_tree(self,pts): # TESTED
+    #     """
+    #     "evaluate_neural_domain_tree" evaluates the neural domain tree layer by layer.
+    #     =================================================================================================
+    #     INPUT:
+    #     pts:        A list of the collocation points that are to be evaluated by the neural domain tree
+    #     OUTPUT:
+    #     u_preds:    A matrix where the ith row corresponds to the prediction coming from the ith level
+    #                 of the neural domain tree.
+    #     NOTE: The current code only works if the support of the union of the domains at each level is the original domain.
+    #     """
+    #     self.pts = pts # save points to class
+    #     params = self.get_params(self.opt_state)
+    #     u_pred = self.apply_sf(params,pts)
+    #     u_preds = np.zeros((len(self.levels),len(pts))) # create array to store predictions
+    #     u_preds[0,:] = u_pred # the first prediction of the solution is the single fidelity net
+    #     self.global_indices = np.arange(len(pts)) # NOTE: This is inefficient. Find a better way to set this
+    #     iter = 1
+    #     for level in self.levels[1:]: # iterates through the levels of the domain tree (skipping the first level which contains the root)
+    #         u_pred = np.zeros(len(pts))
+    #         for mfdomain in level: # iterates through the MFDomains in each level of the tree. NOTE: parallelize this loop
+    #             parent = mfdomain.parent
+    #             local_indices, mfdomain.pts = self.find_interior_points(mfdomain.vertices,parent.pts)
+    #             mfdomain.global_indices = parent.global_indices[local_indices] # get the indices of the points in the support of mfdomain
+    #             params = mfdomain.get_params(mfdomain.opt_state)
+    #             output = mfdomain.apply_mf(params,mfdomain.pts,u_preds[-1][mfdomain.global_indices]) # analyze the local network
+    #             u_pred[mfdomain.global_indices] += output # add the output to the prediction of the solution
+    #         u_preds[iter,:] = u_pred # store the prediction on this level
+    #         iter += 1
+    #     return u_preds
+
+    # def evaluate_neural_domain_tree(self,pts): # TESTED
+    #     """
+    #     "evaluate_neural_domain_tree" evaluates the neural domain tree layer by layer.
+    #     =================================================================================================
+    #     INPUT:
+    #     pts:        A list of the collocation points that are to be evaluated by the neural domain tree
+    #     OUTPUT:
+    #     u_preds:    A matrix where the ith row corresponds to the prediction coming from the ith level
+    #                 of the neural domain tree.
+    #     NOTE: The current code only works if the support of the union of the domains at each level is the original domain.
+    #     """
+    #     self.pts = pts # save points to class
+    #     params = self.get_params(self.opt_state)
+    #     # u_pred = self.apply_sf(params,pts)
+    #     u_pred = vmap(self.apply_sf,(None,0))(params,pts)
+    #     u_preds = np.zeros((len(self.levels),len(pts))) # create array to store predictions
+    #     # u_preds[0,:] = u_pred # the first prediction of the solution is the single fidelity net
+    #     u_preds.at[0,:].set(u_pred)
+    #     self.global_indices = np.arange(len(pts)) # NOTE: This is inefficient. Find a better way to set this
+    #     iter = 1
+    #     for level in self.levels[1:]: # iterates through the levels of the domain tree (skipping the first level which contains the root)
+    #         u_pred = np.zeros(len(pts))
+    #         for mfdomain in level: # iterates through the MFDomains in each level of the tree. NOTE: parallelize this loop
+    #             parent = mfdomain.parent     
+    #             local_indices, mfdomain.pts = self.find_interior_points(mfdomain.vertices,parent.pts)
+    #             mfdomain.global_indices = parent.global_indices[local_indices] # get the indices of the points in the support of mfdomain
+    #             params = mfdomain.get_params(mfdomain.opt_state)
+    #             output = vmap(mfdomain.apply_mf,(None,0,0))(params,mfdomain.pts,u_preds[-1][mfdomain.global_indices]) # analyze the local network
+    #             # output = mfdomain.apply_mf(params,mfdomain.pts,u_preds[-1][mfdomain.global_indices]) # analyze the local network
+    #             u_pred[mfdomain.global_indices] += output # add the output to the prediction of the solution
+    #         u_preds[iter,:] = u_pred # store the prediction on this level
+    #         iter += 1
+    #     return u_preds
 
 
 #==========================================================================================================

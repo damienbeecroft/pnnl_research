@@ -78,6 +78,9 @@ class MFDomainNet(NodeMixin):
             params_l = self.init_l(random.PRNGKey(12345))
             params = (params_l, params_nl)
 
+        # NOTE: The below definitions between the equals signs are likely not necessary and simply take up space. 
+        #       These things should be added to the SFDomainNet class
+        #===========================================================================================
         self.ics_weight = ics_weight
         self.res_weight = res_weight
         self.data_weight = data_weight
@@ -102,6 +105,7 @@ class MFDomainNet(NodeMixin):
         self.loss_data_log = []
 
         self.root.tree_level_organizer(self) # add current node to the level organizer 
+        #===========================================================================================
 
     # =============================================
     # Evaluation

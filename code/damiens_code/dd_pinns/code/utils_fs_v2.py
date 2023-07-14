@@ -200,6 +200,7 @@ def nonlinear_DNN(branch_layers, activation=swish):
         W = glorot_stddev * random.normal(key, (d_in, d_out))
         b = np.zeros(d_out)
         return W, b
+    
     def init(rng_key1):
         def init_layer(key, d_in, d_out):
             k1, k2 = random.split(key)

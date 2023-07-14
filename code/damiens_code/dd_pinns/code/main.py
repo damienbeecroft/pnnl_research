@@ -11,6 +11,8 @@ from jax.example_libraries import optimizers
 
 # My imports from other packages
 import matplotlib.pyplot as plt
+from scipy.integrate import odeint
+
 
 # Imports from local files
 from utils_fs_v2 import  DataGenerator, DataGenerator_res
@@ -89,8 +91,11 @@ if __name__=="__main__":
     lr = optimizers.exponential_decay(1e-3, decay_steps=2000, decay_rate=0.99)
     N_sf = 200 # single fidelity hidden width
     N_nl = 80 # multifidelity nonlinear network hidden width
+    # NOTE: These were the original lines
     sfnet_shape = [1, N_sf, N_sf, N_sf, 2] # shape of the single fidelity network
     nonlin_mfnet_shape = [3, N_nl, N_nl, N_nl, 2] # shape of the multifidelity nonlinear network
+    # sfnet_shape = [1, N_sf, 2] # shape of the single fidelity network
+    # nonlin_mfnet_shape = [3, N_nl, 2] # shape of the multifidelity nonlinear network
     lin_mfnet_shape = [2,  4, 2] # shape of the multifidelity linear network
 
     min_A = 0.0 # lower solution domain boundary
@@ -100,7 +105,6 @@ if __name__=="__main__":
 
     data_range = np.arange(0,int(2*min_B)) # NOTE: What is the purpose of this?
 
-    
     d_vx = scipy.io.loadmat("C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/dd_pinns/code/input/data.mat") # NOTE: Need to make this OS agnostic at some point
     t_data_full, s_data_full = (d_vx["u"].astype(np.float32), d_vx["s"].astype(np.float32))
 
@@ -127,7 +131,7 @@ if __name__=="__main__":
     coords = [min_A, min_B]
     ic_dataset = DataGenerator(t_bc, u_bc, 1)
     res_dataset = DataGenerator_res(coords, batch_size)
-    data_dataset = DataGenerator(t_data, s_data, len(t_data))
+    val_dataset = DataGenerator(t_data, s_data, len(t_data))
 
     lam = []
     F = []
@@ -135,23 +139,69 @@ if __name__=="__main__":
     
     # NOTE: I want to make it so that many of the variables that need to be passed into MFDomainNet
     #       are stored in the super. That way, they don't need to be passed in every single time.
-    A = SFDomainNet(sfnet_shape, ics_weight, res_weight, data_weight, [], lr,[[min_A],[min_B]])
+    A = SFDomainNet(sfnet_shape, ics_weight, res_weight, data_weight, pen_weight, [], lr,[[min_A],[min_B]])
     B = MFDomainNet(nonlin_mfnet_shape, lin_mfnet_shape, ics_weight, res_weight, data_weight, 
                  pen_weight, lr, [], [[0.0],[0.6]], parent = A)
     C = MFDomainNet(nonlin_mfnet_shape, lin_mfnet_shape, ics_weight, res_weight, data_weight, 
                  pen_weight, lr, [], [[0.4],[1.0]], parent = A)
-    D = MFDomainNet(nonlin_mfnet_shape, lin_mfnet_shape, ics_weight, res_weight, data_weight, 
-                 pen_weight, lr, [], [[0.0],[0.3]], parent = B)
-    E = MFDomainNet(nonlin_mfnet_shape, lin_mfnet_shape, ics_weight, res_weight, data_weight, 
-                 pen_weight, lr, [], [[0.2],[0.5]], parent = B)
-    F = MFDomainNet(nonlin_mfnet_shape, lin_mfnet_shape, ics_weight, res_weight, data_weight, 
-                 pen_weight, lr, [], [[0.4],[0.7]], parent = C)
-    G = MFDomainNet(nonlin_mfnet_shape, lin_mfnet_shape, ics_weight, res_weight, data_weight, 
-                 pen_weight, lr, [], [[0.6],[1.0]], parent = C)
+    # D = MFDomainNet(nonlin_mfnet_shape, lin_mfnet_shape, ics_weight, res_weight, data_weight, 
+    #              pen_weight, lr, [], [[0.0],[0.3]], parent = B)
+    # E = MFDomainNet(nonlin_mfnet_shape, lin_mfnet_shape, ics_weight, res_weight, data_weight, 
+    #              pen_weight, lr, [], [[0.2],[0.5]], parent = B)
+    # F = MFDomainNet(nonlin_mfnet_shape, lin_mfnet_shape, ics_weight, res_weight, data_weight, 
+    #              pen_weight, lr, [], [[0.4],[0.7]], parent = C)
+    # G = MFDomainNet(nonlin_mfnet_shape, lin_mfnet_shape, ics_weight, res_weight, data_weight, 
+    #              pen_weight, lr, [], [[0.6],[1.0]], parent = C)
+
+
+    def ode(s,t):
+        ds = np.array([s[1], -0.05*s[1] - 9.81*np.sin(s[0])])
+        return ds
+
+    s0 = np.array([1.,1.])
+    t = np.linspace(0,1,101)
+    s = odeint(ode,s0,t)
+
+    A.train(ic_dataset, res_dataset, val_dataset, 0, nIter = 10)
+
+    u_pred1 = A.predict(t,0)
+
+    # plt.plot(t,s,label = ["s","s'"])
+    # plt.plot(t,u_pred1[0][:,0][:,0],label = "Approx s")
+    # plt.plot(t,u_pred1[0][:,0][:,1],label = "Approx s'")
+    # plt.legend()
+    # plt.show()
     
-    pts = np.linspace(0.0,1.0,11)
-    
-    u_preds = A.evaluate_neural_domain_tree(pts)
-    print("done")
-    plt.plot(pts,u_preds[-1])
+    A.train(ic_dataset, res_dataset, val_dataset, 0, nIter = 20000)
+
+    u_pred2 = A.predict(t,0)
+
+    plt.plot(t,s,label = ["s","s'"])
+    plt.plot(t,u_pred1[0][:,0][:,0],label = "Approx one s")
+    plt.plot(t,u_pred1[0][:,0][:,1],label = "Approx one s'")
+    plt.plot(t,u_pred2[0][:,0][:,0],label = "Approx two s")
+    plt.plot(t,u_pred2[0][:,0][:,1],label = "Approx two s'")
+    plt.legend()
     plt.show()
+
+    print("hello")
+    
+    # res_data = iter(res_dataset)
+    # ic_data = iter(ic_dataset)
+    # val_data = iter(data_dataset)
+
+    # res_batch= next(res_data)
+    # ic_batch= next(ic_data)
+    # val_batch= next(val_data)
+
+    # inputs, outputs = res_batch
+    # pts = inputs
+
+    # u_preds = A.operator_net()
+    
+    # pts = np.linspace(0.0,1.0,11)
+    
+    # u_preds = A.evaluate_neural_domain_tree(pts)
+    # print("done")
+    # plt.plot(pts,u_preds[-1])
+    # plt.show()
