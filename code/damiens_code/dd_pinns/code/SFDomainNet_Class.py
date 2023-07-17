@@ -145,10 +145,6 @@ class SFDomainNet(RootUtilities,NodeMixin):
         self.tree_level_organizer(self) # add root to the level organizer
 
     # ===================================================================================================
-    # Evaluation
-    # ===================================================================================================
-
-    # ===================================================================================================
     # Functions that I implemented
     # ===================================================================================================
 
@@ -191,6 +187,10 @@ class SFDomainNet(RootUtilities,NodeMixin):
                 pts.append(input_pts[i])
         return np.array(indices), np.array(pts)
     
+    # ====================================================================================================
+    # SINGLE FIDELITY: Don't mess with it for now.
+    # ====================================================================================================
+    
     def singlefidelity_network(self,params,pts):
         """
         "singlefidelity_network" evaluates the root network and outputs the solution at "pts".
@@ -207,34 +207,6 @@ class SFDomainNet(RootUtilities,NodeMixin):
         s2 = B[1:]
 
         return s1, s2
-    
-    def multifidelity_network(self, params, pts): # NOT FINISHED
-        self.pts = pts.val # points with the jax array
-        empty_batch = pts.copy()
-        empty_batch.val = np.array([]) # create an empty batch to add points to later
-        params_sf = self.get_params(self.opt_state)
-        u_sf = self.apply_sf(params_sf,pts) # single fidelity prediction
-        u_preds = [u_sf.val] # I am not pre-defining the array this time. I am going to simply append the new solution to the previous one.
-        self.global_indices = np.arange(len(pts)) # NOTE: I am not sure that this works. Even if it does, it is inefficient. Find a better way to set this.
-        iter = 1
-        for level in self.levels[1:-1]: # iterates through the levels of the domain tree (skipping the first and last levels)
-            u_pred = np.zeros(len(pts.val))
-            for mfdomain in level: # iterates through the MFDomains in each level of the tree. NOTE: parallelize this loop
-                parent = mfdomain.parent
-                local_indices, mfdomain.pts = self.find_interior_points(mfdomain.vertices,parent.pts)
-                mfdomain.global_indices = parent.global_indices[local_indices] # get the indices of the points in the support of mfdomain
-                current_params = mfdomain.get_params(mfdomain.opt_state)
-                batch_pts = empty_batch.copy()
-                batch_pts.val = mfdomain.pts # make a batch with mfdomain.pts
-                batch_u_preds = empty_batch.copy()
-                batch_u_preds.val = u_preds[-1][mfdomain.global_indices] # make a batch with u_preds[-1][mfdomain.global_indices]
-                output = mfdomain.apply_mf(current_params,batch_pts,batch_u_preds) # analyze the local network
-                u_pred[mfdomain.global_indices] += output.val # add the output to the prediction of the solution
-            u_preds.append(u_pred)
-            iter += 1
-
-        # NEED TO ADD CODE FOR EVALUATING THE FINAL LAYER
-        return u_preds
 
     # Define ODE residual
     def residual_net(self, params, u, f):
@@ -315,13 +287,15 @@ class SFDomainNet(RootUtilities,NodeMixin):
     @partial(jit, static_argnums=(0,5,6))
     def step(self, i, ic_batch, res_batch, val_batch, level, f):
         params = self.get_level_parameters(level)
-        opt_state = self.opt_init(params) # NOTE: I have no idea if this is the correct way to do this
+        opt_state = self.opt_init(params)
         # params = self.get_params(opt_state)
 
         g = grad(self.loss)(params, ic_batch, res_batch, val_batch, level, f)
         return self.opt_update(i, g, opt_state)
 
     # Optimize parameters in a loop
+    # NOTE: For the single fidelity code, the "level" parameter must always be 0. Therefore,
+    #       it is useless for the single fidelity case
     def train(self, ic_dataset, res_dataset, val_dataset, level, nIter = 10000):
         res_data = iter(res_dataset)
         ic_data = iter(ic_dataset)
@@ -375,8 +349,182 @@ class SFDomainNet(RootUtilities,NodeMixin):
 
         u_pred = vmap(training_function, (None, 0))(params[0],pts)
         return u_pred
+    
+    # ====================================================================================================
+    # MULTIFIDELITY CODE: Don't mess with things above this. I will probably end up
+    # breaking them like last time.
+    # ====================================================================================================
 
+    def multifidelity_network(self, params, pts): # NOT FINISHED
+        self.pts = pts.val # points with the jax array
+        empty_batch = pts.copy()
+        empty_batch.val = np.array([]) # create an empty batch to add points to later
+        params_sf = self.get_params(self.opt_state)
+        u_sf = self.apply_sf(params_sf,pts) # single fidelity prediction
+        u_preds = [u_sf.val] # I am not pre-defining the array this time. I am going to simply append the new solution to the previous one.
+        self.global_indices = np.arange(len(pts)) # NOTE: I am not sure that this works. Even if it does, it is inefficient. Find a better way to set this.
+        iter = 1
+        for level in self.levels[1:-1]: # iterates through the levels of the domain tree (skipping the first and last levels)
+            u_pred = np.zeros(len(pts.val))
+            for mfdomain in level: # iterates through the MFDomains in each level of the tree. NOTE: parallelize this loop
+                parent = mfdomain.parent
+                local_indices, mfdomain.pts = self.find_interior_points(mfdomain.vertices,parent.pts)
+                mfdomain.global_indices = parent.global_indices[local_indices] # get the indices of the points in the support of mfdomain
+                current_params = mfdomain.get_params(mfdomain.opt_state)
+                batch_pts = empty_batch.copy()
+                batch_pts.val = mfdomain.pts # make a batch with mfdomain.pts
+                batch_u_preds = empty_batch.copy()
+                batch_u_preds.val = u_preds[-1][mfdomain.global_indices] # make a batch with u_preds[-1][mfdomain.global_indices]
+                output = mfdomain.apply_mf(current_params,batch_pts,batch_u_preds) # analyze the local network
+                u_pred[mfdomain.global_indices] += output.val # add the output to the prediction of the solution
+            u_preds.append(u_pred)
+            iter += 1
 
+        # NEED TO ADD CODE FOR EVALUATING THE FINAL LAYER
+        return u_preds
+    
+
+    # Define ODE residual
+    def residual_net_mf(self, params, u, f):
+        s1, s2 = f(params, u)
+
+        def s1_fn(params, u):
+          s1_fn, _ = f(params, u)
+          return s1_fn[0]
+        
+        def s2_fn(params, u):
+          _, s2_fn  = f(params, u)
+          return s2_fn[0]
+
+        s1_y = grad(s1_fn, argnums= 1)(params, u)
+        s2_y = grad(s2_fn, argnums= 1)(params, u)
+
+        res_1 = s1_y - s2
+        res_2 = s2_y + 0.05 * s2 + 9.81 * np.sin(s1)
+
+        return res_1, res_2
+    
+    def loss_data_mf(self, params, batch,f):
+        # Fetch data
+        inputs, outputs = batch
+        u = inputs
+        
+        s1 = outputs[:, 0:1]
+        s2 = outputs[:, 1:2]
+
+        # Compute forward pass
+        s1_pred, s2_pred =vmap(f, (None, 0))(params, u)
+        # Compute loss
+
+        loss_s1 = np.mean((s1.flatten() - s1_pred.flatten())**2)
+        loss_s2 = np.mean((s2.flatten() - s2_pred.flatten())**2)
+
+        loss = loss_s1 + loss_s2
+        return loss
+    
+    # Define residual loss
+    def loss_res_mf(self, params, batch,f):
+        # Fetch data
+        inputs, outputs = batch
+        u = inputs
+
+        # Compute forward pass
+        res1_pred, res2_pred = vmap(self.residual_net_mf, (None, 0, None))(params, u,f)
+        # Compute loss
+
+        loss_res1 = np.mean((res1_pred)**2)
+        loss_res2 = np.mean((res2_pred)**2)
+        loss_res = loss_res1 + loss_res2
+        return loss_res
+    
+    # Define total loss
+    def loss_mf(self, params, ic_batch, res_batch, val_batch, level, f):
+        loss_ics = self.loss_data_mf(params, ic_batch, f)
+        loss_res = self.loss_res_mf(params, res_batch, f)
+        loss_data = self.loss_data_mf(params, val_batch, f)
+
+        # NOTE: These lines penalize the network for having large network weights. I am removing this
+        #       for now to simplify development. I will bring it back later. I also need to figure out how to
+        #       make the weight penalization efficient for both the single fidelity and multifidelity networks
+        #===============================================================================================
+        # weights  = 0
+        # for i in onp.arange(len(self.levels[level])):
+        #      params_nl, params_l = params[i]
+        #      weights += self.weight_nl(params_nl)
+
+        # loss =  self.ics_weight*loss_ics + self.res_weight*loss_res +\
+        #         self.data_weight*loss_data+ self.pen_weight*weights
+        #===============================================================================================
+
+        loss = self.ics_weight*loss_ics + self.res_weight*loss_res + self.data_weight*loss_data
+        return loss 
+
+    # Define a compiled update step
+    @partial(jit, static_argnums=(0,5,6))
+    def step_mf(self, i, ic_batch, res_batch, val_batch, level, f):
+        params = self.get_level_parameters(level)
+        opt_state = self.opt_init(params) # NOTE: I have no idea if this is the correct way to do this
+        # params = self.get_params(opt_state)
+
+        g = grad(self.loss_mf)(params, ic_batch, res_batch, val_batch, level, f)
+        return self.opt_update(i, g, opt_state)
+
+    # Optimize parameters in a loop
+    # NOTE: For the single fidelity code, the "level" parameter must always be 0. Therefore,
+    #       it is useless for the single fidelity case
+    def train_mf(self, ic_dataset, res_dataset, val_dataset, level, nIter = 10000):
+        res_data = iter(res_dataset)
+        ic_data = iter(ic_dataset)
+        val_data = iter(val_dataset)
+
+        if level == 0:
+            training_function = self.singlefidelity_network
+        else:
+            training_function = self.multifidelity_network
+
+        pbar = trange(nIter)
+        # Main training loop
+        for it in pbar:
+            # Fetch data
+            res_batch= next(res_data)
+            ic_batch= next(ic_data)
+            val_batch= next(val_data)
+
+            self.opt_state = self.step_mf(next(self.itercount), ic_batch, res_batch, val_batch, level, training_function)
+
+            if it % 1000 == 0:
+                params = self.get_params(self.opt_state)
+
+                # Compute losses
+                loss_value = self.loss_mf(params, ic_batch, res_batch, val_batch, level, training_function)
+                res_value = self.loss_res_mf(params, res_batch, training_function)
+                ics__value = self.loss_data_mf(params, ic_batch, training_function)
+                data_value = self.loss_data_mf(params, val_batch, training_function)
+
+                # Store losses
+                self.loss_training_log.append(loss_value)
+                self.loss_res_log.append(res_value)
+                self.loss_ics_log.append(ics__value)
+                self.loss_data_log.append(data_value)
+
+                # Print losses
+                pbar.set_postfix({'Loss': "{0:.4f}".format(loss_value), 
+                                  'Res': "{0:.4f}".format(res_value), 
+                                  'ICS': "{0:.4f}".format(ics__value),
+                                  'Data': "{0:.4f}".format(data_value)})
+
+    # @partial(jit,static_argnums=(0,2))
+    def predict_mf(self,pts,level):
+
+        params = self.get_level_parameters(level)
+
+        if level == 0:
+            training_function = self.singlefidelity_network
+        else:
+            training_function = self.multifidelity_network
+
+        u_pred = vmap(training_function, (None, 0))(params[0],pts)
+        return u_pred
 
 
     
