@@ -11,32 +11,32 @@ from anytree import NodeMixin
 import os
 
 #import numpy as np
-import scipy.io
+# import scipy.io
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
-import time
+# import time
 from utils_fs_v2 import timing,DataGenerator, DataGenerator_h, nonlinear_DNN, linear_DNN, DNN, linear_deeponet
 import math
-import jax
+# import jax
 import jax.numpy as np
 from jax import random, grad, vmap, jit, hessian
 from jax.example_libraries import optimizers
-from jax.experimental.ode import odeint
-from jax.nn import relu, elu, log_softmax, softmax
-from jax.config import config
+# from jax.experimental.ode import odeint
+# from jax.nn import relu, elu, log_softmax, softmax
+# from jax.config import config
 #from jax.ops import index_update, index
-from jax import lax
+# from jax import lax
 from jax.flatten_util import ravel_pytree
 
 import itertools
-from functools import partial
-from torch.utils import data
-from tqdm import trange, tqdm
+# from functools import partial
+# from torch.utils import data
+# from tqdm import trange, tqdm
 #import matplotlib.pyplot as plt
 #import pandas as pd
 #import matplotlib.pyplot as plt
-from copy import deepcopy
-import numpy as onp
+# from copy import deepcopy
+# import numpy as onp
 
 #============================================================================================
 # Class Definitions
@@ -103,9 +103,9 @@ class MFDomainNet(NodeMixin):
         self.loss_res_log = []
         self.loss_ics_log = []
         self.loss_data_log = []
+        #===========================================================================================
 
         self.root.tree_level_organizer(self) # add current node to the level organizer 
-        #===========================================================================================
 
     # =============================================
     # Evaluation

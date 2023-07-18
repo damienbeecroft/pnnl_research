@@ -10,7 +10,7 @@ from jax.flatten_util import ravel_pytree
 from jax.example_libraries import optimizers
 
 # My imports from other packages
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from scipy.integrate import odeint
 
 
@@ -153,6 +153,7 @@ if __name__=="__main__":
     # G = MFDomainNet(nonlin_mfnet_shape, lin_mfnet_shape, ics_weight, res_weight, data_weight, 
     #              pen_weight, lr, [], [[0.6],[1.0]], parent = C)
 
+    # Code for showing that the single fidelity code at least runs. I have not trained it to convergence yet.
 
     def ode(s,t):
         ds = np.array([s[1], -0.05*s[1] - 9.81*np.sin(s[0])])
@@ -163,45 +164,18 @@ if __name__=="__main__":
     s = odeint(ode,s0,t)
 
     A.train(ic_dataset, res_dataset, val_dataset, 0, nIter = 10)
+    A.train_mf(ic_dataset, res_dataset, val_dataset, 1, nIter = 10)
 
-    u_pred1 = A.predict(t,0)
+
+    # u_pred1 = A.predict(t,0)
+
+
 
     # plt.plot(t,s,label = ["s","s'"])
-    # plt.plot(t,u_pred1[0][:,0][:,0],label = "Approx s")
-    # plt.plot(t,u_pred1[0][:,0][:,1],label = "Approx s'")
+    # plt.plot(t,u_pred1[0][:,0][:,0],label = "Approx one s")
+    # plt.plot(t,u_pred1[0][:,0][:,1],label = "Approx one s'")
+    # plt.plot(t,u_pred2[0][:,0][:,0],label = "Approx two s")
+    # plt.plot(t,u_pred2[0][:,0][:,1],label = "Approx two s'")
     # plt.legend()
     # plt.show()
     
-    A.train(ic_dataset, res_dataset, val_dataset, 0, nIter = 20000)
-
-    u_pred2 = A.predict(t,0)
-
-    plt.plot(t,s,label = ["s","s'"])
-    plt.plot(t,u_pred1[0][:,0][:,0],label = "Approx one s")
-    plt.plot(t,u_pred1[0][:,0][:,1],label = "Approx one s'")
-    plt.plot(t,u_pred2[0][:,0][:,0],label = "Approx two s")
-    plt.plot(t,u_pred2[0][:,0][:,1],label = "Approx two s'")
-    plt.legend()
-    plt.show()
-
-    print("hello")
-    
-    # res_data = iter(res_dataset)
-    # ic_data = iter(ic_dataset)
-    # val_data = iter(data_dataset)
-
-    # res_batch= next(res_data)
-    # ic_batch= next(ic_data)
-    # val_batch= next(val_data)
-
-    # inputs, outputs = res_batch
-    # pts = inputs
-
-    # u_preds = A.operator_net()
-    
-    # pts = np.linspace(0.0,1.0,11)
-    
-    # u_preds = A.evaluate_neural_domain_tree(pts)
-    # print("done")
-    # plt.plot(pts,u_preds[-1])
-    # plt.show()
