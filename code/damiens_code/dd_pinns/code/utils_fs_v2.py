@@ -6,25 +6,23 @@ import sys
 import time
 from functools import wraps
 import jax.numpy as np
-import scipy.io
-# import h5py # use for .mat file after v-7.3
-import os
-import math
-import jax
+# import scipy.io
+# import os
+# import math
+# import jax
 import jax.numpy as np
 from jax import random, grad, vmap, jit, hessian
-from jax.example_libraries import optimizers
+# from jax.example_libraries import optimizers
 from jax.nn import relu, elu, selu, swish
-from jax.config import config
-#from jax.ops import index_update, index
-from jax import lax
+# from jax.config import config
+# from jax import lax
 from jax.flatten_util import ravel_pytree
 
-import itertools
+# import itertools
 from functools import partial
 from torch.utils import data
-from tqdm import trange, tqdm
-from copy import deepcopy
+# from tqdm import trange, tqdm
+# from copy import deepcopy
 
 
 def timing(f):
