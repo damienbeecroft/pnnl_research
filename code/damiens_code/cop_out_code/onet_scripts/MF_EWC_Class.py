@@ -104,12 +104,17 @@ class MF_class_EWC:
     # evaluation
     # =============================================
 
+    def weight_condition(self,condition,u,mu,sigma):
+        w = lax.cond(condition, lambda u: (1 + np.cos(math.pi*(u-mu)/sigma))**2, lambda _: 0., u)
+        return w
+    
+    # Changed this function
     def w_jl(self, j, l, u):
-        mu = self.Tmax*(j-1)/(l-1)
+        # mu = self.Tmax*(j-1)/(l-1) # j starts at zero
+        mu = self.Tmax*j/(l-1)
         sigma = self.Tmax*(self.delta/2.0)/(l-1)
-
-        w_jl = 1+ np.cos(math.pi*(u-mu)/sigma)
-        w_jl = w_jl**2
+        conditions = (u < (mu + sigma)) & (u > (mu - sigma))
+        w_jl = vmap(self.weight_condition,(0,0,None,None))(conditions,u,mu,sigma)
         return w_jl
         
         
@@ -118,7 +123,8 @@ class MF_class_EWC:
         ul = self.apply_lf(self.params_A, u)
     
         for j in onp.arange(len(self.Ndomains)-1):
-            ul_cur = 0
+            ul_cur = onp.zeros(self.Ndomains[j])
+            weights = onp.zeros(self.Ndomains[j])
             for i in onp.arange(self.Ndomains[j]):
                 
                 paramsB_nl =  self.params_t[j][i][0]
@@ -129,9 +135,13 @@ class MF_class_EWC:
                 u_l = self.apply_l(paramsB_l, ul)
                 
                 w = self.w_jl(i, self.Ndomains[j], u)
-                ul_cur += w*(u_l + u_nl)
-
-            ul = ul_cur
+                weights[i] = w
+                ul_cur[i] = u_l + u_nl
+                # ul_cur += w*(u_l + u_nl)
+            sum_weights = weights.sum()
+            weights = sum_weights/sum_weights
+            ul_cur = ul_cur*weights
+            ul = ul_cur.sum()
         
         s1 = 0
         s2 = 0
@@ -150,8 +160,6 @@ class MF_class_EWC:
         
         return s1, s2
     
-    
-
 
     # Define ODE residual
     def residual_net(self, params, u):
