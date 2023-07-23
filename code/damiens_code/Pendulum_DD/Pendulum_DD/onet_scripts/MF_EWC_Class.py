@@ -140,73 +140,8 @@ class MF_class_EWC:
     #     s2 += w*(u_l[1:]+ u_nl[1:])
     #     return (params, u, ul, s1, s2)
 
-    def body(self,param,u,ul):
-            params_nl, params_l = param
-            y = np.hstack([u, ul])
-
-            u_nl = self.apply_nl(params_nl, y)
-            u_l = self.apply_l(params_l, ul)
-            
-            w = self.w_jl(i, self.Ndomains[-1], u)
-            s1 += w*(u_l[:1]+ u_nl[:1])
-            s2 += w*(u_l[1:]+ u_nl[1:])
-        
-    
-    def operator_net(self, params, u):
-    
-        ul = self.apply_lf(self.params_A, u)
-
-        # lax.fori_loop(0,len(self.Ndomains)-1,self.first_loop,())
-        
-        s1 = 0.
-        s2 = 0.
-
-        # val = lax.fori_loop(0,self.Ndomains[-1],self.body,(params,u,ul,s1,s2))
-
-        # s1 = val[3]
-        # s2 = val[4]
-        vmap(self.body,(0,None,None))(params,u,ul)
-
-        # for i in onp.arange(self.Ndomains[-1]):
-        #     params_nl, params_l = params[i]
-        #     y = np.hstack([u, ul])
-
-        #     u_nl = self.apply_nl(params_nl, y)
-        #     u_l = self.apply_l(params_l, ul)
-            
-        #     w = self.w_jl(i, self.Ndomains[-1], u)
-        #     s1 += w*(u_l[:1]+ u_nl[:1])
-        #     s2 += w*(u_l[1:]+ u_nl[1:])
-              
-        #  print(s1.shape)
-        
-        return s1, s2
-        
-        
-    # def operator_net(self, params, u):
-    
-    #     ul = self.apply_lf(self.params_A, u)
-    
-    #     for j in onp.arange(len(self.Ndomains)-1):
-    #         ul_cur = 0
-    #         for i in onp.arange(self.Ndomains[j]):
-                
-    #             paramsB_nl =  self.params_t[j][i][0]
-    #             paramsB_l =  self.params_t[j][i][1]
-    #             y = np.hstack([u, ul])
-
-    #             u_nl = self.apply_nl(paramsB_nl, y)
-    #             u_l = self.apply_l(paramsB_l, ul)
-                
-    #             w = self.w_jl(i, self.Ndomains[j], u)
-    #             ul_cur += w*(u_l + u_nl)
-
-    #         ul = ul_cur
-        
-    #     s1 = 0
-    #     s2 = 0
-    #     for i in onp.arange(self.Ndomains[-1]):
-    #         params_nl, params_l = params[i]
+    # def body(self,param,u,ul):
+    #         params_nl, params_l = param
     #         y = np.hstack([u, ul])
 
     #         u_nl = self.apply_nl(params_nl, y)
@@ -215,10 +150,75 @@ class MF_class_EWC:
     #         w = self.w_jl(i, self.Ndomains[-1], u)
     #         s1 += w*(u_l[:1]+ u_nl[:1])
     #         s2 += w*(u_l[1:]+ u_nl[1:])
+        
+    
+    # def operator_net(self, params, u):
+    
+    #     ul = self.apply_lf(self.params_A, u)
+
+    #     # lax.fori_loop(0,len(self.Ndomains)-1,self.first_loop,())
+        
+    #     s1 = 0.
+    #     s2 = 0.
+
+    #     # val = lax.fori_loop(0,self.Ndomains[-1],self.body,(params,u,ul,s1,s2))
+
+    #     # s1 = val[3]
+    #     # s2 = val[4]
+    #     vmap(self.body,(0,None,None))(params,u,ul)
+
+    #     # for i in onp.arange(self.Ndomains[-1]):
+    #     #     params_nl, params_l = params[i]
+    #     #     y = np.hstack([u, ul])
+
+    #     #     u_nl = self.apply_nl(params_nl, y)
+    #     #     u_l = self.apply_l(params_l, ul)
+            
+    #     #     w = self.w_jl(i, self.Ndomains[-1], u)
+    #     #     s1 += w*(u_l[:1]+ u_nl[:1])
+    #     #     s2 += w*(u_l[1:]+ u_nl[1:])
               
     #     #  print(s1.shape)
         
     #     return s1, s2
+        
+        
+    def operator_net(self, params, u):
+    
+        ul = self.apply_lf(self.params_A, u)
+    
+        for j in onp.arange(len(self.Ndomains)-1):
+            ul_cur = 0
+            for i in onp.arange(self.Ndomains[j]):
+                
+                paramsB_nl =  self.params_t[j][i][0]
+                paramsB_l =  self.params_t[j][i][1]
+                y = np.hstack([u, ul])
+
+                u_nl = self.apply_nl(paramsB_nl, y)
+                u_l = self.apply_l(paramsB_l, ul)
+                
+                w = self.w_jl(i, self.Ndomains[j], u)
+                ul_cur += w*(u_l + u_nl)
+
+            ul = ul_cur
+        
+        s1 = 0
+        s2 = 0
+        for i in onp.arange(self.Ndomains[-1]):
+            params_nl, params_l = params[i]
+            y = np.hstack([u, ul])
+
+            u_nl = self.apply_nl(params_nl, y)
+            u_l = self.apply_l(params_l, ul)
+            
+            w = self.w_jl(i, self.Ndomains[-1], u)
+            s1 += w*(u_l[:1]+ u_nl[:1])
+            s2 += w*(u_l[1:]+ u_nl[1:])
+              
+        #  print(s1.shape)
+        
+        return s1, s2
     
     
 
