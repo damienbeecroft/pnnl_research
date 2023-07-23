@@ -91,9 +91,13 @@ if __name__ == "__main__":
     batch_size_res = int(batch_size/2)
 
     steps_to_train = np.arange(6)
-    reload = [True, True, True, False, False, False]
+    # reload = [True, True, True, False, False, False]
     
-    reloadA = True
+    # reloadA = True
+
+    reload = [False, False, False, False, False, False]
+    
+    reloadA = False
     
     
 
@@ -189,13 +193,15 @@ if __name__ == "__main__":
     
     key, subkey = random.split(key)
 
-    res_pts = coords[0] + (coords[1]-coords[0])*random.uniform(key, shape=[20000,1])
-    res_val = model_A.predict_res(params_A, res_pts)
-    err = res_val**k/np.mean( res_val**k) + c
-    err_norm = err/np.sum(err)                        
-    res_dataset = DataGenerator_res2(coords, res_pts, err_norm, batch_size_res, batch_size)
+
+    # This is the original code for the residual data set generator
+    # res_pts = coords[0] + (coords[1]-coords[0])*random.uniform(key, shape=[20000,1])
+    # res_val = model_A.predict_res(params_A, res_pts)
+    # err = res_val**k/np.mean( res_val**k) + c
+    # err_norm = err/np.sum(err)                        
+    # res_dataset = DataGenerator_res2(coords, res_pts, err_norm, batch_size_res, batch_size)
     
-    
+    total_points = 20000
     Ndomains = []
     for step in steps_to_train:
         # results_dir = "../results_" + str(step) + "/"+save_str+"/" # This is the original line
@@ -209,13 +215,65 @@ if __name__ == "__main__":
             
         Ndomains.append(2**(step+1))
 
+        # Computing the domains where the networks are defined
         sigma = Tmax*delta/(2*(Ndomains[-1] - 1))
         mus = Tmax*onp.linspace(0,1,Ndomains[-1])
         double_domains = onp.array([[mus[j+1] - sigma, mus[j] + sigma] for j in range(Ndomains[-1] - 1)])
         single_domains = onp.array([[mus[j] + sigma, mus[j+2] - sigma] for j in range(Ndomains[-1] - 2)])
+        if step == 0:
+            single_domains = onp.concatenate((onp.array([[min_A,double_domains[0][0]]]),
+                                          onp.array([[double_domains[-1][-1],min_B]])))
+        else:
+            single_domains = onp.concatenate((onp.array([[min_A,double_domains[0][0]]]),
+                                          single_domains,onp.array([[double_domains[-1][-1],min_B]])))
+            
+        double_res_datasets = []
+        single_res_datasets = []
+
+        key, subkey = random.split(key)
+        if(step == 0):
+            # make all the batches for the double domains
+            for domain in double_domains:
+                num_pts = int((total_points*(domain[1] - domain[0]))/(coords[1] - coords[0]))
+                res_pts = domain[0] + (domain[1]-domain[0])*random.uniform(key, shape=[num_pts,1])
+                res_val = model_A.predict_res(params_A, res_pts)
+                err = res_val**k/np.mean(res_val**k) + c
+                err_norm = err/np.sum(err)
+                res_dataset = DataGenerator_res2(domain, res_pts, err_norm, batch_size_res, batch_size)
+                double_res_datasets.append(res_dataset)
+            # make all the batches for the single domains
+            for domain in single_domains:
+                num_pts = int((total_points*(domain[1] - domain[0]))/(coords[1] - coords[0]))
+                res_pts = domain[0] + (domain[1]-domain[0])*random.uniform(key, shape=[num_pts,1])
+                res_val = model_A.predict_res(params_A, res_pts)
+                err = res_val**k/np.mean(res_val**k) + c
+                err_norm = err/np.sum(err)
+                res_dataset = DataGenerator_res2(domain, res_pts, err_norm, batch_size_res, batch_size)
+                single_res_datasets.append(res_dataset)
+        else:
+            # make all the batches for the double domains
+            for domain in double_domains:
+                num_pts = int((total_points*(domain[1] - domain[0]))/(coords[1] - coords[0]))
+                res_pts = domain[0] + (domain[1]-domain[0])*random.uniform(key, shape=[num_pts,1])
+                res_val = model.predict_res(params, res_pts)
+                err = res_val**k/np.mean(res_val**k) + c
+                err_norm = err/np.sum(err)
+                res_dataset = DataGenerator_res2(domain, res_pts, err_norm, batch_size_res, batch_size)
+                double_res_datasets.append(res_dataset)
+            # make all the batches for the single domains
+            for domain in single_domains:
+                num_pts = int((total_points*(domain[1] - domain[0]))/(coords[1] - coords[0]))
+                res_pts = domain[0] + (domain[1]-domain[0])*random.uniform(key, shape=[num_pts,1])
+                res_val = model.predict_res(params, res_pts)
+                err = res_val**k/np.mean(res_val**k) + c
+                err_norm = err/np.sum(err)
+                res_dataset = DataGenerator_res2(domain, res_pts, err_norm, batch_size_res, batch_size)
+                single_res_datasets.append(res_dataset)
+        
  
         model = MF_class_EWC(layers_sizes_nl, layers_sizes_l, layers_A, ics_weight, 
-                         res_weight, data_weight, pen_weight,lr, Ndomains, delta, Tmax, params_A, params_t = params_prev, restart =res)
+                            res_weight, data_weight, pen_weight,lr, Ndomains, delta, Tmax, 
+                            params_A, params_t = params_prev, restart =res)
 
         
         if reload[step]:
@@ -223,9 +281,8 @@ if __name__ == "__main__":
 
         
         else:     
-            model.train(ic_dataset, res_dataset, data_dataset, nIter=epochsA2)
-        
-
+            # model.train(ic_dataset, res_dataset, data_dataset, nIter=epochsA2)
+            model.train(ic_dataset, single_res_datasets, double_res_datasets, data_dataset, nIter=epochsA2)
 
 
             print('\n ... Level ' + str(step) + ' Training done ...')
@@ -242,14 +299,15 @@ if __name__ == "__main__":
             save_data(model,  params, results_dir, 'B')   
             
         params_prev.append(params)
-        
-        key, subkey = random.split(key)
-        res_pts = coords[0] + (coords[1]-coords[0])*random.uniform(key, shape=[20000,1])
-        res_val = model.predict_res(params, res_pts)
-        err = res_val**k/np.mean( res_val**k) + c
-        err_norm = err/np.sum(err)                        
-      
-        res_dataset = DataGenerator_res2(coords, res_pts, err_norm, batch_size_res, batch_size)
+
+
+        # This is the original code for the residual data set generator
+        # key, subkey = random.split(key)
+        # res_pts = coords[0] + (coords[1]-coords[0])*random.uniform(key, shape=[20000,1])
+        # res_val = model.predict_res(params, res_pts)
+        # err = res_val**k/np.mean( res_val**k) + c
+        # err_norm = err/np.sum(err)                        
+        # res_dataset = DataGenerator_res2(coords, res_pts, err_norm, batch_size_res, batch_size)
 
       
             

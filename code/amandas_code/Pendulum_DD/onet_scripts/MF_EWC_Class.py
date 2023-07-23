@@ -250,11 +250,12 @@ class MF_class_EWC:
         for it in pbar:
             # Fetch data
             res_batch= next(res_data)
+            test_batch = [res_batch,res_batch]
             ic_batch= next(ic_data)
             val_batch= next(val_data)
 
             self.opt_state = self.step(next(self.itercount), self.opt_state, 
-                                       ic_batch, res_batch, val_batch)
+                                       ic_batch, test_batch, val_batch)
             
             if it % 1000 == 0:
                 params = self.get_params(self.opt_state)

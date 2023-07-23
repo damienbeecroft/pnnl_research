@@ -119,12 +119,11 @@ class MF_class_EWC:
         
         
     def operator_net(self, params, u):
-    
+
         ul = self.apply_lf(self.params_A, u)
-    
         for j in onp.arange(len(self.Ndomains)-1):
-            ul_cur = onp.zeros(self.Ndomains[j])
-            weights = onp.zeros(self.Ndomains[j])
+            ul_cur = 0
+            sum_w = 0
             for i in onp.arange(self.Ndomains[j]):
                 
                 paramsB_nl =  self.params_t[j][i][0]
@@ -135,29 +134,35 @@ class MF_class_EWC:
                 u_l = self.apply_l(paramsB_l, ul)
                 
                 w = self.w_jl(i, self.Ndomains[j], u)
-                weights[i] = w
-                ul_cur[i] = u_l + u_nl
-                # ul_cur += w*(u_l + u_nl)
-            sum_weights = weights.sum()
-            weights = sum_weights/sum_weights
-            ul_cur = ul_cur*weights
-            ul = ul_cur.sum()
+                sum_w += w
+                ul_cur += w*(u_l + u_nl)
+
+            ul = ul_cur/sum_w
         
         s1 = 0
         s2 = 0
-        for i in onp.arange(self.Ndomains[-1]):
-            params_nl, params_l = params[i]
+        sum_w = 0
+
+        # NOTE: I am evaluating the weights even for the intervals that only have one neural
+        #       network on the domain.
+
+        idx = 0
+        for param in params:
+            params_nl, params_l = param
             y = np.hstack([u, ul])
 
             u_nl = self.apply_nl(params_nl, y)
             u_l = self.apply_l(params_l, ul)
             
-            w = self.w_jl(i, self.Ndomains[-1], u)
+            w = self.w_jl(idx, self.Ndomains[-1], u)
+            sum_w += w
             s1 += w*(u_l[:1]+ u_nl[:1])
             s2 += w*(u_l[1:]+ u_nl[1:])
-              
-        #  print(s1.shape)
+            idx += 1
         
+        s1 = s1/sum_w
+        s2 = s2/sum_w
+
         return s1, s2
     
 
@@ -196,7 +201,7 @@ class MF_class_EWC:
         s2 = outputs[:, 1:2]
 
         # Compute forward pass
-        s1_pred, s2_pred =vmap(self.operator_net, (None, 0))(params, u)
+        s1_pred, s2_pred = vmap(self.operator_net, (None, 0))(params, u)
         # Compute loss
 
         loss_s1 = np.mean((s1.flatten() - s1_pred.flatten())**2)
@@ -206,24 +211,56 @@ class MF_class_EWC:
         return loss
     
     # Define residual loss
-    def loss_res(self, params, batch):
+    def loss_res(self, params, single_res_datasets, double_res_datasets):
         # Fetch data
-        inputs, outputs = batch
-        u = inputs
+
+        res1_pred_sum = 0.
+        res2_pred_sum = 0.
 
         # Compute forward pass
-        res1_pred, res2_pred = vmap(self.residual_net, (None, 0))(params, u)
+        # idx = 0
+        # for batch in single_res_datasets:
+        #     inputs, outputs = batch
+        #     u = inputs
+        #     res1_pred, res2_pred = vmap(self.residual_net, (None, 0))([params[idx]], u)
+        #     res1_pred_sum += res1_pred
+        #     res2_pred_sum += res2_pred
+        #     idx += 1
+
+        for i in onp.arange(self.Ndomains[-1]):
+            inputs, outputs = single_res_datasets[i]
+            u = inputs
+            res1_pred, res2_pred = vmap(self.residual_net, (None, 0))([params[i]], u)
+            res1_pred_sum += res1_pred
+            res2_pred_sum += res2_pred
+
+        # idx = 0
+        # for batch in double_res_datasets:
+        #     inputs, outputs = batch
+        #     u = inputs
+        #     res1_pred, res2_pred = vmap(self.residual_net, (None, 0))([params[idx],params[idx+1]], u)
+        #     res1_pred_sum += res1_pred
+        #     res2_pred_sum += res2_pred
+        #     idx += 1
+
+        for i in onp.arange(self.Ndomains[-1] - 1):
+            inputs, outputs = double_res_datasets[i]
+            u = inputs
+            res1_pred, res2_pred = vmap(self.residual_net, (None, 0))([params[i],params[i+1]], u)
+            res1_pred_sum += res1_pred
+            res2_pred_sum += res2_pred
+
         # Compute loss
 
-        loss_res1 = np.mean((res1_pred)**2)
-        loss_res2 = np.mean((res2_pred)**2)
+        loss_res1 = np.mean((res1_pred_sum)**2)
+        loss_res2 = np.mean((res2_pred_sum)**2)
         loss_res = loss_res1 + loss_res2
         return loss_res
 
     # Define total loss
-    def loss(self, params, ic_batch, res_batch, val_batch):
+    def loss(self, params, ic_batch, single_res_datasets, double_res_datasets, val_batch):
+        loss_res = self.loss_res(params, single_res_datasets, double_res_datasets)
         loss_ics = self.loss_data(params, ic_batch)
-        loss_res = self.loss_res(params, res_batch)
         loss_data = self.loss_data(params, val_batch)
         
         weights  = 0
@@ -240,16 +277,27 @@ class MF_class_EWC:
     
         # Define a compiled update step
     @partial(jit, static_argnums=(0,))
-    def step(self, i, opt_state, ic_batch, res_batch, val_batch):
+    def step(self, i, opt_state, ic_batch, single_res_datasets, double_res_datasets, val_batch):
         params = self.get_params(opt_state)
 
-        g = grad(self.loss)(params, ic_batch, res_batch, val_batch)
+        # g = grad(self.loss)(params, ic_batch, res_batch, val_batch)
+        g = grad(self.loss)(params, ic_batch, single_res_datasets, double_res_datasets, val_batch)
         return self.opt_update(i, g, opt_state)
     
 
     # Optimize parameters in a loop
-    def train(self, ic_dataset, res_dataset, val_dataset, nIter = 10000):
-        res_data = iter(res_dataset)
+    # def train(self, ic_dataset, res_dataset, val_dataset, nIter = 10000):
+    #     res_data = iter(res_dataset)
+    def train(self, ic_dataset, single_res_datasets, double_res_datasets, val_dataset, nIter = 10000):
+        # res_data = iter(res_dataset)
+        single_res_data = []
+        double_res_data = []
+        for single_res_dataset in single_res_datasets:
+            single_res_data.append(iter(single_res_dataset))
+        for double_res_dataset in double_res_datasets:
+            double_res_data.append(iter(double_res_dataset))
+        # single_res_data = vmap(iter)(single_res_datasets)
+        # double_res_data = vmap(iter)(double_res_datasets)
         ic_data = iter(ic_dataset)
         val_data = iter(val_dataset)
 
@@ -257,19 +305,23 @@ class MF_class_EWC:
         # Main training loop
         for it in pbar:
             # Fetch data
-            res_batch= next(res_data)
+            single_res_batches = list(map(next,single_res_data))
+            double_res_batches = list(map(next,double_res_data))
+            # single_res_batches = vmap(next)(single_res_data)
+            # double_res_batches = vmap(next)(double_res_data)
+            # res_batch= next(res_data)
             ic_batch= next(ic_data)
             val_batch= next(val_data)
 
             self.opt_state = self.step(next(self.itercount), self.opt_state, 
-                                       ic_batch, res_batch, val_batch)
+                                       ic_batch, single_res_batches, double_res_batches, val_batch)
             
             if it % 1000 == 0:
                 params = self.get_params(self.opt_state)
 
                 # Compute losses
-                loss_value = self.loss(params, ic_batch, res_batch, val_batch)
-                res_value = self.loss_res(params, res_batch)
+                loss_value = self.loss(params, ic_batch, single_res_batches, double_res_batches, val_batch)
+                res_value = self.loss_res(params, single_res_batches, double_res_batches)
                 ics__value = self.loss_data(params, ic_batch)
                 data_value = self.loss_data(params, val_batch)
 
