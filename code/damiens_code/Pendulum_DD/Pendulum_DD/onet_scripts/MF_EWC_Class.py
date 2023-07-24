@@ -131,7 +131,8 @@ class MF_class_EWC:
         j = 0
         for level in self.params_t:
             i = 0
-            ul_cur = 0
+            weight_sum = 0.
+            ul_cur = 0.
             for mfparams in level:
                 paramsB_nl = mfparams[0]
                 paramsB_l = mfparams[1]
@@ -141,15 +142,17 @@ class MF_class_EWC:
                 u_l = self.apply_l(paramsB_l, ul)
                 
                 w = self.w_jl(i, self.Ndomains[j], u)
+                weight_sum += w
                 ul_cur += w*(u_l + u_nl)
                 i +=1
-            ul = ul_cur
+            ul = ul_cur/weight_sum
             j += 1
         
-        s1 = 0
-        s2 = 0
+        s1 = 0.
+        s2 = 0.
    
         idx = 0
+        weight_sum = 0.
         for param in params:
             params_nl, params_l = param
             y = np.hstack([u, ul])
@@ -158,10 +161,13 @@ class MF_class_EWC:
             u_l = self.apply_l(params_l, ul)
             
             w = self.w_jl(idx, self.Ndomains[-1], u)
+            weight_sum += w
             s1 += w*(u_l[:1]+ u_nl[:1])
             s2 += w*(u_l[1:]+ u_nl[1:])
             idx += 1
-              
+        s1 = s1/weight_sum
+        s2 = s2/weight_sum
+
         #  print(s1.shape)
         
         return s1, s2
