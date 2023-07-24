@@ -101,7 +101,7 @@ if __name__ == "__main__":
     k = 2
     c = 0 
 
-
+    ### Make sure that you understand the significance of all the following variables
     epochs = 1000
     epochsA2 = 100000
     lr = optimizers.exponential_decay(1e-3, decay_steps=2000, decay_rate=0.99)
@@ -117,7 +117,10 @@ if __name__ == "__main__":
     data_range = np.arange(0,int(2*min_B))
 
 
-    d_vx = scipy.io.loadmat("../data.mat")
+    # The original line was: d_vx = scipy.io.loadmat("../data.mat")
+    d_vx = scipy.io.loadmat("C:/Users/beec613/Desktop/pnnl_research/code/amandas_code/data.mat")
+
+    ### Load the training data
     t_data_full, s_data_full = (d_vx["u"].astype(np.float32), 
                d_vx["s"].astype(np.float32))
 
@@ -133,8 +136,10 @@ if __name__ == "__main__":
     # Train A
     # ====================================
     
+    ### Set the boundary and initial conditions
     u_bc = np.asarray([0]).reshape([1, -1])
     s_bc = np.asarray([1, 1]).reshape([1, -1])
+    ### Load those conditions into jax
     u_bc = jax.device_put(u_bc)
     s_bc = jax.device_put(s_bc)
 
@@ -147,7 +152,7 @@ if __name__ == "__main__":
     res_dataset = DataGenerator_res(coords, batch_size)
     data_dataset = DataGenerator(t_data, s_data, len(t_data))
 
-    lam= []
+    lam = []
     F = []
     results_dir = results_dir_A
     model_A = DNN_class_EWC(layers_A, ics_weight, res_weight, data_weight, [], lr)
@@ -163,7 +168,7 @@ if __name__ == "__main__":
         
         flat_params, _  = ravel_pytree(model_A.get_params(model_A.opt_state))
         np.save(results_dir + 'params.npy', flat_params)
-        print('\n ... A Training done ...')
+        print('/n ... A Training done ...')
         
         scipy.io.savemat(results_dir +"losses.mat", 
                      {'training_loss':model_A.loss_training_log,
@@ -186,8 +191,10 @@ if __name__ == "__main__":
     batch_size_pts = batch_size - batch_size_res                            
                                      
     
-    key, subkey = random.split(key)
+    key, subkey = random.split(key) 
 
+    # These lines are computing the residuals at points based on a density function and then
+    # they compute the error to backpropagate the parameters
     res_pts = coords[0] + (coords[1]-coords[0])*random.uniform(key, shape=[20000,1])
     res_val = model_A.predict_res(params_A, res_pts)
     err = res_val**k/np.mean( res_val**k) + c
@@ -220,7 +227,7 @@ if __name__ == "__main__":
 
 
 
-            print('\n ... A2 Training done ...')
+            print('/n ... A2 Training done ...')
             scipy.io.savemat(results_dir +"losses.mat", 
                          {'training_loss':model.loss_training_log,
                           'res_loss':model.loss_res_log,

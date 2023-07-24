@@ -1,0 +1,244 @@
+\documentclass{article}
+% Choose a conveniently small page size
+% PACKAGES
+\usepackage[margin = 1in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{amsthm}
+\usepackage{dsfont}
+\usepackage{hyperref}
+
+% MACROS
+% Set Theory
+\def\N{\mathbb{N}}
+\def\R{\mathbb{R}}
+\def\C{\mathbb{C}}
+\def\Z{\mathbb{Z}}
+%\def\^{\hat}
+\def\-{\vec}
+\def\d{\partial}
+\def\!{\boldsymbol}
+\def\X{\times}
+%\def\-{\bar}
+\def\bf{\textbf}
+\def\l{\left}
+\def\r{\right}
+\title{Meeting Agendas}
+\author{Damien}
+\begin{document}
+\maketitle
+\newpage
+\section*{June 14, 2023}
+Participants: Amanda and Damien
+\subsection*{Agenda}
+Today, we are discussing the following three papers
+\begin{itemize}
+	\item Multifidelity PINN: \url{https://arxiv.org/pdf/1903.00104.pdf}
+	\item Multifidelity DeepONets: \url{https://arxiv.org/pdf/2204.09157.pdf}
+	\item Multifidelity Continual Learning: \url{https://arxiv.org/pdf/2304.03894.pdf} 
+\end{itemize}
+\subsection*{Questions}
+\subsubsection*{Multifidelity PINNs}
+\begin{itemize}
+	\item[Q] We do not have to train the final final neural network that takes in $y_H$ and outputs $f_e$, correct? This is simply used for penalization?
+	\item[A] This is correct.
+	\item[Q] Does penalizing the gradient force the solution to converge to an approximation that is locally at least first order?
+	\item[A] They penalize the gradient because it trains better. 
+	\item[Q] Can you discuss in more detail how each sub-network is trained?
+	\item[A] Training is done separately generally for each network separately. However, linear and nonlinear are trained simultaneously. The low-fidelity method can be trained separately. Training can be done all simultaneously?
+	\item[Q] How is data used for training in Figure 3? Did they train on data not in Figure 3a?
+	\item[A] Figure 3a contains all the training data. There is probably more testing data.
+\end{itemize}
+\subsubsection*{Multifidelity DeepONets}
+\begin{itemize}
+	\item[Q] What are the essential differences between PINNs and DeepONets?
+	\begin{itemize}
+		\item For DeepONets you DO need to train the last network since you do not know the functional form of the operator, correct?
+		\item[A] PINNs train for one initial condition. Deep operator networks attempt to learn how all initial conditions map to solutions. The operator form is known, so the last part is known. We do not need to train the operator.
+		\item What are the key differences in how PINNs and ONets are trained?
+		\item[A] Need smaller time steps and more data for DeepONets as opposed to PINNs.
+	\end{itemize}
+	\item[Q] How are $M_L$ and $P_L$ related in Figure 1?
+	\item[A] $M_L$ contains the points/data needed to get a unique solution of the differential equation. $P_L$ are simply data that we interpolate.
+\end{itemize}
+\subsubsection*{Continual Learning}
+\begin{itemize}
+	\item[Q] You talked about this a bit yesterday, but what are the assumptions we make as far as knowledge about the low-fidelity model we are given? 
+	\begin{itemize}
+		\item Even if we do not know the data the low-fidelity model was trained on, do we know the domain that data was in?
+		\item[A] We assume that the low-fidelity network is correlated with the solution on the new data set. We do not necessarily even know what domain the previous network was trained on.
+		\item If the previous answer is yes, then why are we treating $\mathcal{NN}_{i-1}$ as a low-fidelity predictor on $\Omega_{i-1}$?
+	\end{itemize}
+	\item[Q] Why do we need to train a single fidelity and a multifidelity PINN on $\Omega_1$? 
+	\item[A] The results were better when you initialize the multifidelity approach in this manner.
+\end{itemize}
+\subsubsection*{General Questions}
+\begin{itemize}
+	\item[Q] Have you performed experiments with noise? Are these methods robust to noisy data?
+	\item[A] There is error added to the low-fidelity data in Burger's equation in the ONet paper. The high-fidelity data helps compensate for this noise.
+\end{itemize}
+\newpage
+\section*{June 22, 2023}
+Participants: Amanda and Damien
+\subsection*{Agenda}
+I am having a hard time running the code on Marianas. The pendulum code works fine on my local machine, but there is something wrong still.
+\subsubsection*{Comments}
+\begin{itemize}
+\item The code works when I run it on my machine, so this has to be a problem with the environment.
+\item I have tried running two different slurm scripts: \verb|mybatch.slurm| and \verb|batch.slurm|. Both \verb|.slurm| files give the same output.
+\end{itemize}
+\subsection*{Questions}
+\begin{itemize}
+\item[Q] Once I have run the lines listed below, do I need to run them again every time? Do the lines following \verb|conda create --name jax-cuda| create a permanent environment that I can just load with \verb|conda activate jax-cuda| from now on? Do I need to run the following lines again?
+\begin{itemize}
+\item \verb|module purge|
+\item \verb|module load cuda/11.4|
+\item \verb|module load python/miniconda3.9|
+\item \verb|source /share/apps/python/miniconda3.9/etc/profile.d/conda.sh|
+\item \verb|conda create --name jax-cuda|
+\item \verb|conda activate jax-cuda|
+ 
+\item \verb|conda install scipy=1.10.0|
+\item \verb|pip install --upgrade pip|
+\item \verb|pip install --upgrade "jax[cuda11_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html|
+\item \verb|conda install tqdm|
+\item \verb|pip install torch|
+\item \verb|conda install cudnn|
+\end{itemize}
+\item[A] No, you do not need to re-install the packages in the environment every time.
+\item[Q] I put the above lines into a .sh file and the output when I run the .sh file is different than when I run the code otherwise. Is there a reason for this? I feel like it should be the same?
+\item[A] Just put lines directly into the terminal since you do not need to run the code every time.
+\item[Q] What is \verb|SF_script.py|? Should I have access to this file?
+\end{itemize}
+Amanda's Comments:
+\begin{itemize}
+\item Possible reasons for error:
+\begin{itemize}
+\item The version of cuDNN may not be compatible with what I need to do.
+\item Try to re-install jax in the CUDA environment
+\item This could be a memory error, so run on dl and not dl-shared
+\item If it is a memory error, then it could be that the system is pre-allocating memory that does not exist
+\item Take the line: \verb|os.environ["XLA_PYTHON_CLIENT_PREALLOCATE"]="false"|. Put it in the script between when you import all the packages and when you start the code
+\item If the code is not running on Marianas, developing locally is a good thing to do. 
+\end{itemize}
+\end{itemize}
+Multi-fidelity PINN Stuff:
+\begin{itemize}
+\item Amanda sent me an Overleaf for the multi-fidelity domain decomposition.
+\item Currently the code is not smart about how it selects points.
+\item There will be a running list of problems to work on in the Overleaf.
+\end{itemize}
+\newpage
+\section*{June 26, 20223}
+Participants: Damien and Alexander
+\subsection*{Agenda}
+In this meeting we are discussing goals and expectations for the upcoming weeks.
+%\subsection*{Questions}
+%\begin{itemize}
+%\item[Q] How is the 
+%\end{itemize}
+\subsection*{Goals}
+\begin{itemize}
+\item Implement multi-fidelity framework for domain decomposition. (This is the primary task to complete before anything else)
+\begin{itemize}
+	\item Do one level of the DD method separately and then plug this into the multi-fidelity framework.
+	\item Use 1D pendulum as the first test problem.
+	\item See how the method performs without the insights of the other papers.
+	\item Create data structures in a manner that they are scalable to higher dimensional problems.
+\end{itemize}
+\item Implement point selection methods that depend on the magnitude of the residual as opposed to training with fixed collocation points.
+\item Implement adaptive refinement based on the norm of the residual.
+\item Implement causality in the algorithm.
+\end{itemize}
+\subsection*{Notes}
+\begin{itemize}
+	\item What is going to be the official document for the write up?
+\end{itemize}
+\newpage
+\section*{June 28, 2023}
+Participants: Damien and Amanda
+\subsection*{Agenda}
+In this meeting we are discussing issues with the \verb|Pendulum_DD| code and aspects within it that need to be changed.
+\subsubsection*{Things To Work On}
+\begin{itemize}
+	\item Pendulum
+	\begin{itemize}
+		\item Running the domain decomposition code
+		\item Changing how the point selection is done to be smarter
+		\begin{itemize}
+			\item Find where the neural networks are being evaluated at residual points.
+			\item Make sure that you are not evaluating every network at all the points. Only evaluate networks on points within the support of their weight function.
+			\item THERE ARE TWO OPTIONS FOR CHOOSING WHICH NETWORKS EVALUATE WHICH POINTS: Change the data generator function to generate output points in a given domain OR once you are already given a point, check whether or not the point is in the support of the weight function.
+			\item The data generator function can be smart about parallelization of the points.
+			\item Testing
+			\begin{itemize}
+				\item Running with and without the residual driven point selection
+				\item Look at the sensitivity of the weights of the loss function
+			\end{itemize}
+			\item Do testing on how high we can get the maximum time of the pendulum. Currently it is at 10. Can we get it to 20? 50?
+		\end{itemize}
+	\end{itemize}
+	\item Wave Equation
+	\begin{itemize}
+		\item 
+	\end{itemize}
+	\item Allen-Cahn
+	\begin{itemize}
+		\item 
+	\end{itemize}
+	\item Lorenz
+	\begin{itemize}
+		\item 
+	\end{itemize}
+\end{itemize}
+\newpage
+\section*{June *, 2023}
+\subsection*{Agenda}
+In this meeting I want to clarify any remaining questions that I have about the code in \verb|onet_scripts|. Note: I use verbatim font when I am referencing something in the code. Also note: I added some comments, so the line numbers may not be precise (sorry about that).
+\subsection*{Questions}
+\subsubsection*{Original Code}
+\begin{itemize}
+	\item[Q] It seems that there are seven total neural networks trained: \verb|0| through \verb|5| and \verb|A|. Exactly how are these neural networks related to each other? On what data is each network trained?
+	\item[A] \verb|A| is the single fidelity network. Networks 0 through 5 are a series of multifidelity networks. Each network uses the most recently trained network as the low fidelity approximation. Each network is trained on a different, randomly sampled subset on the time points on the interval $[0,10]$. 
+	\item[Q] \verb|train_MF_EWC_script.py, 105-106|: What are \verb|epochs| and \verb|epochsA2| used for? What is the difference?
+	\item[A] \verb|epochs| is the number of epochs used in the multifidelity networks. \verb|epochsA2| is the number of epochs used in the single fidelity networks.
+	\item Questions that I had that are not important enough to spend time discussing currentlym (I believe).
+	\begin{itemize}
+	\item[Q] \verb|train_MF_EWC_script.py, 155-156|: What is the purpose of \verb|F| and \verb|lam|?
+	\item[Q] What does \verb|EWC| stand for again?
+	\item[Q] \verb|DNN_EWC_Class.py, 215|: How does the \verb|item(res_dataset)| line work? I know it generates new batches of data, but I don't exactly understand the logic.
+	\item[Q] \verb|train_MF_EWC_script.py, 202|: What is the class \verb|DataGenerator_res2| for? Why do we need a second residual class?
+	\item[Q] What is the low fidelity model for each neural network? Is it simply the previous trained network? Is it some combination of all the previously trained networks?
+	\item[Q] \verb|utils_fs_v2.py, 46|: What does the explicit definition of the \verb|__getitem__| method doing? How does it get the batch?
+	\item[Q] \verb|train_MF_EWC_script.py, 216|: In this line we are passing in \verb|params_A|, which is the set of parameters from the initial single-fidelity network. We also pass in all the parameters from all of the previous networks, \verb|params_prev|. Why are we passing in all the previous networks? It feels like we should only need to pass in the previous network.
+	\item[Q] \verb|MF_EWC_Class.py, 58-59|: These lines are setting the parameters of the nonlinear and linear networks to the value that was computed in the previous network?	
+	\end{itemize}
+
+\end{itemize}
+\subsubsection*{Pendulum\_DD}
+\begin{itemize}
+	\item[Q] \verb|train_MF_EWC_script.py, 239|: What is each of the five indices into \verb|params_prev| for?
+	\item[A]
+	\begin{itemize}
+		\item The fifth index is for choosing between the weight matrix and the shift vector. 
+		\item The fourth index chooses which layer of the network you are accessing. Has type "tuple".
+		\item The third index chooses whether you look at the non-linear or the linear network. Has type "list".
+		\item The third layer determines which neural network on the corresponding level you are going to look at. Has type "tuple".
+		\item The first index chooses which level of the domain decomposition hierarchy you are looking at. Has type "list".
+		\item \verb|params_prev| holds all of the parameters from all of the neural networks on all of the layers of the domain decomposition. Has type "list".
+	\end{itemize}
+	\item[Q] \verb|MF_EWC_Class.py, 62, 63|: Why are the nonlinear and linear networks being set equal to what they are on these lines?
+	\item[Q] \verb|MF_EWC_Class.py, 116|: What is \verb|u| in the context of the \verb|operator_net| function? What is \verb|ul|?
+	\item[A] It seems that \verb|u| is the set of collocation points where the neural net is analyzed. \verb|ul| is low-fidelity solution at these collocation points. This notation is rather confusing. Be careful.
+\end{itemize}
+
+\begin{itemize}
+\item Try changing the data generator so that the points know ahead of time where they are going to end up.
+\item Look at how the parameters are accessed in Amanda's code and try to adjust my code so that I can access the parameters properly.
+\end{itemize}
+\end{document}

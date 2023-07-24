@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.6.20)  21 JUN 2023 09:33
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.6.20)  24 JUL 2023 14:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -523,34 +523,34 @@ Package pdftex.def Info: imgs/domain_decomp.png  used on input line 40.
 
 {C:/Users/beec613/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map} <./imgs/dom
 ain_decomp.png>] [2]
-Overfull \hbox (25.10344pt too wide) in paragraph at lines 68--69
+Overfull \hbox (25.10344pt too wide) in paragraph at lines 91--92
 []\OT1/cmr/m/n/10 Stanford CS229M Lec-ture 13 (Neu-ral Tan-gent Ker-nel): []$\O
 T1/cmtt/m/n/10 https : / / www . youtube . com / watch ? v = btphvvnad0A &
  []
 
 
-Overfull \hbox (22.40878pt too wide) in paragraph at lines 78--79
+Overfull \hbox (22.40878pt too wide) in paragraph at lines 101--102
 []\OT1/cmr/m/n/10 Point se-lec-tion for PINNs: []$\OT1/cmtt/m/n/10 https : / / 
 www . sciencedirect . com / science / article / pii / S0045782522006260$[] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 81--82
+Underfull \hbox (badness 10000) in paragraph at lines 104--105
 
  []
 
-[3] [4] (outline.aux)
+[3] [4] [5] [6] [7] [8] [9] (outline.aux)
 Package rerunfilecheck Info: File `outline.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 10656 strings out of 476331
- 167025 string characters out of 5786821
- 1858660 words of memory out of 5000000
- 30931 multiletter control sequences out of 15000+600000
+ 10664 strings out of 476331
+ 167112 string characters out of 5786821
+ 1864660 words of memory out of 5000000
+ 30933 multiletter control sequences out of 15000+600000
  520048 words of font info for 63 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,7n,76p,485b,436s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,7n,76p,485b,506s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\beec613\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tc
 rm1000.pk><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public/am
 sfonts/cm/cmbx10.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type
@@ -559,9 +559,9 @@ sfonts/cm/cmbx10.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type
 ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/beec613/AppData/L
 ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/beec613
 /AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on outline.pdf (4 pages, 195510 bytes).
+Output written on outline.pdf (9 pages, 205686 bytes).
 PDF statistics:
- 92 PDF objects out of 1000 (max. 8388607)
- 16 named destinations out of 1000 (max. 500000)
+ 118 PDF objects out of 1000 (max. 8388607)
+ 22 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
