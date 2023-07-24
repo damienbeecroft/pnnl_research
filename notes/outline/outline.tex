@@ -103,7 +103,7 @@ We will consider a multifidelity domain decomposition approach, where a PINN is 
 \end{itemize}
 \bf{Coding}:\\
 \par I was sent the pendulum code by Amanda. I took some time this week to go through it and get a feel for what is going on. I have not run the code since I do not have my PNNL laptop. I plan to have the code up and running early next week.
-\newpage
+%\newpage
 \subsection*{Week 2}
 \bf{Reading}:
 \begin{itemize}
@@ -122,36 +122,47 @@ We will consider a multifidelity domain decomposition approach, where a PINN is 
 \item Run Amanda's code locally
 \item Plot solutions from Amanda's code
 \end{itemize}
-\newpage
+%\newpage
 \subsection*{Week 3} 
 \bf{Notes}:
 \begin{itemize}
 \item I went through the original code Amanda sent me slowly to understand exactly how it works.
-\item I went through the altered code in \verb|Pendulum_DD| to understand exactly how it works.
+\item I went through the altered code in \verb|Pendulum_DD| to understand exactly how it works. This was rather time consuming.
 \item I realized that the problem of only applying neural networks to points within their domains can be solved with a rather simple sorting algorithm.
 \end{itemize}
 \subsection*{Coding}
 \begin{itemize}
 \item Implementing domain sorting code.
 \end{itemize}
-\newpage
-\subsection*{Week 4}
-Lost in GitHub problem
-\newpage
-\subsection*{Week 5} 
-Lost in GitHub problem
-%Note: Some updates were lost in a GitHub problem
 
-%\textbf{Code}
-%\begin{itemize}
-%\item Went to the Seattle PNNL lab to meet Amanda and Sarah.
-%\item
-%\end{itemize}
-\newpage
-\subsection*{Week 6}
-\textbf{Code}
+%\newpage
+\subsection*{Week 4}
+\bf{Coding}
 \begin{itemize}
-\item I have begun reading through the JAX documentation in order understand how to implement the multifidelity network architecture.
+\item I created a function that sorts the points amongst the tree of domains.
+\item I created a super class that tracks which nodes are on which levels of the tree.
+\item I created a function that evaluates the nodes on each level and sorts them accordingly.
+\item I began taking the code apart and putting it back together in order to get things working.
+\end{itemize}
+%\newpage
+\subsection*{Week 5} 
+\bf{Coding}
+\begin{itemize}
+\item This week I went to the PNNL office in Seattle to meet  Amanda and Sarah.
+\item I spent time trying to figure out how to set up the visit to Pasco. Of course, Concur got the better of me in the end and I did not end up going to Pasco.
+\item I worked on integrating the theory I had worked out in week 4 in with the \verb|Pendulum_DD| code.
+\item I began to have difficulties with Jax as I was beginning to integrate the code in with Amanda's.
+\item I read through the Jax documentation in order understand how to implement the multifidelity network architecture.
+\end{itemize}
+%\newpage
+\subsection*{Week 6}
+\textbf{Coding}
+\begin{itemize}
+\item I learned about pytrees in Jax. I began attempting to translate the code that I have to be compatible with Jax.
+\item I began to realize that I could not get pytrees working with in Jax, at least the way I was implementing it.
+\item I talked to Amanda and she suggested that I try making batches for each subset where different neural networks are defined.
+\item I tried implementing the multiple batching, however, the code was not running. Jax was again giving me problems.
+\item I tried running the original \verb|Pendulum_DD| code that Amanda sent me and it gave me an error. I tried extracting the original zip file that Amanda gave me and that also gave me the same error. I cannot get the \verb|Pendulum_DD| code to run at all now. I am doubting if I ever actually ran it.
 \end{itemize}
 \newpage
 \subsection*{Week 7}
