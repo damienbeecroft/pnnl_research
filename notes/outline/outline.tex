@@ -121,11 +121,13 @@ We will consider a multifidelity domain decomposition approach, where a PINN is 
 \item Set up GitHub repository on Marianas and pull code from \verb|pnnl_research|
 \item Run Amanda's code locally
 \item Plot solutions from Amanda's code
+\item Tried to get \verb|onet_scripts| running on Marianas. It did not work.
 \end{itemize}
 %\newpage
 \subsection*{Week 3} 
 \bf{Notes}:
 \begin{itemize}
+\item Tried to get \verb|onet_scripts| running on Marianas. It did not work. I spent a lot of time on this.
 \item I went through the original code Amanda sent me slowly to understand exactly how it works.
 \item I went through the altered code in \verb|Pendulum_DD| to understand exactly how it works. This was rather time consuming.
 \item I realized that the problem of only applying neural networks to points within their domains can be solved with a rather simple sorting algorithm.
@@ -149,6 +151,7 @@ We will consider a multifidelity domain decomposition approach, where a PINN is 
 \bf{Coding}
 \begin{itemize}
 \item This week I went to the PNNL office in Seattle to meet  Amanda and Sarah.
+\item Sarah and I met with Shady. Shady was able to figure out why Sarah and I could not get the code running on Marianas. There were extra packages in our \verb|python| and \verb|.conda| files. After deleting these packages the code ran.
 \item I spent time trying to figure out how to set up the visit to Pasco. Of course, Concur got the better of me in the end and I did not end up going to Pasco.
 \item I worked on integrating the theory I had worked out in week 4 in with the \verb|Pendulum_DD| code.
 \item I began to have difficulties with Jax as I was beginning to integrate the code in with Amanda's.
@@ -166,6 +169,10 @@ We will consider a multifidelity domain decomposition approach, where a PINN is 
 \end{itemize}
 \newpage
 \subsection*{Week 7}
+\textbf{Coding}
+\begin{itemize}
+\item I realized that \verb|Pendulum_DD| code that I was sent never ran  in the first place. It had a bug where \verb|self.NDomains| was converted to a traced value implicitly. The code then attempted to make a numpy array with this code, but this can't be done with a traced variable.
+\end{itemize}
 \newpage 
 \subsection*{Week 8} 
 \newpage

@@ -104,95 +104,37 @@ class MF_class_EWC:
     # evaluation
     # =============================================
 
+    # def w_jl(self, j, l, u):
+    #     mu = self.Tmax*(j-1)/(l-1)
+    #     sigma = self.Tmax*(self.delta/2.0)/(l-1)
+
+    #     w_jl = 1+ np.cos(math.pi*(u-mu)/sigma)
+    #     w_jl = w_jl**2
+    #     return w_jl
+    def weight_condition(self,condition,u,mu,sigma):
+        w = lax.cond(condition, lambda u: (1 + np.cos(math.pi*(u-mu)/sigma))**2, lambda _: 0., u)
+        return w
+    
+    # Changed this function
     def w_jl(self, j, l, u):
-        mu = self.Tmax*(j-1)/(l-1)
+        # mu = self.Tmax*(j-1)/(l-1) # j starts at zero
+        mu = self.Tmax*j/(l-1)
         sigma = self.Tmax*(self.delta/2.0)/(l-1)
-
-        w_jl = 1+ np.cos(math.pi*(u-mu)/sigma)
-        w_jl = w_jl**2
+        conditions = (u < (mu + sigma)) & (u > (mu - sigma))
+        w_jl = vmap(self.weight_condition,(0,0,None,None))(conditions,u,mu,sigma)
         return w_jl
-    
-    # def second_loop(self,j,i,ul,u):
-    #     paramsB_nl =  self.params_t[j][i][0]
-    #     paramsB_l =  self.params_t[j][i][1]
-    #     y = np.hstack([u, ul])
-
-    #     u_nl = self.apply_nl(paramsB_nl, y)
-    #     u_l = self.apply_l(paramsB_l, ul)
-        
-    #     w = self.w_jl(i, self.Ndomains[j], u)
-    #     ul_cur += w*(u_l + u_nl)
-    
-    # def first_loop(self,i):
-    #     ul_cur = 0
-    #     lax.fori_loop(0)
-    
-    # def body(self,i,val):
-    #     params, u, ul, s1, s2 = val
-    #     params_nl, params_l = params[i]
-    #     y = np.hstack([u, ul])
-
-    #     u_nl = self.apply_nl(params_nl, y)
-    #     u_l = self.apply_l(params_l, ul)
-        
-    #     w = self.w_jl(i, self.Ndomains[-1], u)
-    #     s1 += w*(u_l[:1]+ u_nl[:1])
-    #     s2 += w*(u_l[1:]+ u_nl[1:])
-    #     return (params, u, ul, s1, s2)
-
-    # def body(self,param,u,ul):
-    #         params_nl, params_l = param
-    #         y = np.hstack([u, ul])
-
-    #         u_nl = self.apply_nl(params_nl, y)
-    #         u_l = self.apply_l(params_l, ul)
-            
-    #         w = self.w_jl(i, self.Ndomains[-1], u)
-    #         s1 += w*(u_l[:1]+ u_nl[:1])
-    #         s2 += w*(u_l[1:]+ u_nl[1:])
-        
-    
-    # def operator_net(self, params, u):
-    
-    #     ul = self.apply_lf(self.params_A, u)
-
-    #     # lax.fori_loop(0,len(self.Ndomains)-1,self.first_loop,())
-        
-    #     s1 = 0.
-    #     s2 = 0.
-
-    #     # val = lax.fori_loop(0,self.Ndomains[-1],self.body,(params,u,ul,s1,s2))
-
-    #     # s1 = val[3]
-    #     # s2 = val[4]
-    #     vmap(self.body,(0,None,None))(params,u,ul)
-
-    #     # for i in onp.arange(self.Ndomains[-1]):
-    #     #     params_nl, params_l = params[i]
-    #     #     y = np.hstack([u, ul])
-
-    #     #     u_nl = self.apply_nl(params_nl, y)
-    #     #     u_l = self.apply_l(params_l, ul)
-            
-    #     #     w = self.w_jl(i, self.Ndomains[-1], u)
-    #     #     s1 += w*(u_l[:1]+ u_nl[:1])
-    #     #     s2 += w*(u_l[1:]+ u_nl[1:])
-              
-    #     #  print(s1.shape)
-        
-    #     return s1, s2
-        
         
     def operator_net(self, params, u):
     
         ul = self.apply_lf(self.params_A, u)
-    
-        for j in onp.arange(len(self.Ndomains)-1):
+
+        j = 0
+        for level in self.params_t:
+            i = 0
             ul_cur = 0
-            for i in onp.arange(self.Ndomains[j]):
-                
-                paramsB_nl =  self.params_t[j][i][0]
-                paramsB_l =  self.params_t[j][i][1]
+            for mfparams in level:
+                paramsB_nl = mfparams[0]
+                paramsB_l = mfparams[1]
                 y = np.hstack([u, ul])
 
                 u_nl = self.apply_nl(paramsB_nl, y)
@@ -200,27 +142,29 @@ class MF_class_EWC:
                 
                 w = self.w_jl(i, self.Ndomains[j], u)
                 ul_cur += w*(u_l + u_nl)
-
+                i +=1
             ul = ul_cur
+            j += 1
         
         s1 = 0
         s2 = 0
-        for i in onp.arange(self.Ndomains[-1]):
-            params_nl, params_l = params[i]
+   
+        idx = 0
+        for param in params:
+            params_nl, params_l = param
             y = np.hstack([u, ul])
 
             u_nl = self.apply_nl(params_nl, y)
             u_l = self.apply_l(params_l, ul)
             
-            w = self.w_jl(i, self.Ndomains[-1], u)
+            w = self.w_jl(idx, self.Ndomains[-1], u)
             s1 += w*(u_l[:1]+ u_nl[:1])
             s2 += w*(u_l[1:]+ u_nl[1:])
+            idx += 1
               
         #  print(s1.shape)
         
         return s1, s2
-    
-    
 
 
     # Define ODE residual
@@ -289,8 +233,8 @@ class MF_class_EWC:
         loss_data = self.loss_data(params, val_batch)
         
         weights  = 0
-        for i in onp.arange(self.Ndomains[-1]):
-             params_nl, params_l = params[i]
+        for param in params:
+             params_nl, params_l = param
              weights += self.weight_nl(params_nl)
 
         loss =  self.ics_weight*loss_ics + self.res_weight*loss_res +\
