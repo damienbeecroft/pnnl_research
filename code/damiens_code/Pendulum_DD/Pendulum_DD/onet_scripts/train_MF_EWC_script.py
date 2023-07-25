@@ -95,7 +95,7 @@ if __name__ == "__main__":
     reload = [False, False, False, False, False, False]
 
     
-    reloadA = True
+    reloadA = False
     
     
 
@@ -120,7 +120,7 @@ if __name__ == "__main__":
     data_range = np.arange(0,int(2*min_B))
 
 
-    d_vx = scipy.io.loadmat("C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/Pendulum_DD/Pendulum_DD/data.mat")
+    d_vx = scipy.io.loadmat("/people/beec613/pnnl_research/code/damiens_code/Pendulum_DD/Pendulum_DD/data.mat")
     t_data_full, s_data_full = (d_vx["u"].astype(np.float32), 
                d_vx["s"].astype(np.float32))
 
@@ -128,7 +128,7 @@ if __name__ == "__main__":
     # saving settings
     # ====================================
     save_str = "MF_loop"
-    results_dir_A = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/Pendulum_DD/Pendulum_DD/results_A/"+save_str
+    results_dir_A = "/people/beec613/pnnl_research/code/damiens_code/Pendulum_DD/Pendulum_DD/results_A/"+save_str
     if not os.path.exists(results_dir_A):
         os.makedirs(results_dir_A)
         
@@ -199,7 +199,7 @@ if __name__ == "__main__":
     
     Ndomains = []
     for step in steps_to_train:
-        results_dir = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/Pendulum_DD/Pendulum_DD/results_" + str(step) + "/"+save_str+"/"
+        results_dir = "/people/beec613/pnnl_research/code/damiens_code/Pendulum_DD/Pendulum_DD/results_" + str(step) + "/"+save_str+"/"
         if not os.path.exists(results_dir):
             os.makedirs(results_dir)
         
