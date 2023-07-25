@@ -50,7 +50,13 @@ We will consider a multifidelity domain decomposition approach, where a PINN is 
 \end{itemize}
 \bf{Coding}:
 \begin{itemize}
-\item Figure out how to run code on Marianas
+	\item Do Now
+	\begin{itemize}
+		\item Do 20, 30, 40 for times on the pendulum equation. Keep going until failure. Failure means you can't get the error under $10^{-1}$ for any network.
+		\item Given a time scale that trains, decrease the network size until failure.
+		\item Work on implementing the wave equation
+		\item Make the multifidelity code efficient
+	\end{itemize}
 	\item Pendulum
 	\begin{itemize}
 		\item Run the domain decomposition code in \verb|Pendulum_DD|
@@ -70,6 +76,8 @@ We will consider a multifidelity domain decomposition approach, where a PINN is 
 			\item Do testing on how high we can get the maximum time of the pendulum. Currently it is at 10. Can we get it to 20? 50?
 		\end{itemize}
 	\end{itemize}
+
+
 	\item Wave Equation
 %	\begin{itemize}
 %		\item 
@@ -83,6 +91,7 @@ We will consider a multifidelity domain decomposition approach, where a PINN is 
 %		\item 
 %	\end{itemize}
 \end{itemize}
+
 \newpage
 \newpage
 \subsection*{Week 1}
@@ -167,7 +176,7 @@ We will consider a multifidelity domain decomposition approach, where a PINN is 
 \item I tried implementing the multiple batching, however, the code was not running. Jax was again giving me problems.
 \item I tried running the original \verb|Pendulum_DD| code that Amanda sent me and it gave me an error. I tried extracting the original zip file that Amanda gave me and that also gave me the same error. I cannot get the \verb|Pendulum_DD| code to run at all now. I am doubting if I ever actually ran it.
 \end{itemize}
-\newpage
+%\newpage
 \subsection*{Week 7}
 \textbf{Coding}
 \begin{itemize}

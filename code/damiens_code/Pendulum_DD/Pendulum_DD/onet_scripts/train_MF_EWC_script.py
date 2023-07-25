@@ -7,30 +7,30 @@ Created on Mon Aug 26 16:24:15 2019
 """
 
 import os
-
+import sys
 #import numpy as np
 import scipy.io
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
 import jax
 import jax.numpy as np
-import time
+# import time
 from utils_fs_v2 import timing,  DataGenerator, DataGenerator_res, DataGenerator_res2
-import math
+# import math
 import jax
-import jax.numpy as np
+# import jax.numpy as np
 from jax import random, grad, vmap, jit, hessian
 from jax.example_libraries import optimizers
 from jax.experimental.ode import odeint
-from jax.nn import relu, selu
-from jax.config import config
+# from jax.nn import relu, selu
+# from jax.config import config
 #from jax.ops import index_update, index
-from jax import lax
+# from jax import lax
 from jax.flatten_util import ravel_pytree
 
-import itertools
-from functools import partial
-from torch.utils import data
+# import itertools
+# from functools import partial
+# from torch.utils import data
 from tqdm import trange, tqdm
 #import matplotlib.pyplot as plt
 #import pandas as pd
@@ -112,14 +112,16 @@ if __name__ == "__main__":
     layers_sizes_nl = [3, N_nl, N_nl, N_nl, 2]
     layers_sizes_l = [2,  4, 2]
 
-    min_A = 0
-    min_B = 10
+    min_A = float(sys.argv[1])
+    min_B = float(sys.argv[2])
+    # min_A = 0
+    # min_B = 10
     Tmax = min_B
     delta = 1.9
-
+    print(min_A)
+    print(min_B)
     data_range = np.arange(0,int(2*min_B))
-
-
+    # d_vx = scipy.io.loadmat("C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/Pendulum_DD/Pendulum_DD/data.mat")
     d_vx = scipy.io.loadmat("/people/beec613/pnnl_research/code/damiens_code/Pendulum_DD/Pendulum_DD/data.mat")
     t_data_full, s_data_full = (d_vx["u"].astype(np.float32), 
                d_vx["s"].astype(np.float32))
@@ -128,7 +130,8 @@ if __name__ == "__main__":
     # saving settings
     # ====================================
     save_str = "MF_loop"
-    results_dir_A = "/people/beec613/pnnl_research/code/damiens_code/Pendulum_DD/Pendulum_DD/results_A/"+save_str
+    # results_dir_A = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/Pendulum_DD/Pendulum_DD/out_results/pend_" + str(min_A) + "_" + str(min_B) + "/results_A/"+save_str
+    results_dir_A = "/people/beec613/pnnl_research/code/damiens_code/Pendulum_DD/Pendulum_DD/out_results/pend_" + str(min_A) + "_" + str(min_B) + "/results_A/"+save_str
     if not os.path.exists(results_dir_A):
         os.makedirs(results_dir_A)
         
@@ -199,7 +202,8 @@ if __name__ == "__main__":
     
     Ndomains = []
     for step in steps_to_train:
-        results_dir = "/people/beec613/pnnl_research/code/damiens_code/Pendulum_DD/Pendulum_DD/results_" + str(step) + "/"+save_str+"/"
+        # results_dir = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/Pendulum_DD/Pendulum_DD/out_results/pend_" + str(min_A) + "_" + str(min_B) + "/results_" + str(step) + "/"+save_str+"/"
+        results_dir = "/people/beec613/pnnl_research/code/damiens_code/Pendulum_DD/Pendulum_DD/out_results/pend_" + str(min_A) + "_" + str(min_B) + "/results_" + str(step) + "/"+save_str+"/"
         if not os.path.exists(results_dir):
             os.makedirs(results_dir)
         
