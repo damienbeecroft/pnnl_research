@@ -90,7 +90,7 @@ if __name__ == "__main__":
     batch_size = 100
     batch_size_res = int(batch_size/2)
 
-    steps_to_train = np.arange(6)
+    steps_to_train = np.arange(5)
     # reload = [True, True, True, False, False, False]
     reload = [False, False, False, False, False, False]
 
