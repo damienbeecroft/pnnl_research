@@ -95,7 +95,7 @@ if __name__ == "__main__":
 
     reload = [False, False, False, False, False, False]
     
-    reloadA = True
+    reloadA = False
     
 
     k = 2
@@ -238,40 +238,56 @@ if __name__ == "__main__":
         if(step == 0):
             # make all the batches for the double domains
             for domain in double_domains:
-                num_pts = int((total_points*(domain[1] - domain[0]))/(coords[1] - coords[0]))
-                res_pts = domain[0] + (domain[1]-domain[0])*random.uniform(key, shape=[num_pts,1])
+                domain_size = domain[1] - domain[0]
+                domain_fraction = domain_size/(coords[1] - coords[0])
+                num_pts = int(total_points*domain_fraction)
+                res_pts = domain[0] + domain_size*random.uniform(key, shape=[num_pts,1])
                 res_val = model_A.predict_res(params_A, res_pts)
                 err = res_val**k/jnp.mean(res_val**k) + c
                 err_norm = err/jnp.sum(err)
-                res_dataset = DataGenerator_res2(domain, res_pts, err_norm, batch_size_res, batch_size)
+                batch_size_local = int(domain_fraction*batch_size)
+                batch_size_res_local = int(domain_fraction*batch_size_res)
+                res_dataset = DataGenerator_res2(domain, res_pts, err_norm, batch_size_res_local, batch_size_local)
                 double_res_datasets.append(res_dataset)
             # make all the batches for the single domains
             for domain in single_domains:
-                num_pts = int((total_points*(domain[1] - domain[0]))/(coords[1] - coords[0]))
-                res_pts = domain[0] + (domain[1]-domain[0])*random.uniform(key, shape=[num_pts,1])
+                domain_size = domain[1] - domain[0]
+                domain_fraction = domain_size/(coords[1] - coords[0])
+                num_pts = int(total_points*domain_fraction)
+                res_pts = domain[0] + domain_size*random.uniform(key, shape=[num_pts,1])
                 res_val = model_A.predict_res(params_A, res_pts)
                 err = res_val**k/jnp.mean(res_val**k) + c
                 err_norm = err/jnp.sum(err)
-                res_dataset = DataGenerator_res2(domain, res_pts, err_norm, batch_size_res, batch_size)
+                batch_size_local = int(domain_fraction*batch_size)
+                batch_size_res_local = int(domain_fraction*batch_size_res)
+                res_dataset = DataGenerator_res2(domain, res_pts, err_norm, batch_size_res_local, batch_size_local)
                 single_res_datasets.append(res_dataset)
         else:
             # make all the batches for the double domains
             for domain in double_domains:
-                num_pts = int((total_points*(domain[1] - domain[0]))/(coords[1] - coords[0]))
-                res_pts = domain[0] + (domain[1]-domain[0])*random.uniform(key, shape=[num_pts,1])
+                domain_size = domain[1] - domain[0]
+                domain_fraction = domain_size/(coords[1] - coords[0])
+                num_pts = int(total_points*domain_fraction)
+                res_pts = domain[0] + domain_size*random.uniform(key, shape=[num_pts,1])
                 res_val = model.predict_res(params, res_pts)
                 err = res_val**k/jnp.mean(res_val**k) + c
                 err_norm = err/jnp.sum(err)
-                res_dataset = DataGenerator_res2(domain, res_pts, err_norm, batch_size_res, batch_size)
+                batch_size_local = int(domain_fraction*batch_size)
+                batch_size_res_local = int(domain_fraction*batch_size_res)                
+                res_dataset = DataGenerator_res2(domain, res_pts, err_norm, batch_size_res_local, batch_size_local)
                 double_res_datasets.append(res_dataset)
             # make all the batches for the single domains
             for domain in single_domains:
-                num_pts = int((total_points*(domain[1] - domain[0]))/(coords[1] - coords[0]))
-                res_pts = domain[0] + (domain[1]-domain[0])*random.uniform(key, shape=[num_pts,1])
+                domain_size = domain[1] - domain[0]
+                domain_fraction = domain_size/(coords[1] - coords[0])
+                num_pts = int(total_points*domain_fraction)
+                res_pts = domain[0] + domain_size*random.uniform(key, shape=[num_pts,1])
                 res_val = model.predict_res(params, res_pts)
                 err = res_val**k/jnp.mean(res_val**k) + c
                 err_norm = err/jnp.sum(err)
-                res_dataset = DataGenerator_res2(domain, res_pts, err_norm, batch_size_res, batch_size)
+                batch_size_local = int(domain_fraction*batch_size)
+                batch_size_res_local = int(domain_fraction*batch_size_res)                
+                res_dataset = DataGenerator_res2(domain, res_pts, err_norm, batch_size_res_local, batch_size_local)
                 single_res_datasets.append(res_dataset)
         
  

@@ -51,7 +51,7 @@ if __name__ == "__main__":
     s = odeint(system, u.flatten(), y)
     
     
-    outdir = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/Pendulum_DD/Pendulum_DD/out_results/pend_0_20/"
+    outdir = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/Pendulum_DD/Pendulum_DD/out_results/pend_0.0_20.0/"
     suff = "MF_loop"
 
     net_data_dirA = outdir + "results_A/" + suff + "/"
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     plt.plot(y, s[:, 0], 'k', linestyle=':', linewidth=2, label='Exact')
  #   plt.scatter(t_data, s_data[:, 0], c='#59a14f')
     i=0
-    # plt.plot(uA[:, i], predA[:, i],  'k', linestyle='-', label='A prediction')
+    plt.plot(uA[:, i], predA[:, i],  'k', linestyle='-', label='A prediction')
     
     
     
@@ -83,14 +83,14 @@ if __name__ == "__main__":
     plt.plot(y, s[:, 1], 'k', linestyle=':', linewidth=2, label='Exact')
   #  plt.scatter(t_data, s_data[:, 1], c='#59a14f')
     i=1
-    # plt.plot(uA[:, 0], predA[:, i],  'k', linestyle='-', label='A prediction')
+    plt.plot(uA[:, 0], predA[:, i],  'k', linestyle='-', label='A prediction')
     err = np.linalg.norm(s[0:400, :].flatten()-predA[0:400, :].flatten(), 2)/np.linalg.norm(s[0:400, :].flatten(), 2)
     errors[0] = err
     print(err)
     
     
     
-    for i in np.arange(4,Ntrain):
+    for i in np.arange(Ntrain):
         lab_str = str(i+1) + " prediction"
         net_data_dir = outdir + "results_" + str(i) + "/" + suff + "/"
         d_vx = scipy.io.loadmat(net_data_dir + "beta_test.mat")

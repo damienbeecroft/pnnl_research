@@ -332,7 +332,7 @@ class MF_class_EWC:
 
         res1_pred_sum = 0.
         res2_pred_sum = 0.
-        # num_u = 0
+        num_u = 0
         # Compute forward pass
         idx = 0
         for batch in single_res_datasets:
@@ -342,7 +342,7 @@ class MF_class_EWC:
 
             res1_pred_sum += jnp.sum(res1_pred**2)
             res2_pred_sum += jnp.sum(res2_pred**2)
-            # num_u += len(u)
+            num_u += len(u)
             idx += 1
 
         idx = 0
@@ -353,12 +353,14 @@ class MF_class_EWC:
 
             res1_pred_sum += jnp.sum(res1_pred**2)
             res2_pred_sum += jnp.sum(res2_pred**2)
+            num_u += len(u)
             idx += 1
 
         # Compute loss
 
         # NOTE: I hard coded the division by the batch size here. This is temporary. I need to make this adaptable.
-        loss_res = (res1_pred_sum + res2_pred_sum)/100
+        # loss_res = (res1_pred_sum + res2_pred_sum)/100
+        loss_res = (res1_pred_sum + res2_pred_sum)/num_u
         return loss_res
 
     # Define total loss
@@ -380,7 +382,7 @@ class MF_class_EWC:
 
     
         # Define a compiled update step
-    # @partial(jit, static_argnums=(0,))
+    @partial(jit, static_argnums=(0,))
     def step(self, i, opt_state, ic_batch, single_res_datasets, double_res_datasets, val_batch):
         params = self.get_params(opt_state)
 
