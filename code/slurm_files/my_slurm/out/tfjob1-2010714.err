@@ -1,0 +1,22 @@
+Now you should run one of the following depending on your shell
+source /share/apps/python/miniconda3.9/etc/profile.d/conda.sh
+source /share/apps/python/miniconda3.9/etc/profile.d/conda.csh
+Traceback (most recent call last):
+  File "/people/beec613/.conda/envs/jax-gpu2/lib/python3.9/site-packages/scipy/io/matlab/_mio.py", line 39, in _open_file
+    return open(file_like, mode), True
+FileNotFoundError: [Errno 2] No such file or directory: '../data.mat'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/people/beec613/pnnl_research/code/amandas_code/onet_scripts/train_MF_EWC_script.py", line 121, in <module>
+    d_vx = scipy.io.loadmat("../data.mat")
+  File "/people/beec613/.conda/envs/jax-gpu2/lib/python3.9/site-packages/scipy/io/matlab/_mio.py", line 225, in loadmat
+    with _open_file_context(file_name, appendmat) as f:
+  File "/people/beec613/.conda/envs/jax-gpu2/lib/python3.9/contextlib.py", line 119, in __enter__
+    return next(self.gen)
+  File "/people/beec613/.conda/envs/jax-gpu2/lib/python3.9/site-packages/scipy/io/matlab/_mio.py", line 17, in _open_file_context
+    f, opened = _open_file(file_like, appendmat, mode)
+  File "/people/beec613/.conda/envs/jax-gpu2/lib/python3.9/site-packages/scipy/io/matlab/_mio.py", line 45, in _open_file
+    return open(file_like, mode), True
+FileNotFoundError: [Errno 2] No such file or directory: '../data.mat'

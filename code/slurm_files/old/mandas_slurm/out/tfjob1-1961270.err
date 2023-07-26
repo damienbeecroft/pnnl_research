@@ -1,0 +1,4 @@
+Now you should run one of the following depending on your shell
+source /share/apps/python/miniconda3.9/etc/profile.d/conda.sh
+source /share/apps/python/miniconda3.9/etc/profile.d/conda.csh
+python: can't open file '/qfs/people/beec613/pnnl_research/code/slurm_files/mandas_slurm/./SF_script.py': [Errno 2] No such file or directory
