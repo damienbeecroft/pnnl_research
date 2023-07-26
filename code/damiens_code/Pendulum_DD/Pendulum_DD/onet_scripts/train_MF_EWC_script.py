@@ -103,12 +103,14 @@ if __name__ == "__main__":
     c = 0 
 
 
-    epochs = 1000
+    epochs = 10000
     epochsA2 = 100000
     lr = optimizers.exponential_decay(1e-3, decay_steps=2000, decay_rate=0.99)
-    N_low = 200 
+    # N_low = 200 
+    N_low = 100
     N_nl = 80
-    layers_A = [1, N_low, N_low, N_low, 2]
+    # layers_A = [1, N_low, N_low, N_low, 2]
+    layers_A = [1, N_low, N_low, N_low, N_low, N_low, 2]
     layers_sizes_nl = [3, N_nl, N_nl, N_nl, 2]
     layers_sizes_l = [2,  4, 2]
 
