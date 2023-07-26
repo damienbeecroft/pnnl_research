@@ -11,7 +11,7 @@ Note:
 
 # My imports
 from jax import config
-config.update("jax_debug_nans", True)
+# config.update("jax_debug_nans", True)
 # config.parse_flags_with_jax = False
 
 # Other imports
@@ -163,8 +163,18 @@ class MF_class_EWC:
     # Define ODE residual
     def residual_net(self, params, u):
 
+        # debug.breakpoint()
         s1, s2 = self.operator_net(params, u)
-        debug.print("\n s1, s2, u = {}", (s1, s2, u))
+        # debug.print("\n s1, s2, u = {}", (s1, s2, u))
+        # debug.breakpoint()
+
+        # is_finite = jnp.isnan(s1).all()
+        # # flag = 
+        # def true_fn(s1):
+        #     debug.breakpoint()
+        # def false_fn(s1):
+        #     pass
+        # lax.cond(is_finite, true_fn, false_fn, s1)
 
         def s1_fn(params, u):
           s1_fn, _ = self.operator_net(params, u)
@@ -215,9 +225,11 @@ class MF_class_EWC:
         for batch in single_res_datasets:
             inputs, outputs = batch
             u = inputs
-            debug.print("single")
-            debug.print("\n idx = {}", idx)
+            # debug.print("single")
+            # debug.print("\n idx = {}", idx)
             # debug.print("\n u = {}", u[:5])
+            # debug.print("\n params[idx] = {}", params[idx])
+            # debug.breakpoint()
             res1_pred, res2_pred = vmap(self.residual_net, (None, 0))([params[idx]], u)
             # debug.print("\n res1_pred = {}", res1_pred[:5])
             # debug.print("\n res2_pred = {}", res2_pred[:5])
@@ -230,7 +242,7 @@ class MF_class_EWC:
         for batch in double_res_datasets:
             inputs, outputs = batch
             u = inputs
-            debug.print("double")
+            # debug.print("double")
             res1_pred, res2_pred = vmap(self.residual_net, (None, 0))([params[idx],params[idx+1]], u)
             # debug.print("\n res1_pred = {}", res1_pred[:5])
             # debug.print("\n res2_pred = {}", res2_pred[:5])
@@ -264,7 +276,7 @@ class MF_class_EWC:
 
     
         # Define a compiled update step
-    @partial(jit, static_argnums=(0,))
+    # @partial(jit, static_argnums=(0,))
     def step(self, i, opt_state, ic_batch, single_res_datasets, double_res_datasets, val_batch):
         params = self.get_params(opt_state)
 
