@@ -120,8 +120,8 @@ if __name__ == "__main__":
 
     data_range = jnp.arange(0,int(2*min_B))
 
-    path_to_pnnl = "C:/Users/beec613/Desktop/"
-    # path_to_pnnl = "/people/beec613/"
+    #path_to_pnnl = "C:/Users/beec613/Desktop/"
+    path_to_pnnl = "/people/beec613/"
 
 
     # d_vx = scipy.io.loadmat("../data.mat") # This was the original line
