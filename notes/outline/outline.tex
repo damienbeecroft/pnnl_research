@@ -52,7 +52,9 @@ We will consider a multifidelity domain decomposition approach, where a PINN is 
 \begin{itemize}
 	\item Do Now
 	\begin{itemize}
-		\item Do 20, 30, 40 for times on the pendulum equation. Keep going until failure. Failure means you can't get the error under $10^{-1}$ for any network.
+		\item You can precompute the weights that correspond to each batch ahead of time and generate them in the batch.
+		\item Preselect the points in the batch. Don't randomly choose some points in each batch.
+		\item Make the batching more efficient. Generate the weights for the newest level inside of the batch.
 		\item Given a time scale that trains, decrease the network size until failure.
 		\item Work on implementing the wave equation
 		\item Make the multifidelity code efficient
@@ -181,6 +183,10 @@ We will consider a multifidelity domain decomposition approach, where a PINN is 
 \textbf{Coding}
 \begin{itemize}
 \item I realized that \verb|Pendulum_DD| code that I was sent never ran  in the first place. It had a bug where \verb|self.NDomains| was converted to a traced value implicitly. The code then attempted to make a numpy array with this code, but this can't be done with a traced variable.
+\item I did the pendulum code up to time 20. It failed to train.
+\item I increased the amount of resources used on the single fidelity network for the T = [0,20] training session. The single fidelity network was a bit better, but still struggled.
+\item I modified the code so that neural networks are only evaluated on points that lie within their support. However, the implementation was sloppy and the code is far slower than the code where all neural nets are evaluated everywhere.
+\item I began thinking about how to make the code more efficient. I believe that the main reason is the for loops in my code and the poor batching method. I am working on changing both of these.
 \end{itemize}
 \newpage 
 \subsection*{Week 8} 

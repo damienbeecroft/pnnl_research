@@ -51,7 +51,7 @@ if __name__ == "__main__":
     s = odeint(system, u.flatten(), y)
     
     
-    outdir = ""
+    outdir = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/mffbpinns/results_out/pend_0_10/"
     suff = "MF_loop"
 
     net_data_dirA = outdir + "results_A/" + suff + "/"
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     uA, predA= (d_vx["U_res"].astype(np.float32), d_vx["S_pred"].astype(np.float32))
 
 
-    d_vx = scipy.io.loadmat("data.mat")
+    d_vx = scipy.io.loadmat("C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/mffbpinns/data.mat")
     t_data, s_data = (d_vx["u"].astype(np.float32), 
                d_vx["s"].astype(np.float32))
   
@@ -118,7 +118,7 @@ if __name__ == "__main__":
     plt.xlim([-0, 10])
     plt.tick_params(labelsize=16)
     plt.tight_layout()
-    plt.savefig(suff +  '_s1.png', format='png')
+    plt.savefig(outdir + suff +  '_s1.png', format='png')
 
     plt.figure(fig2.number)
   #  plt.scatter(t_data, s_data[:, 1], c='#59a14f')
@@ -132,7 +132,7 @@ if __name__ == "__main__":
     plt.xlim([-0, 10])
 
 
-    plt.savefig( suff  + '_s2.png', format='png')
+    plt.savefig(outdir + suff  + '_s2.png', format='png')
 
     fig3,bx = plt.subplots(figsize=(4,3))
     plt.figure(fig3.number)
@@ -143,4 +143,4 @@ if __name__ == "__main__":
     plt.tick_params(labelsize=14)
     plt.tight_layout()
 
-    plt.savefig(suff + '_Errors.png', format='png')
+    plt.savefig(outdir + suff + '_Errors.png', format='png')

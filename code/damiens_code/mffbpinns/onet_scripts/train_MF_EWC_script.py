@@ -14,7 +14,7 @@ import scipy.io
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
 import jax
-# import time
+import time
 from utils_fs_v2 import timing,  DataGenerator, DataGenerator_res, DataGenerator_res2
 # import math
 import jax
@@ -93,9 +93,9 @@ if __name__ == "__main__":
 
     steps_to_train = jnp.arange(5)
 
-    reload = [False, False, False, False, False, False]
+    reload = [True, True, False, False, False, False]
     
-    reloadA = False
+    reloadA = True
     
 
     k = 2
@@ -120,8 +120,8 @@ if __name__ == "__main__":
 
     data_range = jnp.arange(0,int(2*min_B))
 
-    #path_to_pnnl = "C:/Users/beec613/Desktop/"
-    path_to_pnnl = "/people/beec613/"
+    path_to_pnnl = "C:/Users/beec613/Desktop/"
+    # path_to_pnnl = "/people/beec613/"
 
 
     # d_vx = scipy.io.loadmat("../data.mat") # This was the original line
@@ -220,6 +220,7 @@ if __name__ == "__main__":
         Ndomains.append(2**(step+1))
 
         # Computing the domains where the networks are defined
+        t0 = time.time()
         sigma = Tmax*delta/(2*(Ndomains[-1] - 1))
         mus = Tmax*np.linspace(0,1,Ndomains[-1])
         double_domains = np.array([[mus[j+1] - sigma, mus[j] + sigma] for j in range(Ndomains[-1] - 1)])
@@ -289,7 +290,8 @@ if __name__ == "__main__":
                 batch_size_res_local = int(domain_fraction*batch_size_res)                
                 res_dataset = DataGenerator_res2(domain, res_pts, err_norm, batch_size_res_local, batch_size_local)
                 single_res_datasets.append(res_dataset)
-        
+        t1 = time.time()
+        print("Batch Time: %.3f" % (t1-t0))
  
         model = MF_class_EWC(layers_sizes_nl, layers_sizes_l, layers_A, ics_weight, 
                             res_weight, data_weight, pen_weight,lr, Ndomains, delta, Tmax, 
@@ -302,6 +304,7 @@ if __name__ == "__main__":
         
         else:     
             # model.train(ic_dataset, res_dataset, data_dataset, nIter=epochsA2)
+            print("Training")
             model.train(ic_dataset, single_res_datasets, double_res_datasets, data_dataset, nIter=epochsA2)
 
 

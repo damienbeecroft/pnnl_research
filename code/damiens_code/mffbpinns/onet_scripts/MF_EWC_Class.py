@@ -11,6 +11,7 @@ Note:
 
 # My imports
 from jax import config
+import time
 # config.update("jax_debug_nans", True)
 # config.parse_flags_with_jax = False
 
@@ -406,13 +407,19 @@ class MF_class_EWC:
         # Main training loop
         for it in pbar:
             # Fetch data
+            t0 = time.time()
             single_res_batches = list(map(next,single_res_data))
             double_res_batches = list(map(next,double_res_data))
             ic_batch= next(ic_data)
             val_batch= next(val_data)
+            t1 = time.time()
+            print("\nNext Time: %.3f" % (t1-t0))
 
+            t0 = time.time()
             self.opt_state = self.step(next(self.itercount), self.opt_state, 
                                        ic_batch, single_res_batches, double_res_batches, val_batch)
+            t1 = time.time()
+            print("\nStep Time: %.3f" % (t1-t0))
             
             if it % 1000 == 0:
                 params = self.get_params(self.opt_state)
