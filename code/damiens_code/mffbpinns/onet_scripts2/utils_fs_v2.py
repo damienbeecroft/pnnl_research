@@ -9,7 +9,8 @@ from functools import wraps
 import jax.numpy as jnp
 from jax import random, jit, vmap
 from jax.nn import swish
-import jax.lax as lax
+# import jax.lax as lax
+import jax
 
 from jax.flatten_util import ravel_pytree
 
@@ -86,97 +87,149 @@ class DataGenerator_res(data.Dataset):
         inputs = u
         outputs = s
         return inputs, outputs
-    
-    # This is the original code for the residual data set generator
-    # res_pts = coords[0] + (coords[1]-coords[0])*random.uniform(key, shape=[20000,1])
-    # res_val = model_A.predict_res(params_A, res_pts)
-    # err = res_val**k/np.mean( res_val**k) + c
-    # err_norm = err/np.sum(err)                        
-    # res_dataset = DataGenerator_res2(coords, res_pts, err_norm, batch_size_res, batch_size)
 
-class DataGenerator_res2(data.Dataset):
-    # def __init__(self, domain_bounds, single_domains, double_domains, N, key=random.PRNGKey(1234)):
-    def __init__(self, domain_bounds, model_prev, model_curr, single_domains, double_domains, 
-                 total_points, Tmax, delta, Ndomains, step, key=random.PRNGKey(42)):
+class DataGenerator_res2(data.Dataset): # WORK IN PROGRESS
+    def __init__(self, total_domain_bounds, model_prev, total_points, batch_size,
+                 delta, Ndomains, step, k, c, key=random.PRNGKey(42)):
         
         # Make the domain arrays
+        Tmax = total_domain_bounds[1] - total_domain_bounds[0]
         sigma = Tmax*delta/(2*(Ndomains - 1))
         mus = Tmax*jnp.linspace(0,1,Ndomains)
-        double_domains = jnp.array([[mus[j+1] - sigma, mus[j] + sigma] for j in range(Ndomains[-1] - 1)])
-        single_domains = jnp.array([[mus[j] + sigma, mus[j+2] - sigma] for j in range(Ndomains[-1] - 2)])
+        double_domains = jnp.array([[mus[j+1] - sigma, mus[j] + sigma] for j in range(Ndomains - 1)])
+        single_domains = jnp.array([[mus[j] + sigma, mus[j+2] - sigma] for j in range(Ndomains - 2)])
         if step == 0:
-            single_domains = jnp.concatenate((jnp.array([[domain_bounds[0],double_domains[0][0]]]),
-                                          jnp.array([[double_domains[-1][-1],domain_bounds[1]]])))
+            single_domains = jnp.concatenate((jnp.array([[total_domain_bounds[0],double_domains[0][0]]]),
+                                          jnp.array([[double_domains[-1][-1],total_domain_bounds[1]]])))
         else:
-            single_domains = jnp.concatenate((jnp.array([[domain_bounds[0],double_domains[0][0]]]),
-                                          single_domains,jnp.array([[double_domains[-1][-1],domain_bounds[1]]])))
+            single_domains = jnp.concatenate((jnp.array([[total_domain_bounds[0],double_domains[0][0]]]),
+                                          single_domains,jnp.array([[double_domains[-1][-1],total_domain_bounds[1]]])))
         
-        self.delta = delta
-        self.Tmax = Tmax
-        self.Ndomains = Ndomains
-        self.mus = mus
-        self.sigma = sigma
-        self.domain_bounds = domain_bounds
+        self.key = key
+        self.delta = delta # overlap ratio
+        self.Tmax = Tmax # max time to solve the pendulum
+        self.Ndomains = Ndomains # number of domains on the current level of the domain decomposition (NOTE: This is Ndomains[-1] in the train_MF_EWC_script.py code)
+        self.mus = mus # the centers of the NN domains (each domain is [mu - sigma, mu + sigma])
+        self.sigma = sigma # half the length of the NN domain
+        self.batch_size = batch_size
+        self.total_domain_bounds = total_domain_bounds # domain bounds of the ENTIRE problem, [0, Tmax]
         self.single_domains = single_domains # domains where only one NN has support
         self.double_domains = double_domains # domains where two NNs have support
-        self.single_local_points = self.point_allocation(single_domains,total_points)
-        self.double_local_points = self.point_allocation(double_domains,total_points)
-        self.total_points = jnp.sum(self.single_local_points) + jnp.sum(self.double_local_points)
+        self.single_domain_num_pts = self.point_allocation(single_domains,total_points)
+        self.double_domain_num_pts = self.point_allocation(double_domains,total_points)
+        self.single_domain_num_batch_pts = self.point_allocation(single_domains,batch_size)
+        self.double_domain_num_batch_pts = self.point_allocation(double_domains,batch_size)
+        self.total_points = jnp.sum(self.single_domain_num_pts) + jnp.sum(self.double_domain_num_pts)
 
         # get random points for single domains
-        single_domain_key_array = random.split(key,len(self.single_local_points))
-        single_domain_point_dict = []
-        for idx in jnp.arange(len(single_domains)):
-            temp = self.get_points(self.single_domains[idx],self.single_local_points[idx],single_domain_key_array[idx])
-            single_domain_point_dict.append(temp)
-        self.single_domain_point_dict = single_domain_point_dict   
+        single_domain_key_array = random.split(key,len(self.single_domain_num_pts))
+        self.key, subkey = random.split(self.key)
+        single_domain_pts = []
+        single_domain_probs = []
+        params = model_prev.get_params(model_prev.opt_state)
+        for idx in jnp.arange(len(single_domains)): # NOTE: this can probably be made more efficient with tree_map
+            points = self.get_points(self.single_domains[idx],self.single_domain_num_pts[idx],single_domain_key_array[idx])
+            res_val = model_prev.predict_res(params, points)
+            err = res_val**k/jnp.mean(res_val**k) + c
+            probabilities = err/jnp.sum(err)            
+            single_domain_pts.append(points)
+            single_domain_probs.append(probabilities)
+        self.single_domain_pts = single_domain_pts
+        self.single_domain_probs = single_domain_probs
 
         # get random points for double domains
-        double_domain_key_array = random.split(key,len(self.double_local_points))
-        double_domain_point_dict = []
-        for idx in jnp.arange(len(double_domains)):
-            temp = self.get_points(self.double_domains[idx],self.double_local_points[idx],double_domain_key_array[idx])
-            temp2 = self.get_weights()
-            double_domain_point_dict.append(temp)
-        self.double_domain_point_dict = double_domain_point_dict
-
-    def weight_condition(self,condition,u,mu,sigma):
-        w = lax.cond(condition, lambda u: (1 + jnp.cos(math.pi*(u-mu)/sigma))**2, lambda _: 0., u)
-        return w
-    
-    # Changed this function
-    @partial(jit, static_argnums = (0,))
-    def w(self, mu, sigma, u):
-        conditions = (u < (mu + sigma)) & (u > (mu - sigma))
-        w_jl = vmap(self.weight_condition,(0,0,None,None))(conditions,u,mu,sigma)
-        return w_jl
+        double_domain_key_array = random.split(self.key,len(self.double_domain_num_pts))
+        self.key, subkey = random.split(self.key)
+        double_domain_pts = []
+        double_domain_weights = []
+        double_domain_probs = []
+        for idx in jnp.arange(len(double_domains)): # NOTE: this can probably be made more efficient with tree_map
+            points = self.get_points(self.double_domains[idx],self.double_domain_num_pts[idx],double_domain_key_array[idx])
+            weights = self.get_weights(self.mus[idx],self.mus[idx+1],self.sigma,points)
+            res_val = model_prev.predict_res(params, points)
+            err = res_val**k/jnp.mean(res_val**k) + c
+            probabilities = err/jnp.sum(err)       
+            double_domain_pts.append(points)
+            double_domain_weights.append(weights)
+            double_domain_probs.append(probabilities)
+        self.double_domain_pts = double_domain_pts
+        self.double_domain_weights = double_domain_weights
+        self.double_domain_probs = double_domain_probs
 
     @partial(jit, static_argnums = (0,))
     def point_allocation(self,domains,N):
-        domain_lengths = (domains[:,1] - domains[:,0])/(self.domain_bounds[1] - self.domain_bounds[0]) 
+        """
+        Determines how many points are to be allocated to each subdomain. NOTE: The number of total points
+        assigned to all domains may be less than total_points due to rounding.
+        ==================================================================================================
+        INPUTS:
+        domains:    A matrix where each row denotes the bounds of a domain.
+        N:          Total number of points to be assigned
+        OUTPUTS:
+        temp:       A list of integers that determines how many points should be assigned to each domain
+        """
+        domain_lengths = (domains[:,1] - domains[:,0])/(self.total_domain_bounds[1] - self.total_domain_bounds[0]) 
         jnp.ravel(domain_lengths)
         domain_lengths = N*domain_lengths
-        temp = jnp.rint(domain_lengths).astype(jnp.int32)
-        return temp
+        points = jnp.rint(domain_lengths).astype(jnp.int32)
+        return points
     
+    # @partial(jit, static_argnums = (0,))
     def get_points(self,domain,total_num_pts,key):
-        key_res, key_uni = random.split(key)
-        residual_num_pts = total_num_pts // 2
-        uniform_num_pts = total_num_pts - residual_num_pts
-        residual_pts = domain[0] + (domain[1] - domain[0])*random.uniform(key_res, shape=[residual_num_pts, 1])
-        uniform_pts = domain[0] + (domain[1] - domain[0])*random.uniform(key_uni, shape=[uniform_num_pts, 1])
-        return {'res_pts': residual_pts, 'uni_pts': uniform_pts}
+        """
+        Generates uniformly random points on 'domain'
+        """
+        residual_pts = domain[0] + (domain[1] - domain[0])*random.uniform(key, shape=[total_num_pts, 1])
+        return residual_pts
     
+    @partial(jit, static_argnums = (0,))
+    def get_weights(self,mu1,mu2,sigma,u):
+        weights1 = (1 + jnp.cos(math.pi*(u-mu1)/sigma))**2
+        weights2 = (1 + jnp.cos(math.pi*(u-mu2)/sigma))**2
+        return {'left': weights1, 'right': weights2}
+
     def __getitem__(self, index):
         'Generate one batch of data'
-        self.key, key1, key2 = random.split(self.key,3)
-        inputs = self.__data_generation(key1,key2)
+        self.key, subkey = random.split(self.key)
+        inputs = self.__data_generation(subkey)
         return inputs
 
-    @partial(jit, static_argnums=(0,))
-    def __data_generation(self, key1, key2):
+    # @partial(jit, static_argnums=(0,))
+    def __data_generation(self, key):
+        single_domain_batches = []
+        for idx in jnp.arange(len(self.single_domains)): # NOTE: this can probably be made more efficient with tree_map
+            locs = random.choice(key, self.single_domain_num_pts[idx], (self.single_domain_num_batch_pts[idx],), p=self.single_domain_probs[idx], replace=False)
+            batch_pts = self.single_domain_pts[idx][locs]
+            single_domain_batches.append(batch_pts)
 
-        pass
+        double_domain_batches = []
+        double_domain_left_weights = []
+        double_domain_right_weights = []
+        for idx in jnp.arange(len(self.double_domains)): # NOTE: this can probably be made more efficient with tree_map
+            locs = random.choice(key, self.double_domain_num_pts[idx], (self.double_domain_num_batch_pts[idx],), p=self.double_domain_probs[idx], replace=False)
+            batch_pts = self.double_domain_pts[idx][locs]
+            batch_left_weights = self.double_domain_weights[idx]['left'][locs]
+            batch_right_weights = self.double_domain_weights[idx]['right'][locs]
+            double_domain_batches.append(batch_pts)
+            double_domain_left_weights.append(batch_left_weights)
+            double_domain_right_weights.append(batch_right_weights)
+
+
+        return single_domain_batches, double_domain_batches, batch_left_weights, batch_right_weights
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
 class DataGenerator_h(data.Dataset):
     def __init__(self, u, s,  u_l, 
@@ -346,6 +399,23 @@ def linear_deeponet(branch_layers, trunk_layers):
         return outputs
 
     return init, apply
+
+###########################################################################################################
+# This is an old weight function that I am not using anymore
+###########################################################################################################
+
+    # def weight_condition(self,condition,u,mu,sigma):
+    #     w = lax.cond(condition, lambda u: (1 + jnp.cos(math.pi*(u-mu)/sigma))**2, lambda _: 0., u)
+    #     return w
+    
+    # @partial(jit, static_argnums = (0,))
+    # def w(self, mu, sigma, u):
+    #     """
+    #     Returns the weights of the points in "u"
+    #     """
+    #     conditions = (u < (mu + sigma)) & (u > (mu - sigma)) # NOTE: This condition should be able to be removed since all points lie in the support
+    #     weights = vmap(self.weight_condition,(0,0,None,None))(conditions,u,mu,sigma)
+    #     return weights
     
 
 ###########################################################################################################
@@ -378,26 +448,26 @@ def linear_deeponet(branch_layers, trunk_layers):
 #         self.domain_bounds = domain_bounds
 #         self.single_domains = single_domains # domains where only one NN has support
 #         self.double_domains = double_domains # domains where two NNs have support
-#         self.single_local_points = self.point_allocation(single_domains,total_points)
-#         self.double_local_points = self.point_allocation(double_domains,total_points)
-#         self.total_points = jnp.sum(self.single_local_points) + jnp.sum(self.double_local_points)
+#         self.single_domain_num_pts = self.point_allocation(single_domains,total_points)
+#         self.double_domain_num_pts = self.point_allocation(double_domains,total_points)
+#         self.total_points = jnp.sum(self.single_domain_num_pts) + jnp.sum(self.double_domain_num_pts)
 
 #         # get random points for single domains
-#         single_domain_key_array = random.split(key,len(self.single_local_points))
-#         single_domain_point_dict = []
+#         single_domain_key_array = random.split(key,len(self.single_domain_num_pts))
+#         single_domain_pts = []
 #         for idx in jnp.arange(len(single_domains)):
-#             temp = self.get_points(self.single_domains[idx],self.single_local_points[idx],single_domain_key_array[idx])
-#             single_domain_point_dict.append(temp)
-#         self.single_domain_point_dict = single_domain_point_dict   
+#             temp = self.get_points(self.single_domains[idx],self.single_domain_num_pts[idx],single_domain_key_array[idx])
+#             single_domain_pts.append(temp)
+#         self.single_domain_pts = single_domain_pts   
 
 #         # get random points for double domains
-#         double_domain_key_array = random.split(key,len(self.double_local_points))
-#         double_domain_point_dict = []
+#         double_domain_key_array = random.split(key,len(self.double_domain_num_pts))
+#         double_domain_pts = []
 #         for idx in jnp.arange(len(double_domains)):
-#             temp = self.get_points(self.double_domains[idx],self.double_local_points[idx],double_domain_key_array[idx])
+#             temp = self.get_points(self.double_domains[idx],self.double_domain_num_pts[idx],double_domain_key_array[idx])
 #             temp2 = self.get_weights()
-#             double_domain_point_dict.append(temp)
-#         self.double_domain_point_dict = double_domain_point_dict
+#             double_domain_pts.append(temp)
+#         self.double_domain_pts = double_domain_pts
 
 #     def weight_condition(self,condition,u,mu,sigma):
 #         w = lax.cond(condition, lambda u: (1 + jnp.cos(math.pi*(u-mu)/sigma))**2, lambda _: 0., u)

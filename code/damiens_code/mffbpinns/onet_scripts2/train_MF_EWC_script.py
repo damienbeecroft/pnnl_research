@@ -91,15 +91,13 @@ if __name__ == "__main__":
     batch_size = 100
     batch_size_res = int(batch_size/2)
 
+    batch_size_res2 = 1000
+
     steps_to_train = jnp.arange(5)
 
     reload = [False, False, False, False, False, False]
     
     reloadA = True
-    
-
-    k = 2
-    c = 0 
 
 
     epochs = 1000
@@ -111,21 +109,19 @@ if __name__ == "__main__":
     layers_sizes_nl = [3, N_nl, N_nl, N_nl, 2]
     layers_sizes_l = [2,  4, 2]
 
-    # min_A = sys.argv[1]
-    # min_B = sys.argv[2]
     min_A = 0
     min_B = 10
     Tmax = min_B
     delta = 1.9
 
+    
+    k = 2
+    c = 1/Tmax
+
     data_range = jnp.arange(0,int(2*min_B))
 
     path_to_pnnl = "C:/Users/beec613/Desktop/"
     # path_to_pnnl = "/people/beec613/"
-
-
-    # d_vx = scipy.io.loadmat("../data.mat") # This was the original line
-    # results_dir = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/Pendulum_DD/Pendulum_DD/out_results/pend_" + str(min_A) + "_" + str(min_B) + "/results_" + str(step) + "/"+save_str+"/"
 
     d_vx = scipy.io.loadmat(path_to_pnnl + "pnnl_research/code/damiens_code/mffbpinns/data.mat")
     t_data_full, s_data_full = (d_vx["u"].astype(jnp.float32), 
@@ -184,7 +180,6 @@ if __name__ == "__main__":
     # ====================================
     # DNN model A2
     # ====================================
-  #  res_weight = 100.0
     params_prev = []
     
 
@@ -197,16 +192,10 @@ if __name__ == "__main__":
     
     key, subkey = random.split(key)
 
-
-    # This is the original code for the residual data set generator
-    # res_pts = coords[0] + (coords[1]-coords[0])*random.uniform(key, shape=[20000,1])
-    # res_val = model_A.predict_res(params_A, res_pts)
-    # err = res_val**k/np.mean( res_val**k) + c
-    # err_norm = err/np.sum(err)                        
-    # res_dataset = DataGenerator_res2(coords, res_pts, err_norm, batch_size_res, batch_size)
     
-    total_points = 20000
+    total_points = 50000
     Ndomains = []
+    model = model_A
     for step in steps_to_train:
         # results_dir = "../results_" + str(step) + "/"+save_str+"/" # This is the original line
         results_dir = path_to_pnnl + "pnnl_research/code/damiens_code/mffbpinns/results_out/pend_" + str(min_A) + "_" + str(min_B) + "/results_" + str(step) + "/"+save_str+"/"
@@ -220,76 +209,12 @@ if __name__ == "__main__":
         Ndomains.append(2**(step+1))
 
         # Computing the domains where the networks are defined
-        sigma = Tmax*delta/(2*(Ndomains[-1] - 1))
-        mus = Tmax*np.linspace(0,1,Ndomains[-1])
-        double_domains = np.array([[mus[j+1] - sigma, mus[j] + sigma] for j in range(Ndomains[-1] - 1)])
-        single_domains = np.array([[mus[j] + sigma, mus[j+2] - sigma] for j in range(Ndomains[-1] - 2)])
-        if step == 0:
-            single_domains = np.concatenate((np.array([[min_A,double_domains[0][0]]]),
-                                          np.array([[double_domains[-1][-1],min_B]])))
-        else:
-            single_domains = np.concatenate((np.array([[min_A,double_domains[0][0]]]),
-                                          single_domains,np.array([[double_domains[-1][-1],min_B]])))
-            
-        double_res_datasets = []
-        single_res_datasets = []
-
-        key, subkey = random.split(key)
-        if(step == 0):
-            # make all the batches for the double domains
-            for domain in double_domains:
-                domain_size = domain[1] - domain[0]
-                domain_fraction = domain_size/(coords[1] - coords[0])
-                num_pts = int(total_points*domain_fraction)
-                res_pts = domain[0] + domain_size*random.uniform(key, shape=[num_pts,1])
-                res_val = model_A.predict_res(params_A, res_pts)
-                err = res_val**k/jnp.mean(res_val**k) + c
-                err_norm = err/jnp.sum(err)
-                batch_size_local = int(domain_fraction*batch_size)
-                batch_size_res_local = int(domain_fraction*batch_size_res)
-                res_dataset = DataGenerator_res2(domain, res_pts, err_norm, batch_size_res_local, batch_size_local)
-                double_res_datasets.append(res_dataset)
-            # make all the batches for the single domains
-            for domain in single_domains:
-                domain_size = domain[1] - domain[0]
-                domain_fraction = domain_size/(coords[1] - coords[0])
-                num_pts = int(total_points*domain_fraction)
-                res_pts = domain[0] + domain_size*random.uniform(key, shape=[num_pts,1])
-                res_val = model_A.predict_res(params_A, res_pts)
-                err = res_val**k/jnp.mean(res_val**k) + c
-                err_norm = err/jnp.sum(err)
-                batch_size_local = int(domain_fraction*batch_size)
-                batch_size_res_local = int(domain_fraction*batch_size_res)
-                res_dataset = DataGenerator_res2(domain, res_pts, err_norm, batch_size_res_local, batch_size_local)
-                single_res_datasets.append(res_dataset)
-        else:
-            # make all the batches for the double domains
-            for domain in double_domains:
-                domain_size = domain[1] - domain[0]
-                domain_fraction = domain_size/(coords[1] - coords[0])
-                num_pts = int(total_points*domain_fraction)
-                res_pts = domain[0] + domain_size*random.uniform(key, shape=[num_pts,1])
-                res_val = model.predict_res(params, res_pts)
-                err = res_val**k/jnp.mean(res_val**k) + c
-                err_norm = err/jnp.sum(err)
-                batch_size_local = int(domain_fraction*batch_size)
-                batch_size_res_local = int(domain_fraction*batch_size_res)                
-                res_dataset = DataGenerator_res2(domain, res_pts, err_norm, batch_size_res_local, batch_size_local)
-                double_res_datasets.append(res_dataset)
-            # make all the batches for the single domains
-            for domain in single_domains:
-                domain_size = domain[1] - domain[0]
-                domain_fraction = domain_size/(coords[1] - coords[0])
-                num_pts = int(total_points*domain_fraction)
-                res_pts = domain[0] + domain_size*random.uniform(key, shape=[num_pts,1])
-                res_val = model.predict_res(params, res_pts)
-                err = res_val**k/jnp.mean(res_val**k) + c
-                err_norm = err/jnp.sum(err)
-                batch_size_local = int(domain_fraction*batch_size)
-                batch_size_res_local = int(domain_fraction*batch_size_res)                
-                res_dataset = DataGenerator_res2(domain, res_pts, err_norm, batch_size_res_local, batch_size_local)
-                single_res_datasets.append(res_dataset)
+                    
+        res_dataset = DataGenerator_res2(coords, model, total_points, batch_size_res2, delta, Ndomains[-1], step, k, c)
         
+        res_data = iter(res_dataset)
+        res_batch = next(res_data)
+
  
         model = MF_class_EWC(layers_sizes_nl, layers_sizes_l, layers_A, ics_weight, 
                             res_weight, data_weight, pen_weight,lr, Ndomains, delta, Tmax, 
@@ -302,7 +227,7 @@ if __name__ == "__main__":
         
         else:     
             # model.train(ic_dataset, res_dataset, data_dataset, nIter=epochsA2)
-            model.train(ic_dataset, single_res_datasets, double_res_datasets, data_dataset, nIter=epochsA2)
+            model.train(ic_dataset, res_dataset, data_dataset, nIter=epochsA2)
 
 
             print('\n ... Level ' + str(step) + ' Training done ...')
@@ -320,15 +245,6 @@ if __name__ == "__main__":
             
         params_prev.append(params)
 
-
-        # This is the original code for the residual data set generator
-        # key, subkey = random.split(key)
-        # res_pts = coords[0] + (coords[1]-coords[0])*random.uniform(key, shape=[20000,1])
-        # res_val = model.predict_res(params, res_pts)
-        # err = res_val**k/np.mean( res_val**k) + c
-        # err_norm = err/np.sum(err)                        
-        # res_dataset = DataGenerator_res2(coords, res_pts, err_norm, batch_size_res, batch_size)
-
       
             
 
@@ -336,13 +252,13 @@ if __name__ == "__main__":
 
 
     
-# =============================================
-# =============================================
-#if __name__ == "__main__":
+# # =============================================
+# # =============================================
+# #if __name__ == "__main__":
     
-    replay = False
-    MAS = False
-    RDPS = False 
-    scaled = False
-   # run_MF(replay, MAS, RDPS, scaled) #MF
+#     replay = False
+#     MAS = False
+#     RDPS = False 
+#     scaled = False
+#    # run_MF(replay, MAS, RDPS, scaled) #MF
     

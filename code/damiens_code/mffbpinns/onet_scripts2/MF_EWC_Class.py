@@ -16,6 +16,7 @@ from jax import config
 
 # Other imports
 import os
+import time
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
@@ -342,16 +343,16 @@ class MF_class_EWC:
 
         preds = vmap(self.residual_net_single_wrapper, (0, 0))(params, single_res_datasets)
 
-        # idx = 0
-        # # for batch in single_res_datasets:
+        idx = 0
         # for batch in single_res_datasets:
-        #     u = batch
-        #     res1_pred, res2_pred = vmap(self.residual_net_single, (None, 0))(params[idx], u)
+        for batch in single_res_datasets:
+            u = batch
+            res1_pred, res2_pred = vmap(self.residual_net_single, (None, 0))(params[idx], u)
 
-        #     res1_pred_sum += jnp.sum(res1_pred**2)
-        #     res2_pred_sum += jnp.sum(res2_pred**2)
-        #     num_u += len(u)
-        #     idx += 1
+            res1_pred_sum += jnp.sum(res1_pred**2)
+            res2_pred_sum += jnp.sum(res2_pred**2)
+            num_u += len(u)
+            idx += 1
 
         idx = 0
         for batch in double_res_datasets:
@@ -413,14 +414,20 @@ class MF_class_EWC:
         # Main training loop
         for it in pbar:
             # Fetch data
+            t0 = time.time()
             single_res_batches = list(map(next,single_res_data))
             double_res_batches = list(map(next,double_res_data))
+            t1 = time.time()
+            print("Batch: %.3f" % t1 - t0)
             ic_batch= next(ic_data)
             val_batch= next(val_data)
 
+            t0 = time.time()
             self.opt_state = self.step(next(self.itercount), self.opt_state, 
                                        ic_batch, single_res_batches, double_res_batches, val_batch)
-            
+            t1 = time.time()
+            print(t1 - t0)
+            print("Step: %.3f" % t1 - t0)
             if it % 1000 == 0:
                 params = self.get_params(self.opt_state)
 

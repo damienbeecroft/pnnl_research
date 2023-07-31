@@ -93,7 +93,7 @@ if __name__ == "__main__":
 
     steps_to_train = jnp.arange(5)
 
-    reload = [True, True, False, False, False, False]
+    reload = [True, False, False, False, False, False]
     
     reloadA = True
     

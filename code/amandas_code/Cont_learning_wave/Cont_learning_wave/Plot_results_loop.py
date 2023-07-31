@@ -30,12 +30,12 @@ if __name__ == "__main__":
     n_runs = 8
     
     errors = onp.zeros(n_runs + 1)
-    
+    path = 'C:/Users/beec613/Desktop/pnnl_research/code/amandas_code/Cont_learning_wave/Cont_learning_wave/'
     # A
     fig1, ax = plt.subplots()
 
     post = 'MF_loop/'
-    net_data_dirHF  = 'results_A/' + post
+    net_data_dirHF  = path + 'results_A/' + post
     xmax = 1
     xmin = 0
 
@@ -114,7 +114,7 @@ if __name__ == "__main__":
     
     
     for i in np.arange(n_runs):
-        net_data_dirHF  = 'results_' + str(i) +"/" +  post
+        net_data_dirHF  = path + 'results_' + str(i) +"/" +  post
         data_dir = net_data_dirHF + "beta_"
         d_vx = scipy.io.loadmat(data_dir + "test.mat")
         t,  x, U_pred= (d_vx["t"].astype(np.float32), 
