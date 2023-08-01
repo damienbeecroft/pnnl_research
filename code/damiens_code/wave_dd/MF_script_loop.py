@@ -266,9 +266,12 @@ if __name__ == "__main__":
     ymin_A = 0.0
     ymin_B = 1.0
 
-    
-    steps_to_train = np.arange(3)
-    reload = [False, False, False]
+    #==== parameters that I am adding =====
+    delta = 1.9
+    #======================================
+
+    steps_to_train = np.arange(2)
+    reload = [False, False]
     
     reloadA = True
 
@@ -340,7 +343,8 @@ if __name__ == "__main__":
     err = res_val**k/np.mean( res_val**k) + c
     err_norm = err/np.sum(err)                        
     res_sampler = DataGenerator_MF(2, dom_coords, res_pts, err_norm, lambda x: r(x, a, c), batch_size_pts, batch_size_res)
-  
+    
+    Ndomains = []
     for step in steps_to_train:
         results_dir = "../results_" + str(step) + "/"+save_str+"/"
         if not os.path.exists(results_dir):
@@ -351,10 +355,10 @@ if __name__ == "__main__":
         else:
             res = 1
 
+        Ndomains.append(4**(step+1))
         model = MF_DNN_class(layer_sizes_nl, layer_sizes_l,layers, ics_weight, res_weight, 
-                             ut_weight, lr, params_A, params_t=params_prev, restart =res)
-        
-
+                             ut_weight, lr, Ndomains, delta, dom_coords, params_A, 
+                             params_t=params_prev, restart =res)
         
         if reload[step]:
             params = model.unravel_params(np.load(results_dir + '/params.npy'))

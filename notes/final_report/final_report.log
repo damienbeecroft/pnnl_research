@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.6.20)  31 JUL 2023 16:28
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.6.20)  1 AUG 2023 15:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -531,13 +531,13 @@ Package rerunfilecheck Info: File `final_report.out' has not changed.
 (rerunfilecheck)             Checksum: 9814C2D956916ADB9290ECA4E25C967A;103.
  ) 
 Here is how much of TeX's memory you used:
- 10687 strings out of 476331
- 167957 string characters out of 5786821
+ 10688 strings out of 476331
+ 167967 string characters out of 5786821
  1856660 words of memory out of 5000000
  30970 multiletter control sequences out of 15000+600000
  520487 words of font info for 64 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,8n,76p,1286b,503s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,8n,76p,1278b,509s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist
 , replaced by a fixed one
@@ -555,9 +555,9 @@ ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users
 cmr8.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmsy10.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1
 /public/amsfonts/cm/cmsy8.pfb>
-Output written on final_report.pdf (4 pages, 123958 bytes).
+Output written on final_report.pdf (4 pages, 123739 bytes).
 PDF statistics:
- 88 PDF objects out of 1000 (max. 8388607)
- 8 named destinations out of 1000 (max. 500000)
+ 89 PDF objects out of 1000 (max. 8388607)
+ 9 named destinations out of 1000 (max. 500000)
  9 words of extra memory for PDF output out of 10000 (max. 10000000)
 

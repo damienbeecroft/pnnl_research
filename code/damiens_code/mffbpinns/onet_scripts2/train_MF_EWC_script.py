@@ -14,7 +14,7 @@ import scipy.io
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
 import jax
-# import time
+import time   
 from utils_fs_v2 import timing,  DataGenerator, DataGenerator_res, DataGenerator_res2
 # import math
 import jax
@@ -116,7 +116,7 @@ if __name__ == "__main__":
 
     
     k = 2
-    c = 1/Tmax
+    c = 0 
 
     data_range = jnp.arange(0,int(2*min_B))
 
@@ -183,8 +183,9 @@ if __name__ == "__main__":
     params_prev = []
     
 
+
     k = 2
-    c = 0 
+    c = 1/Tmax
     key = random.PRNGKey(1234)
     batch_size_res = int(batch_size/2)    
     batch_size_pts = batch_size - batch_size_res                            
@@ -213,8 +214,12 @@ if __name__ == "__main__":
         res_dataset = DataGenerator_res2(coords, model, total_points, batch_size_res2, delta, Ndomains[-1], step, k, c)
         
         res_data = iter(res_dataset)
-        res_batch = next(res_data)
-
+        for i in range(100):
+            t0 = time.time()
+            res_batch = next(res_data)
+            t1 = time.time()
+            print("Next Time: %.3f" % (t1 - t0))
+        
  
         model = MF_class_EWC(layers_sizes_nl, layers_sizes_l, layers_A, ics_weight, 
                             res_weight, data_weight, pen_weight,lr, Ndomains, delta, Tmax, 

@@ -92,8 +92,6 @@ class MF_class_EWC:
 
         self.itercount = itertools.count()
 
-
-
         # building loss function
         self.loss_training_log = []
         self.loss_res_log = []
@@ -104,13 +102,6 @@ class MF_class_EWC:
     # evaluation
     # =============================================
 
-    # def w_jl(self, j, l, u):
-    #     mu = self.Tmax*(j-1)/(l-1)
-    #     sigma = self.Tmax*(self.delta/2.0)/(l-1)
-
-    #     w_jl = 1+ np.cos(math.pi*(u-mu)/sigma)
-    #     w_jl = w_jl**2
-    #     return w_jl
     def weight_condition(self,condition,u,mu,sigma):
         w = lax.cond(condition, lambda u: (1 + np.cos(math.pi*(u-mu)/sigma))**2, lambda _: 0., u)
         return w
