@@ -26,7 +26,7 @@ from torch.utils import data
 from tqdm import trange, tqdm
 from copy import deepcopy
 
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 def timing(f):
     """Decorator for measuring the execution time of methods."""
