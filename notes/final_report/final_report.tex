@@ -29,6 +29,7 @@
 \def\bf{\textbf}
 \def\l{\left}
 \def\r{\right}
+\def\~{\tilde}
 \date{August 2022}
 \doublespacing
 \begin{document}
@@ -59,14 +60,37 @@
 
 \section*{Abstract}
 \begin{singlespace}
-Physics informed neural networks (PINNs) struggle to successfully learn solutions to differential equations that exhibit high-frequency oscillations or multi-scale behavior. Multilevel finite basis physics informed neural networks (FBPINNs) tackle this problem by recursively discretizing the solution domain and training coupled neural networks on the subdomains. High frequency structures are made less oscillatory with respect to the length scale of these smaller subdomains. This plays to the spectral bias of PINNs and enables one to learn the global solution faster. In this work we integrate multifidelity methods into multilevel FBPINNs to further improve the learning rate. Multifidelity PINNs are provided with both high and low fidelity data and learn the correlation between the two data sources to approximate the global solution. In the multifidelity multilevel FBPINNs framework solution approximations from previous levels supply the low fidelity data. Linear and nonlinear branch networks are then trained to learn the correlation between the low fidelity data and the true solution.\footnote{My internship was virtual, so I didn't get a chance to get any good photos!}
+Physics informed neural networks (PINNs) struggle to successfully learn solutions to differential equations that exhibit high-frequency oscillations or multi-scale behavior. Multilevel finite basis physics informed neural networks (FBPINNs) tackle this problem by recursively discretizing the solution domain and training coupled neural networks on the subdomains. High frequency structures are made less oscillatory with respect to the length scale of these smaller subdomains. This plays to the spectral bias of PINNs and enables one to learn the global solution faster. In this work we integrate multifidelity methods into multilevel FBPINNs to further improve the learning rate. This internship was virtual. I created a GitHub project to communicate what I am working on with my mentors. Anyone interested in solving differential equations could benefit from this project.
+%Multifidelity PINNs are provided with both high and low fidelity data and learn the correlation between the two data sources to approximate the global solution. In the multifidelity multilevel FBPINNs framework solution approximations from previous levels supply the low fidelity data. Linear and nonlinear branch networks are then trained to learn the correlation between the low fidelity data and the true solution.\footnote{My internship was virtual, so I didn't get a chance to get any good photos!}
 \end{singlespace}
+\vspace{1cm}
+\begin{figure}[H]
+\center
+\includegraphics[width = 0.9\textwidth]{me.jpg}
+\caption{My internship at Pacific Northwest National Lab was virtual. My office was anywhere I lugged my computer. On some of my more adventurous days I ventured all the way down to my living room to use the television as a secondary monitor. On an even more auspicious occasion my girlfriend and soon to be doctor Caitlin Neher was kind enough to take my photo for this final report.}
+\end{figure}
+
 \vfill
 \newpage
 \section{Introduction}
 
-Analytical and numerical methods for solving differential equations are very 
-Scientists and mathematicians have long hunted for efficient methods for solving differential equations.
+In 2016 Raissi et al. (cite) invented the physics informed neural network (PINN). This framework enables machine learning algorithms to learn solutions to differential equations with just the physical constraints. The dream is to achieve a flexible differential equation solvers that are able to find high accuracy solutions with little expert knowledge. However, this dream is still a ways off. We briefly review the concept of a PINN here. Suppose that we have the following differential equation.
+\begin{align*}
+	u(t,x)_t + N[u(t,x)] &= 0 \quad \text{for} \quad x \in \Omega, \: t \in [0,T]\\
+	B[u(t,x)] &= 0 \quad \text{for} \quad x \in \partial \Omega\\
+	u(0,x) &= u_0(x)
+\end{align*}
+$N$ and $B$ are known differential operators that contain no time derivatives. PINNs construct a neural network $\~u(t,x)$ that, is penalized every training step in proportion to how poorly the network satisfies the physical constraints. In particular,
+\begin{align*}
+	\~u(t,x)_t + N[\~u(t,x)] &= l_1 \quad \text{for} \quad x \in \Omega, \: t \in [0,T]\\
+	B[\~u(t,x)] &= l_2 \quad \text{for} \quad x \in \partial \Omega\\
+	\~u(0,x) - u_0(x)& = l_3
+\end{align*}
+\begin{equation*}
+\text{total loss} = l_1 + l_2 + l_3
+\end{equation*}
+The gradient of the loss is taken with respect to the hidden variables of the neural network in order to determine how the weights are to be adjusted. Automatic differentiation is used to differentiate the neural network with respect to the temporal and spatial variables. Now that we have discussed the basic set up of PINNs, we can touch on the current difficulties of training PINNs.
+
 
 
 \section*{Summary of Papers}
