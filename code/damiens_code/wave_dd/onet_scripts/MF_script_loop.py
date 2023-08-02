@@ -282,7 +282,8 @@ if __name__ == "__main__":
     # ====================================
     # saving settings
     # ====================================
-    path_to_wave = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/wave_dd"
+    #path_to_wave = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/wave_dd"
+    path_to_wave = "/people/beec613/pnnl_research/code/damiens_code/wave_dd"
     save_str = "MF_loop"
     results_dir_A = path_to_wave + "/results_A/" + save_str
     if not os.path.exists(results_dir_A):
