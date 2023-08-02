@@ -6,18 +6,17 @@ import sys
 import time
 from functools import wraps
 import jax.numpy as np
-import scipy.io
+# import scipy.io
 # import h5py # use for .mat file after v-7.3
-import os
-import math
-import jax
-import jax.numpy as np
+# import os
+# import math
+# import jax
 from jax import random, grad, vmap, jit, hessian
-from jax.experimental import optimizers
-from jax.experimental.ode import odeint
+# from jax.experimental import optimizers
+# from jax.experimental.ode import odeint
 from jax.nn import relu, elu, selu, swish
 from jax.config import config
-from jax.ops import index_update, index
+# from jax.ops import index_update, index
 from jax import lax
 from jax.flatten_util import ravel_pytree
 

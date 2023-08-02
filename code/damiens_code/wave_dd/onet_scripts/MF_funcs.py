@@ -397,7 +397,7 @@ class MF_DNN_class:
         # self.side_domains = int(np.sqrt(Ndomains))
         self.delta = delta
         self.dom_coords = dom_coords
-        self.dom_lens = dom_coords[0,:] - dom_coords[1,:]
+        self.dom_lens = dom_coords[1,:] - dom_coords[0,:]
         #==================================
 
         self.init_nl, self.apply_nl, self.weight_nl = nonlinear_DNN(layers_branch_nl)
@@ -458,121 +458,84 @@ class MF_DNN_class:
     # =============================================
     # evaluation
     # =============================================
-    def pendd_operator_net(self, params, u):
-    
-        ul = self.apply_lf(self.params_A, u)
 
-        j = 0
-        for level in self.params_t:
-            i = 0
-            weight_sum = 0.
-            ul_cur = 0.
-            for mfparams in level:
-                paramsB_nl = mfparams[0]
-                paramsB_l = mfparams[1]
-                y = np.hstack([u, ul])
-
-                u_nl = self.apply_nl(paramsB_nl, y)
-                u_l = self.apply_l(paramsB_l, ul)
-                
-                w = self.w_jl(i, self.Ndomains[j], u)
-                weight_sum += w
-                ul_cur += w*(u_l + u_nl)
-                i +=1
-            ul = ul_cur/weight_sum
-            j += 1
-        
-        s1 = 0.
-        s2 = 0.
-   
-        idx = 0
-        weight_sum = 0.
-        for param in params:
-            params_nl, params_l = param
-            y = np.hstack([u, ul])
-
-            u_nl = self.apply_nl(params_nl, y)
-            u_l = self.apply_l(params_l, ul)
-            
-            w = self.w_jl(idx, self.Ndomains[-1], u)
-            weight_sum += w
-            s1 += w*(u_l[:1]+ u_nl[:1])
-            s2 += w*(u_l[1:]+ u_nl[1:])
-            idx += 1
-        s1 = s1/weight_sum
-        s2 = s2/weight_sum
-
-        #  print(s1.shape)
-        
-        return s1, s2
 
     def weight_condition(self,condition,u,mu,sigma):
         w = lax.cond(condition, lambda u: (1 + np.cos(math.pi*(u-mu)/sigma))**2, lambda _: 0., u)
         return w
-    
-    # Changed this function
-    def w_jl(self, j, l, u):        
-        L = np.sqrt(l).astype(int)
+
+    def w_jl(self,j, l, t, x):        
+        L = np.sqrt(l)
         J = np.array([j % L, j // L])
         mu = self.dom_lens*J/(L-1)
         sigma = self.dom_lens*(self.delta/2.0)/(L-1)
-        conditions = ((u < (mu + sigma)) & (u > (mu - sigma))).all()
-        w_jl = vmap(self.weight_condition,(0,0,None,None))(conditions,u,mu,sigma)
-        return w_jl
+        t_conditions = (t < (mu[0] + sigma[0])) & (t > (mu[0] - sigma[0]))
+        x_conditions = (x < (mu[1] + sigma[1])) & (x > (mu[1] - sigma[1]))
+        conditions = x_conditions & t_conditions
+        # conditions = conditions.reshape(-1) 
+        # t = t.reshape(-1)
+        # x = x.reshape(-1)
+        t_w = vmap(self.weight_condition,(0,0,None,None))(conditions,t,mu[0],sigma[0])
+        x_w = vmap(self.weight_condition,(0,0,None,None))(conditions,x,mu[1],sigma[1])
+        weight = t_w*x_w
+        return weight
 
     
     def operator_net(self, params, x, t):
+        x = x.reshape(-1)
+        t = t.reshape(-1)
         y = np.stack([t,x])
         y = y.reshape([-1, 2])
-        ul = self.apply_lf(self.params_A, y)[0, 0]
-
-        # for i in onp.arange(len(self.params_t)): 
-        #     paramsB_nl =  self.params_t[i][0]
-        #     paramsB_l =  self.params_t[i][1]
-        #     y = np.stack([t, x, ul])
-
-        #     B_lin = self.apply_l(paramsB_l, ul)
-        #    # B_lin = self.apply_l(paramsB_l,in_u)
-        #     B_nonlin = self.apply_nl(paramsB_nl, y)
-        #     B_lin = B_lin[:, 0]
-
-        #     ul = B_nonlin + B_lin 
-        #     ul = ul[0]
+        ul = (self.apply_lf(self.params_A, y)[0, 0]).reshape(-1)
 
         j = 0
         for level in self.params_t:
             i = 0
             weight_sum = 0.
             ul_cur = 0.
+            y = np.hstack([t, x, ul])
             for mfparams in level:
                 paramsB_nl = mfparams[0]
                 paramsB_l = mfparams[1]
-                y = np.stack([t, x, ul])
 
                 u_l = self.apply_l(paramsB_l, ul)
                 u_nl = self.apply_nl(paramsB_nl, y)
                 
-                w = self.w_jl(i, self.Ndomains[j], x, t)
+                w = self.w_jl(i, self.Ndomains[j], t, x)
                 weight_sum += w
                 ul_cur += w*(u_l + u_nl)
                 i +=1
             ul = ul_cur/weight_sum
+            # ul = ul.reshape(t.shape)
             j += 1
-        
-        params_nl, params_l = params
-        y = np.stack([t,x, ul])
+   
+        idx = 0
+        weight_sum = 0.
+        pred = 0.
+        y = np.hstack([t, x, ul])
+        for param in params:
+            params_nl, params_l = param
 
-        logits_nl = self.apply_nl(params_nl, y)
-        logits_l = self.apply_l(params_l, ul)
-        logits_l = logits_l[:, 0]
-        pred = logits_nl + logits_l 
+            u_nl = self.apply_nl(params_nl, y)
+            u_l = self.apply_l(params_l, ul)
+            # u_l = u_l[:, 0]
 
+
+            w = self.w_jl(idx, self.Ndomains[-1], t, x)
+            weight_sum += w
+            pred += w*(u_nl + u_l) 
+
+            idx += 1
+        pred = pred/weight_sum
         
         return pred[0]
+        # return pred
     
 
     # Define ODE residual
     def residual_net(self, params, u):
+        # x = u[1].reshape(-1)
+        # t = u[0].reshape(-1)
         x = u[1]
         t = u[0]
         
@@ -583,6 +546,8 @@ class MF_DNN_class:
         return res
 
     def ut_net(self, params, u):
+        # x = u[1].reshape(-1)
+        # t = u[0].reshape(-1)
         x = u[1]
         t = u[0]
         
@@ -594,9 +559,10 @@ class MF_DNN_class:
         # Fetch data
         inputs, outputs = batch
         u = inputs
+        # x = u[:, 1].reshape(-1,1)
+        # t = u[:, 0].reshape(-1,1)
         x = u[:, 1]
         t = u[:, 0]
-        
         
         s1, s1t = outputs
 
@@ -612,9 +578,10 @@ class MF_DNN_class:
         # Fetch data
         inputs, outputs = batch
         u = inputs
+        # x = u[:, 1].reshape(-1,1)
+        # t = u[:, 0].reshape(-1,1)
         x = u[:, 1]
         t = u[:, 0]
-        
         
         s1 = outputs
 
@@ -649,7 +616,7 @@ class MF_DNN_class:
         return loss_res   
     
     # Define total loss
-    @partial(jit, static_argnums=(0,))
+    # @partial(jit, static_argnums=(0,))
     def loss(self, params,  ics_batch, bc1_batch, bc2_batch, res_batch):
         loss_ics = self.loss_ics(params, ics_batch)
         loss_bc1 = self.loss_bcs(params, bc1_batch)
@@ -657,20 +624,15 @@ class MF_DNN_class:
         loss_ut = self.loss_ut(params, ics_batch)
         loss_res = self.loss_res(params, res_batch)
 
-
-
         loss =  self.ics_weight*(loss_ics+loss_bc1+loss_bc2)\
                 + self.res_weight*loss_res \
                 + self.ut_weight*loss_ut
-                
 
-
-                
         return loss
 
     
         # Define a compiled update step
-    @partial(jit, static_argnums=(0,))
+    # @partial(jit, static_argnums=(0,))
     def step(self, i, opt_state, ics_batch, bc1_batch, bc2_batch, res_batch):
         params = self.get_params(opt_state)
 
@@ -738,7 +700,78 @@ class MF_DNN_class:
         s_pred =vmap(self.residual_net, (None, 0))(params, U_star)
         return s_pred**2
     
+
+    #==============================================================================================
+    # The below functions work, however I think that all the reshaping may be causing problems
+    #==============================================================================================
+
+    # def weight_condition(self,condition,u,mu,sigma):
+    #     w = lax.cond(condition, lambda u: (1 + np.cos(math.pi*(u-mu)/sigma))**2, lambda _: 0., u)
+    #     return w
+
+    # def w_jl(self,j, l, t, x):        
+    #     L = np.sqrt(l)
+    #     J = np.array([j % L, j // L])
+    #     mu = self.dom_lens*J/(L-1)
+    #     sigma = self.dom_lens*(self.delta/2.0)/(L-1)
+    #     t_conditions = ((t < (mu[0] + sigma[0])) & (t > (mu[0] - sigma[0]))).all()
+    #     x_conditions = ((x < (mu[1] + sigma[1])) & (x > (mu[1] - sigma[1]))).all()
+    #     conditions = x_conditions & t_conditions
+    #     conditions = conditions.reshape(-1) 
+    #     t = t.reshape(-1)
+    #     x = x.reshape(-1)
+    #     t_w = vmap(self.weight_condition,(0,0,None,None))(conditions,t,mu[0],sigma[0])
+    #     x_w = vmap(self.weight_condition,(0,0,None,None))(conditions,x,mu[1],sigma[1])
+    #     weight = t_w*x_w
+    #     return weight
+
     
+    # def operator_net(self, params, x, t):
+    #     y = np.stack([t,x])
+    #     y = y.reshape([-1, 2])
+    #     ul = self.apply_lf(self.params_A, y)[0, 0]
+
+    #     j = 0
+    #     for level in self.params_t:
+    #         i = 0
+    #         weight_sum = 0.
+    #         ul_cur = 0.
+    #         y = np.stack([t, x, ul])
+    #         for mfparams in level:
+    #             paramsB_nl = mfparams[0]
+    #             paramsB_l = mfparams[1]
+
+    #             u_l = self.apply_l(paramsB_l, ul)
+    #             u_nl = self.apply_nl(paramsB_nl, y)
+                
+    #             w = self.w_jl(i, self.Ndomains[j], t, x)
+    #             weight_sum += w
+    #             ul_cur += w*(u_l + u_nl)
+    #             i +=1
+    #         ul = ul_cur/weight_sum
+    #         ul = ul.reshape(t.shape)
+    #         j += 1
+   
+    #     idx = 0
+    #     weight_sum = 0.
+    #     pred = 0.
+    #     y = np.hstack([t, x, ul])
+    #     for param in params:
+    #         params_nl, params_l = param
+
+    #         u_nl = self.apply_nl(params_nl, y)
+    #         u_l = self.apply_l(params_l, ul)
+    #         u_l = u_l[:, 0]
+            
+    #         w = self.w_jl(idx, self.Ndomains[-1], t, x)
+    #         weight_sum += w
+    #         pred += w*(u_nl + u_l) 
+
+    #         idx += 1
+    #     pred = pred/weight_sum
+        
+    #     return pred[0]
+
 #======================================================================================
 # This is the original operator_network of the code.
 #======================================================================================

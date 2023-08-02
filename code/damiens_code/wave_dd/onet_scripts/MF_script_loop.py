@@ -255,7 +255,7 @@ if __name__ == "__main__":
     batch_size = 300
     batch_size_s = 300
     epochs = 100000
-    epochsA2 = 100
+    epochsA2 = 100000
     lr = optimizers.exponential_decay(5e-4, decay_steps=2000, decay_rate=0.99)
     lrA = optimizers.exponential_decay(1e-4, decay_steps=2000, decay_rate=0.99)
     ics_weight = 1
@@ -270,8 +270,8 @@ if __name__ == "__main__":
     delta = 1.9
     #======================================
 
-    steps_to_train = np.arange(2)
-    reload = [False, False]
+    steps_to_train = np.arange(1)
+    reload = [False]
     
     reloadA = True
 
@@ -282,8 +282,9 @@ if __name__ == "__main__":
     # ====================================
     # saving settings
     # ====================================
+    path_to_wave = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/wave_dd"
     save_str = "MF_loop"
-    results_dir_A = "../results_A/"+save_str+"/"
+    results_dir_A = path_to_wave + "/results_A/" + save_str
     if not os.path.exists(results_dir_A):
         os.makedirs(results_dir_A)
 
@@ -346,7 +347,7 @@ if __name__ == "__main__":
     
     Ndomains = []
     for step in steps_to_train:
-        results_dir = "../results_" + str(step) + "/"+save_str+"/"
+        results_dir = path_to_wave + "/results_" + str(step) + "/"+save_str+"/"
         if not os.path.exists(results_dir):
             os.makedirs(results_dir)
         
@@ -358,7 +359,7 @@ if __name__ == "__main__":
         Ndomains.append(4**(step+1))
         model = MF_DNN_class(layer_sizes_nl, layer_sizes_l,layers, ics_weight, res_weight, 
                              ut_weight, lr, Ndomains, delta, dom_coords, params_A, 
-                             params_t=params_prev, restart =res)
+                             params_t=params_prev, restart=res)
         
         if reload[step]:
             params = model.unravel_params(np.load(results_dir + '/params.npy'))
