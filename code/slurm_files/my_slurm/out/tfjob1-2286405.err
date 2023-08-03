@@ -1,0 +1,9 @@
+Now you should run one of the following depending on your shell
+source /share/apps/python/miniconda3.9/etc/profile.d/conda.sh
+source /share/apps/python/miniconda3.9/etc/profile.d/conda.csh
+Traceback (most recent call last):
+  File "/people/beec613/pnnl_research/code/damiens_code/wave_test/onet_scripts/MF_script_loop.py", line 9, in <module>
+    from utils_fs_v2 import timing
+  File "/qfs/people/beec613/pnnl_research/code/damiens_code/wave_test/onet_scripts/utils_fs_v2.py", line 30, in <module>
+    import matplotlib.pyplot as plt
+ModuleNotFoundError: No module named 'matplotlib'

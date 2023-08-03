@@ -1,0 +1,7 @@
+Now you should run one of the following depending on your shell
+source /share/apps/python/miniconda3.9/etc/profile.d/conda.sh
+source /share/apps/python/miniconda3.9/etc/profile.d/conda.csh
+Traceback (most recent call last):
+  File "/people/beec613/pnnl_research/code/damiens_code/wave_test/onet_scripts/MF_script_loop.py", line 285, in <module>
+    results_dir_A = path_to_dir + "/results_A/"+save_str+"/"
+NameError: name 'path_to_dir' is not defined
