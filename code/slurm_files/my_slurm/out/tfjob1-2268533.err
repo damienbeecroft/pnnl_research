@@ -1,0 +1,11 @@
+Now you should run one of the following depending on your shell
+source /share/apps/python/miniconda3.9/etc/profile.d/conda.sh
+source /share/apps/python/miniconda3.9/etc/profile.d/conda.csh
+Traceback (most recent call last):
+  File "/people/beec613/pnnl_research/code/damiens_code/wave_dd/onet_scripts/MF_script_loop.py", line 308, in <module>
+    params_A = model_A.unravel_params(np.load(results_dir_A + '/params.npy'))
+  File "/people/beec613/.conda/envs/jax-gpu/lib/python3.9/site-packages/jax/_src/numpy/lax_numpy.py", line 288, in load
+    out = np.load(*args, **kwargs)
+  File "/people/beec613/.conda/envs/jax-gpu/lib/python3.9/site-packages/numpy/lib/npyio.py", line 427, in load
+    fid = stack.enter_context(open(os_fspath(file), "rb"))
+FileNotFoundError: [Errno 2] No such file or directory: 'C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/wave_dd/results_A/MF_loop/params.npy'
