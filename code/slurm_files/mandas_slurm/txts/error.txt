@@ -1,6 +1,0 @@
-ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
-torch 2.0.1 requires nvidia-cublas-cu11==11.10.3.66; platform_system == "Linux" and platform_machine == "x86_64", but you have nvidia-cublas-cu11 11.11.3.6 which is incompatible.
-torch 2.0.1 requires nvidia-cuda-cupti-cu11==11.7.101; platform_system == "Linux" and platform_machine == "x86_64", but you have nvidia-cuda-cupti-cu11 11.8.87 which is incompatible.
-torch 2.0.1 requires nvidia-cuda-runtime-cu11==11.7.99; platform_system == "Linux" and platform_machine == "x86_64", but you have nvidia-cuda-runtime-cu11 11.8.89 which is incompatible.
-torch 2.0.1 requires nvidia-cudnn-cu11==8.5.0.96; platform_system == "Linux" and platform_machine == "x86_64", but you have nvidia-cudnn-cu11 8.9.2.26 which is incompatible.
-
