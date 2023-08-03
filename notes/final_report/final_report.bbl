@@ -1,0 +1,14 @@
+\begin{thebibliography}{1}
+
+\bibitem{pinns}
+Maziar Raissi, Paris Perdikaris, and George~E. Karniadakis.
+\newblock Physics informed deep learning (part {I):} data-driven solutions of
+  nonlinear partial differential equations.
+\newblock {\em CoRR}, abs/1711.10561, 2017.
+
+\bibitem{fixedpts}
+Franz~M. Rohrhofer, Stefan Posch, Clemens Gößnitzer, and Bernhard~C. Geiger.
+\newblock On the role of fixed points of dynamical systems in training
+  physics-informed neural networks, 2023.
+
+\end{thebibliography}

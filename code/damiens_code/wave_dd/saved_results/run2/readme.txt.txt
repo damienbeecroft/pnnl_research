@@ -1,0 +1,1 @@
+This is the multifidelity code run with 100000 iterations and the linear operator initialized to the identity. However, training did not go as well as hoped. I am increasing the number of training iterations to see if it helps.
