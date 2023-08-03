@@ -155,8 +155,9 @@ def nonlinear_DNN(branch_layers, activation=np.tanh):
 def linear_DNN(branch_layers):
 
     def xavier_init_j(key, d_in, d_out):
-        glorot_stddev = 1. / np.sqrt((d_in + d_out) / 2.)
-        W = glorot_stddev * random.normal(key, (d_in, d_out))
+        # glorot_stddev = 1. / np.sqrt((d_in + d_out) / 2.)
+        # W = glorot_stddev * random.normal(key, (d_in, d_out))
+        W = np.ones((d_in,d_out))
         b = np.zeros(d_out)
         return W, b
     def init(rng_key1):

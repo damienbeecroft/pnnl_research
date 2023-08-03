@@ -76,9 +76,6 @@ def save_data(model, params, save_results_to):
                               'U_pred':U_pred}, format='4')
     
 
-    
-
-
 class DataGenerator(data.Dataset):
     def __init__(self, dim, coords, func, 
                  batch_size=64, rng_key=random.PRNGKey(1234)):
@@ -105,8 +102,6 @@ class DataGenerator(data.Dataset):
         outputs = y
         return inputs, outputs
     
-
-
 class DataGenerator_ICS(data.Dataset):
     def __init__(self, dim, coords, func, func_ut,
                  batch_size=64, rng_key=random.PRNGKey(1234)):
@@ -172,8 +167,6 @@ class DataGenerator_MF(data.Dataset):
         outputs = y
         return inputs, outputs
 
-
-    
 class DataGenerator_ICS_MFA2(data.Dataset):
     def __init__(self, dim, coords, func, func_ut,
                  batch_size=64, rng_key=random.PRNGKey(1234)):
@@ -255,6 +248,7 @@ if __name__ == "__main__":
     batch_size = 300
     batch_size_s = 300
     epochs = 100000
+    # epochsA2 = 10
     epochsA2 = 100000
     lr = optimizers.exponential_decay(5e-4, decay_steps=2000, decay_rate=0.99)
     lrA = optimizers.exponential_decay(1e-4, decay_steps=2000, decay_rate=0.99)
@@ -282,7 +276,7 @@ if __name__ == "__main__":
     # ====================================
     # saving settings
     # ====================================
-    #path_to_wave = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/wave_dd"
+    # path_to_wave = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/wave_dd"
     path_to_wave = "/people/beec613/pnnl_research/code/damiens_code/wave_dd"
     save_str = "MF_loop"
     results_dir_A = path_to_wave + "/results_A/" + save_str

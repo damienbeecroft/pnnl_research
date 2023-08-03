@@ -480,6 +480,35 @@ class MF_DNN_class:
         weight = t_w*x_w
         return weight
 
+    # def operator_net(self, params, x, t):
+    #     y = np.stack([t,x])
+    #     y = y.reshape([-1, 2])
+    #     ul = self.apply_lf(self.params_A, y)[0, 0]
+
+    #     for i in onp.arange(len(self.params_t)): 
+    #         paramsB_nl =  self.params_t[i][0]
+    #         paramsB_l =  self.params_t[i][1]
+    #         y = np.stack([t, x, ul])
+
+    #         B_lin = self.apply_l(paramsB_l, ul)
+    #        # B_lin = self.apply_l(paramsB_l,in_u)
+    #         B_nonlin = self.apply_nl(paramsB_nl, y)
+    #         B_lin = B_lin[:, 0]
+
+    #         ul = B_nonlin + B_lin 
+    #         ul = ul[0]
+
+        
+    #     params_nl, params_l = params
+    #     y = np.stack([t,x, ul])
+
+    #     logits_nl = self.apply_nl(params_nl, y)
+    #     logits_l = self.apply_l(params_l, ul)
+    #     logits_l = logits_l[:, 0]
+    #     pred = logits_nl + logits_l 
+
+        
+    #     return pred[0]
     
     def operator_net(self, params, x, t):
         x = x.reshape(-1)
@@ -519,8 +548,6 @@ class MF_DNN_class:
             u_nl = self.apply_nl(params_nl, y)
             u_l = self.apply_l(params_l, ul)
             # u_l = u_l[:, 0]
-
-
             w = self.w_jl(idx, self.Ndomains[-1], t, x)
             weight_sum += w
             pred += w*(u_nl + u_l) 
