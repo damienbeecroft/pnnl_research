@@ -1,5 +1,16 @@
 \begin{thebibliography}{1}
 
+\bibitem{fbpinns}
+Victorita Dolean, Alexander Heinlein, Siddhartha Mishra, and Ben Moseley.
+\newblock Multilevel domain decomposition-based architectures for
+  physics-informed neural networks, 2023.
+
+\bibitem{mfpinns}
+Xuhui Meng and George~Em Karniadakis.
+\newblock A composite neural network that learns from multi-fidelity data:
+  Application to function approximation and inverse {PDE} problems.
+\newblock {\em Journal of Computational Physics}, 401:109020, jan 2020.
+
 \bibitem{pinns}
 Maziar Raissi, Paris Perdikaris, and George~E. Karniadakis.
 \newblock Physics informed deep learning (part {I):} data-driven solutions of
