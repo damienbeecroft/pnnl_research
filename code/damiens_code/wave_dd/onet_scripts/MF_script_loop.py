@@ -239,7 +239,7 @@ if __name__ == "__main__":
     
     N_low = 500
     layers = [2, N_low, N_low, N_low, N_low, N_low, 1]
-    N_low=200
+    N_low= 200
     layer_sizes_nl = [3, N_low, N_low, N_low, 1]
     layer_sizes_l = [1, 1]
     
@@ -253,7 +253,7 @@ if __name__ == "__main__":
     lr = optimizers.exponential_decay(5e-4, decay_steps=2000, decay_rate=0.99)
     lrA = optimizers.exponential_decay(1e-4, decay_steps=2000, decay_rate=0.99)
     ics_weight = 1
-    res_weight = 1.0
+    res_weight = 10.0
     ut_weight = 1
 
 

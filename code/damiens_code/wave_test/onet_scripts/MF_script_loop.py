@@ -259,7 +259,7 @@ if __name__ == "__main__":
     lr = optimizers.exponential_decay(5e-4, decay_steps=2000, decay_rate=0.99)
     lrA = optimizers.exponential_decay(1e-4, decay_steps=2000, decay_rate=0.99)
     ics_weight = 1
-    res_weight = 1.0
+    res_weight = 10.0
     ut_weight = 1
 
 
