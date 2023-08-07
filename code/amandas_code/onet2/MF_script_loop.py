@@ -361,7 +361,7 @@ if __name__ == "__main__":
     
         params_A = model_A.get_params(model_A.opt_state)
         flat_params, _  = ravel_pytree(model_A.get_params(model_A.opt_state))
-        np.save(results_dir_A + 'params.npy', flat_params)
+        np.save(results_dir_A + '/params.npy', flat_params)
     
         save_data(model_A, params_A, results_dir_A)
 

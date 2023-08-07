@@ -381,7 +381,8 @@ class DNN_class:
 class MF_DNN_class:
     
     # Initialize the class
-    def __init__(self, layers_branch_nl, layers_branch_l, layers_branch_lf, ics_weight, res_weight, ut_weight, energy_weight, lr ,
+    # def __init__(self, layers_branch_nl, layers_branch_l, layers_branch_lf, ics_weight, res_weight, ut_weight, energy_weight, lr ,
+    def __init__(self, layers_branch_nl, layers_branch_l, layers_branch_lf, ics_weight, res_weight, ut_weight, lr ,
                  params_A, restart =0, params_t = []): 
 
         self.init_nl, self.apply_nl, self.weight_nl = nonlinear_DNN(layers_branch_nl)
@@ -419,7 +420,7 @@ class MF_DNN_class:
         self.ics_weight = ics_weight
         self.res_weight = res_weight
         self.ut_weight = ut_weight
-        self.energy_weight = energy_weight
+        # self.energy_weight = energy_weight
 
 
         # building loss function
@@ -427,7 +428,7 @@ class MF_DNN_class:
         self.loss_res_log = []
         self.loss_ics_log = []
         self.loss_ut_log = []
-        self.loss_energy_log = []
+        # self.loss_energy_log = []
 
     # =============================================
     # evaluation
