@@ -325,7 +325,7 @@ if __name__ == "__main__":
     # ====================================
     # saving settings
     # ====================================
-    save_str = "MF_loop"
+    save_str = "MF_loop/"
     # path = "C:/Users/beec613/Desktop/pnnl_research/code/amandas_code/onet2"
     path = "/people/beec613/pnnl_research/code/amandas_code/onet2"
     results_dir_A = path + "/results_A/"+save_str
@@ -349,7 +349,7 @@ if __name__ == "__main__":
     res_sampler = DataGenerator(2, dom_coords, lambda x: r(x, a, c), batch_size)
 
     if reloadA:
-        params_A = model_A.unravel_params(np.load(results_dir_A + '/params.npy'))
+        params_A = model_A.unravel_params(np.load(results_dir_A + 'params.npy'))
     else:     
         model_A.train(ics_sampler, bc1, bc2, res_sampler, nIter=epochs, F = 0, lam = [])
 
@@ -362,7 +362,7 @@ if __name__ == "__main__":
     
         params_A = model_A.get_params(model_A.opt_state)
         flat_params, _  = ravel_pytree(model_A.get_params(model_A.opt_state))
-        np.save(results_dir_A + '/params.npy', flat_params)
+        np.save(results_dir_A + 'params.npy', flat_params)
     
         save_data(model_A, params_A, results_dir_A)
 
@@ -406,7 +406,7 @@ if __name__ == "__main__":
 
         
         if reload[step]:
-            params = model.unravel_params(np.load(results_dir + '/params.npy'))
+            params = model.unravel_params(np.load(results_dir + 'params.npy'))
         
         else:     
             model.train(ics_sampler, bc1, bc2, res_sampler, nIter=epochsA2, F = 0, lam = [])

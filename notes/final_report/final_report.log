@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.6.20)  4 AUG 2023 14:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.6.20)  7 AUG 2023 12:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -567,20 +567,27 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 <imgs/domain_decomp.png, id=37, 974.89218pt x 519.44063pt>
 File: imgs/domain_decomp.png Graphic file (type png)
 <use imgs/domain_decomp.png>
-Package pdftex.def Info: imgs/domain_decomp.png  used on input line 98.
+Package pdftex.def Info: imgs/domain_decomp.png  used on input line 101.
 (pdftex.def)             Requested size: 328.82707pt x 175.20457pt.
- [3] (final_report.bbl [4 <./imgs/domain_decomp.png>]) [5] (final_report.aux)
+ [3]
+<imgs/batch1.png, id=47, 765.6103pt x 666.23906pt>
+File: imgs/batch1.png Graphic file (type png)
+<use imgs/batch1.png>
+Package pdftex.def Info: imgs/batch1.png  used on input line 110.
+(pdftex.def)             Requested size: 328.82707pt x 286.1519pt.
+ (final_report.bbl [4 <./imgs/domain_decomp.png>]) [5 <./imgs/batch1.png>] (fin
+al_report.aux)
 Package rerunfilecheck Info: File `final_report.out' has not changed.
 (rerunfilecheck)             Checksum: 9814C2D956916ADB9290ECA4E25C967A;103.
  ) 
 Here is how much of TeX's memory you used:
- 11320 strings out of 476331
- 178484 string characters out of 5786821
- 1860660 words of memory out of 5000000
- 31576 multiletter control sequences out of 15000+600000
+ 11333 strings out of 476331
+ 178711 string characters out of 5786821
+ 1858660 words of memory out of 5000000
+ 31587 multiletter control sequences out of 15000+600000
  518491 words of font info for 55 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,10n,76p,2960b,557s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,10n,76p,1321b,557s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
 m/cmbx12.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public
 /amsfonts/cm/cmmi12.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/t
@@ -592,9 +599,9 @@ grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/beec613/AppData
 rs/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.
 pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
 /cm/cmti12.pfb>
-Output written on final_report.pdf (6 pages, 2656576 bytes).
+Output written on final_report.pdf (6 pages, 2749594 bytes).
 PDF statistics:
- 101 PDF objects out of 1000 (max. 8388607)
- 16 named destinations out of 1000 (max. 500000)
- 19 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 105 PDF objects out of 1000 (max. 8388607)
+ 17 named destinations out of 1000 (max. 500000)
+ 24 words of extra memory for PDF output out of 10000 (max. 10000000)
 
