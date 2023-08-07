@@ -12,7 +12,9 @@
 \usepackage{amsthm}
 \usepackage{dsfont}
 \usepackage{hyperref}
- \usepackage{setspace}
+\usepackage{setspace}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 
 % MACROS
 % Set Theory
@@ -66,7 +68,7 @@ Physics informed neural networks (PINNs) struggle to successfully learn solution
 \vspace{1cm}
 \begin{figure}[H]
 \center
-\includegraphics[width = 0.9\textwidth]{me.jpg}
+\includegraphics[width = 0.9\textwidth]{imgs/me.jpg}
 \caption{My internship at Pacific Northwest National Lab was virtual. My office was anywhere I lugged my computer. On some of my more adventurous days I ventured all the way down to my living room to use the television as a secondary monitor. On an even more auspicious occasion my girlfriend and soon to be doctor Caitlin Neher was kind enough to take my photo for this final report.}
 \end{figure}
 
@@ -75,11 +77,11 @@ Physics informed neural networks (PINNs) struggle to successfully learn solution
 \section{Introduction}
 
 Raissi et al. \cite{pinns} invented the physics informed neural network (PINN) in 2016. This framework enables machine learning algorithms to learn solutions to differential equations with just the physical constraints. The dream is to achieve a flexible differential equation solvers that are able to find high accuracy solutions with little expert knowledge. However, this dream is still a ways off. We briefly review the concept of a PINN here. Suppose that we have the following differential equation.
-\begin{align*}
-	u(t,x)_t + N[u(t,x)] &= 0 \quad \text{for} \quad x \in \Omega, \: t \in [0,T]\\
+\begin{align} \label{eq:dq}
+	u(t,x)_t + N[u(t,x)] &= 0 \quad \text{for} \quad x \in \Omega, \: t \in [0,T] \notag\\
 	B[u(t,x)] &= 0 \quad \text{for} \quad x \in \partial \Omega\\
-	u(0,x) &= u_0(x)
-\end{align*}
+	u(0,x) &= u_0(x) \notag
+\end{align}
 $N$ and $B$ are known differential operators that contain no time derivatives. PINNs construct a neural network $\~u(t,x)$ that, is penalized every training step in proportion to how poorly the network satisfies the physical constraints. In particular,
 \begin{align*}
 	\~u(t,x)_t + N[\~u(t,x)] &= l_1 \quad \text{for} \quad x \in \Omega, \: t \in [0,T]\\
@@ -89,12 +91,49 @@ $N$ and $B$ are known differential operators that contain no time derivatives. P
 \begin{equation*}
 \text{total loss} = l_1 + l_2 + l_3
 \end{equation*}
-The gradient of the loss is taken with respect to the hidden variables of the neural network in order to determine how the weights are to be adjusted. Automatic differentiation is used to differentiate the neural network with respect to the temporal and spatial variables. PINNs struggle to learn oscillatory and multi-scale solutions, often converging to fixed point solutions of the differential equation \cite{fixedpts}. This is often due to the fact that fixed point solutions satisfy the physical constraints of the differential equation while also maintaining small hidden weights. The boundary and initial conditions do not have enough influence to push the network away from steady state solutions. There are a variety of methods and techniques that have been introduced to improve the convergence of PINNs. My research was focused on combining two such methods. The first method is the multifidelity PINN framework introduced by Meng et al. \cite{mfpinns}. Multifidelity PINNs learn from a high and low fidelity data source. The network learns the correlation between the two data sources to achieve an accurate prediction of the true solution. The second is the multilevel finite basis PINNs as introduced in Dolean et al. \cite{fbpinns}. This construction takes the entire domain of the problem and decomposes it into a set of overlapping subdomains. A neural network is trained on each of these subdomains. My task this summer was to combine these two methods and test the performance on a few test problems.
+\indent The gradient of the loss is taken with respect to the hidden variables of the neural network in order to determine how the weights are to be adjusted. Automatic differentiation is used to differentiate the neural network with respect to the temporal and spatial variables. PINNs struggle to learn oscillatory and multi-scale solutions, often converging to fixed point solutions of the differential equation \cite{fixedpts}. This is often due to the fact that fixed point solutions satisfy the physical constraints of the differential equation while also maintaining small hidden weights. The boundary and initial conditions do not have enough influence to push the network away from steady state solutions. There are a variety of methods and techniques that have been introduced to improve the convergence of PINNs. My research was focused on combining two such methods. The first method is the multifidelity PINN framework introduced by Meng et al. \cite{mfpinns}. Multifidelity PINNs learn from a high and low fidelity data source. The network learns the correlation between the two data sources to achieve an accurate prediction of the true solution. The second is the multilevel finite basis PINNs as introduced in Dolean et al. \cite{fbpinns}. This construction takes the entire domain of the problem and decomposes it into a set of overlapping subdomains. A neural network is trained on each of these subdomains. My task this summer was to combine these two methods and test the performance on a few test problems. The working name for this method is the Multifidelity Finite Basis Physics Informed Neural Network (MFFBPINN) algorithm. Suppose we are attempting to learn the differential equation posed in equation \ref{eq:dq}. MFFBPINNs construct a hierarchy of neural networks. On the zeroth level of the hierarchy is a single fidelity neural network that requires no low fidelity data to make a prediction. This single fidelity method could be a classical PINN or the solution of a numerical solver. The only caveat is that we need to be able to take spatial and temporal derivatives of this single fidelity method. After this single fidelity network is trained on $\Omega$, the domain is broken up into a set of overlapping subdomains for the first multifidelity level: $\{\Omega^1_n\}_{n=0}^{N_1}$. Each multifidelity PINN on this level takes in the evaluation of the single fidelity PINN on the zeroth level as its low fidelity approximation to the solution. Now, the multifidelity PINNs on the first level are trained while the single fidelity network's parameters are frozen. For the second level of multifidelity PINNs the process is repeated. The domain is broken up into a new set of subdomains: $\{\Omega^2_n\}_{n=0}^{N_2}$. However, now the multifidelity networks on the first level provide the low fidelity data for the second level. This process repeats until a desired accuracy is achieved. 
 
+\begin{figure}[H] \label{fig:dd}
+\centering
+\includegraphics[width=0.7\textwidth]{imgs/domain_decomp.png}
+\caption{A simple example of how the MFFBPINN algorithm works is given here for a 1D problem where the number of domains is doubled at each step.}
+\end{figure}
+
+During the course of this internship, we developed two main ways to implement this algorithm. Each one is centered around how batching is done. In the first implementation, a batch containing points in the entire domain $\Omega$ is sent to the MFFBPINN. In this construction, one can make a tree of neural networks the batch is first given to the zeroth level. The zeroth level creates its solution prediction. The networks on the first level (which are all children of the single fidelity network on the zeroth level) then look at the points in the original batch and the low fidelity solution from the zeroth layer and make their own approximation for the points that are within their subdomains. The child of each network in the second level then take in the batch points and approximations of their parents and create new approximations on the points in their subdomains and so on and so forth. 
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{•}
+\end{figure}
+
+In the second implementation of the MFFBPINN, distinct batches of residual points are created for each intersection of the subdomains on the highest level (the level with the highest number). These batch points are then fed down to the neural networks on the lower levels to get the low fidelity approximations. For instance, suppose that we have 
 
 \bibliographystyle{plain} % We choose the "plain" reference style
 \bibliography{refs} % Entries are in the mybib.bib file
 \end{document}
+
+
+%The most basic algorithm for this code is given below.
+%
+%\begin{algorithm}
+%\caption{Multifidelity Finite Basis Physics Informed Neural Network}\label{alg:cap}
+%\begin{algorithmic}
+%\Require $\Omega$, \verb|batch_generator|
+%\State $nn_{sf} \gets$ \verb|train_single_fidelity_network()|
+%\State $X \gets x$
+%\State $N \gets n$
+%\While{$N \neq 0$}
+%\If{$N$ is even}
+%    \State $X \gets X \times X$
+%    \State $N \gets \frac{N}{2}$  \Comment{This is a comment}
+%\ElsIf{$N$ is odd}
+%    \State $y \gets y \times X$
+%    \State $N \gets N - 1$
+%\EndIf
+%\EndWhile
+%\end{algorithmic}
+%\end{algorithm}
+
 
 %\section*{Summary of Papers}
 %\begin{itemize}

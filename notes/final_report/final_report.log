@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.6.20)  4 AUG 2023 09:52
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.6.20)  4 AUG 2023 14:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -412,32 +412,64 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 (C:\Users\beec613\AppData\Local\Programs\MiKTeX\tex/latex/setspace\setspace.sty
 Package: setspace 2022/12/04 v6.7b set line spacing
 )
+(C:\Users\beec613\AppData\Local\Programs\MiKTeX\tex/latex/algorithms\algorithm.
+sty
+Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
+nment
+ (C:\Users\beec613\AppData\Local\Programs\MiKTeX\tex/latex/base\ifthen.sty
+Package: ifthen 2022/04/13 v1.1d Standard LaTeX ifthen package (DPC)
+)
+\@float@every@algorithm=\toks32
+\c@algorithm=\count296
+)
+(C:\Users\beec613\AppData\Local\Programs\MiKTeX\tex/latex/algorithmicx\algpseud
+ocode.sty
+Package: algpseudocode 
+
+(C:\Users\beec613\AppData\Local\Programs\MiKTeX\tex/latex/algorithmicx\algorith
+micx.sty
+Package: algorithmicx 2005/04/27 v1.2 Algorithmicx
+
+Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
+\c@ALG@line=\count297
+\c@ALG@rem=\count298
+\c@ALG@nested=\count299
+\ALG@tlm=\skip59
+\ALG@thistlm=\skip60
+\c@ALG@Lnr=\count300
+\c@ALG@blocknr=\count301
+\c@ALG@storecount=\count302
+\c@ALG@tmpcounter=\count303
+\ALG@tmplength=\skip61
+)
+Document Style - pseudocode environments for use with the `algorithmicx' style
+)
 (C:\Users\beec613\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-p
 dftex.def
 File: l3backend-pdftex.def 2023-03-30 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count296
+\l__color_backend_stack_int=\count304
 \l__pdf_internal_box=\box100
 ) (final_report.aux)
 \openout1 = `final_report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -477,17 +509,17 @@ LaTeX Font Info:    ... okay on input line 35.
 (C:\Users\beec613\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.
 mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count297
+\scratchcounter=\count305
 \scratchdimen=\dimen173
 \scratchbox=\box101
-\nofMPsegments=\count298
-\nofMParguments=\count299
-\everyMPshowfont=\toks32
-\MPscratchCnt=\count300
+\nofMPsegments=\count306
+\nofMParguments=\count307
+\everyMPshowfont=\toks33
+\MPscratchCnt=\count308
 \MPscratchDim=\dimen174
-\MPnumerator=\count301
-\makeMPintoPDFobject=\count302
-\everyMPtoPDFconversion=\toks33
+\MPnumerator=\count309
+\makeMPintoPDFobject=\count310
+\everyMPtoPDFconversion=\toks34
 )
 (C:\Users\beec613\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf
 -base.sty
@@ -499,7 +531,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 .cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-Package hyperref Info: Link coloring OFF on input line 35.
+Package hyperref Info: Link coloring OFF on input line 37.
  (final_report.out) (final_report.out)
 \@outlinefile=\write3
 \openout3 = `final_report.out'.
@@ -507,55 +539,62 @@ Package hyperref Info: Link coloring OFF on input line 35.
  [1
 
 {C:/Users/beec613/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
-<me.jpg, id=14, 4095.3pt x 3083.52pt>
-File: me.jpg Graphic file (type jpg)
-<use me.jpg>
-Package pdftex.def Info: me.jpg  used on input line 69.
+<imgs/me.jpg, id=14, 4095.3pt x 3083.52pt>
+File: imgs/me.jpg Graphic file (type jpg)
+<use imgs/me.jpg>
+Package pdftex.def Info: imgs/me.jpg  used on input line 71.
 (pdftex.def)             Requested size: 422.77664pt x 318.29776pt.
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.74 \newpage
-              [1 <./me.jpg>]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 78.
+l.76 \newpage
+              [1 <./imgs/me.jpg>]
+LaTeX Font Info:    Trying to load font information for U+msa on input line 80.
 
 
 (C:\Users\beec613\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 78.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 80.
 
 
 (C:\Users\beec613\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-[2] (final_report.bbl) [3] (final_report.aux)
+[2]
+<imgs/domain_decomp.png, id=37, 974.89218pt x 519.44063pt>
+File: imgs/domain_decomp.png Graphic file (type png)
+<use imgs/domain_decomp.png>
+Package pdftex.def Info: imgs/domain_decomp.png  used on input line 98.
+(pdftex.def)             Requested size: 328.82707pt x 175.20457pt.
+ [3] (final_report.bbl [4 <./imgs/domain_decomp.png>]) [5] (final_report.aux)
 Package rerunfilecheck Info: File `final_report.out' has not changed.
 (rerunfilecheck)             Checksum: 9814C2D956916ADB9290ECA4E25C967A;103.
  ) 
 Here is how much of TeX's memory you used:
- 10697 strings out of 476331
- 168111 string characters out of 5786821
- 1858660 words of memory out of 5000000
- 30974 multiletter control sequences out of 15000+600000
+ 11320 strings out of 476331
+ 178484 string characters out of 5786821
+ 1860660 words of memory out of 5000000
+ 31576 multiletter control sequences out of 15000+600000
  518491 words of font info for 55 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,10n,76p,1533b,449s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,10n,76p,2960b,557s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
 m/cmbx12.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public
 /amsfonts/cm/cmmi12.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/t
 ype1/public/amsfonts/cm/cmmi8.pfb><C:/Users/beec613/AppData/Local/Programs/MiKT
 eX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/beec613/AppData/Local/Pro
 grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/beec613/AppData
-/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/beec61
-3/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/U
-sers/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti1
-2.pfb>
-Output written on final_report.pdf (4 pages, 2550468 bytes).
+/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/beec61
+3/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Use
+rs/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.
+pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
+/cm/cmti12.pfb>
+Output written on final_report.pdf (6 pages, 2656576 bytes).
 PDF statistics:
- 81 PDF objects out of 1000 (max. 8388607)
- 12 named destinations out of 1000 (max. 500000)
- 14 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 101 PDF objects out of 1000 (max. 8388607)
+ 16 named destinations out of 1000 (max. 500000)
+ 19 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -105,6 +105,46 @@ class DataGenerator(data.Dataset):
         outputs = y
         return inputs, outputs
     
+    
+class DataGenerator_energy(data.Dataset):
+    def __init__(self, dim, coords, e_0, N,
+                 batch_size=64, rng_key=random.PRNGKey(1234)):
+        'Initialization'
+        self.dim = dim
+        self.coords = coords
+        self.N  = N
+        self.dx = coords[1, 0]/N
+        
+
+        self.batch_size = batch_size
+        self.key = rng_key
+        
+        x = np.linspace(self.coords[0, 0], self.coords[1, 0], self.N)
+        x = np.reshape(x, [-1, self.N])
+        x = np.repeat(x, self.batch_size, axis=0).reshape(self.batch_size, self.N, -1)
+        self.x = x
+        self.e_0 = e_0*np.ones(self.batch_size)
+
+        
+
+    def __getitem__(self, index):
+        'Generate one batch of data'
+        self.key, subkey = random.split(self.key)
+        inputs, outputs = self.__data_generation(subkey)
+        return inputs, outputs
+
+    @partial(jit, static_argnums=(0,))
+    def __data_generation(self, key):
+        'Generates data containing batch_size samples'
+        t = self.coords[0,1] + (self.coords[1,1]-self.coords[0,1])*random.uniform(key, shape=[self.batch_size, 1])
+        t = np.repeat(t, self.N, axis=1).reshape(self.batch_size, self.N, -1)
+        
+        
+        
+        xvec = np.concatenate([t, self.x], axis=2)
+        inputs = (xvec, self.dx)
+        outputs = self.e_0
+        return inputs, outputs
 
 
 class DataGenerator_ICS(data.Dataset):
@@ -212,28 +252,36 @@ def u(x, a, c):
     t = x[:,0:1]
     x = x[:,1:2]
     return np.sin(np.pi * x) * np.cos(c * np.pi * t) + \
-            a * np.sin(2 * c * np.pi* x) * np.cos(4 * c  * np.pi * t)
+            a * np.sin(4 * np.pi* x) * np.cos(4 * c  * np.pi * t)
 
 def u_t(x,a, c):
     t = x[:,0:1]
     x = x[:,1:2]
     u_t = -  c * np.pi * np.sin(np.pi * x) * np.sin(c * np.pi * t) - \
-            a * 4 * c * np.pi * np.sin(2 * c * np.pi* x) * np.sin(4 * c * np.pi * t)
+            a * 4 * c * np.pi * np.sin(4 * np.pi* x) * np.sin(4 * c * np.pi * t)
     return u_t
 
 def u_tt(x, a, c):
     t = x[:,0:1]
     x = x[:,1:2]
     u_tt = -(c * np.pi)**2 * np.sin( np.pi * x) * np.cos(c * np.pi * t) - \
-            a * (4 * c * np.pi)**2 *  np.sin(2 * c * np.pi* x) * np.cos(4 * c * np.pi * t)
+            a * (4 * c * np.pi)**2 *  np.sin(4 * np.pi* x) * np.cos(4 * c * np.pi * t)
     return u_tt
 
 def u_xx(x, a, c):
     t = x[:,0:1]
     x = x[:,1:2]
     u_xx = - np.pi**2 * np.sin( np.pi * x) * np.cos(c * np.pi * t) - \
-              a * (2 * c * np.pi)** 2 * np.sin(2 * c * np.pi* x) * np.cos(4 * c * np.pi * t)
+              a * (4 * np.pi)** 2 * np.sin(4 * np.pi* x) * np.cos(4 * c * np.pi * t)
     return  u_xx
+
+def u_x(x, a, c):
+    t = x[:,0:1]
+    x = x[:,1:2]
+    u_x =  np.pi* np.cos( np.pi * x) * np.cos(c * np.pi * t) + \
+              a * (4 * np.pi)* np.cos(4 * np.pi* x) * np.cos(4 * c * np.pi * t)
+    return  u_x
+
 
 
 def r(x, a, c):
@@ -244,11 +292,11 @@ def r(x, a, c):
     
 if __name__ == "__main__":
     
-    N_low = 500
+    N_low = 100
     layers = [2, N_low, N_low, N_low, N_low, N_low, 1]
-    N_low=200
-    layer_sizes_nl = [3, N_low, N_low, N_low, 1]
-    layer_sizes_l = [1, 1]
+    N_low=100
+    layer_sizes_nl = [3,N_low, N_low, N_low, N_low, N_low, 1]
+    layer_sizes_l = [1,20, 1]
     
     a = 0.5
     c = 2
@@ -256,33 +304,30 @@ if __name__ == "__main__":
     batch_size_s = 300
     epochs = 100000
     epochsA2 = 100000
-    lr = optimizers.exponential_decay(5e-4, decay_steps=2000, decay_rate=0.99)
-    lrA = optimizers.exponential_decay(1e-4, decay_steps=2000, decay_rate=0.99)
-    ics_weight = 1.
-    res_weight = 10.0
-    ut_weight = 1.
-
+    lr = optimizers.exponential_decay(1e-3, decay_steps=2000, decay_rate=0.99)
+    lrA = optimizers.exponential_decay(1e-4, decay_steps=2000, decay_rate=0.95)
+    ics_weight = 20.0
+    res_weight = 1.0
+    ut_weight = 1
 
     ymin_A = 0.0
-    ymin_B = 1.0
+    ymin_B = 1
 
     
-    steps_to_train = np.arange(3)
+    steps_to_train = np.arange(10)
     reload = [False, False, False]
     
-    reloadA = True
+    reloadA = False
 
     
     l = 0
-    
 
     # ====================================
     # saving settings
     # ====================================
-    #path_to_dir = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/wave_test"
-    path_to_dir = "/people/beec613/pnnl_research/code/damiens_code/wave_test"
     save_str = "MF_loop"
-    results_dir_A = path_to_dir + "/results_A/"+save_str+"/"
+    path = "C:/Users/beec613/Desktop/pnnl_research/code/amandas_code/onet2"
+    results_dir_A = path + "/results_A/"+save_str
     if not os.path.exists(results_dir_A):
         os.makedirs(results_dir_A)
 
@@ -334,7 +379,8 @@ if __name__ == "__main__":
     c = 0 
     key = random.PRNGKey(1234)
     batch_size_res = int(batch_size/2)    
-    batch_size_pts = batch_size - batch_size_res
+    batch_size_pts = batch_size - batch_size_res                            
+                                     
     
     key, subkey = random.split(key)
     res_pts = dom_coords[0:1,:] + (dom_coords[1:2,:]-dom_coords[0:1,:])*random.uniform(key, shape=[20000, 2])
@@ -344,7 +390,7 @@ if __name__ == "__main__":
     res_sampler = DataGenerator_MF(2, dom_coords, res_pts, err_norm, lambda x: r(x, a, c), batch_size_pts, batch_size_res)
   
     for step in steps_to_train:
-        results_dir = path_to_dir + "/results_" + str(step) + "/"+save_str+"/"
+        results_dir = path + "/results_" + str(step) + "/"+save_str
         if not os.path.exists(results_dir):
             os.makedirs(results_dir)
         
