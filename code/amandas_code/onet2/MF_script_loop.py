@@ -326,7 +326,8 @@ if __name__ == "__main__":
     # saving settings
     # ====================================
     save_str = "MF_loop"
-    path = "C:/Users/beec613/Desktop/pnnl_research/code/amandas_code/onet2"
+    # path = "C:/Users/beec613/Desktop/pnnl_research/code/amandas_code/onet2"
+    path = "/people/beec613/pnnl_research/code/amandas_code/onet2"
     results_dir_A = path + "/results_A/"+save_str
     if not os.path.exists(results_dir_A):
         os.makedirs(results_dir_A)
