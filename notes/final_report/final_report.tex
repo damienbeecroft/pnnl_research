@@ -112,54 +112,10 @@ During the course of this internship, we developed two main ways to implement th
 \label{fig:batch1}
 \end{figure}
 
-In the second implementation of the MFFBPINN, distinct batches of residual points are created for each intersection of the subdomains on the highest level. These batch points are then fed down to the neural networks on the lower levels to get the low fidelity approximations. For instance, suppose that we have 
+In the second implementation of the MFFBPINN, distinct batches of residual points are created for each intersection of the subdomains on the highest level. These batch points are then fed down to the neural networks on the lower levels to get the low fidelity approximations. This method is illustrated in Figure
 
-\bibliographystyle{plain} % We choose the "plain" reference style
-\bibliography{refs} % Entries are in the mybib.bib file
+\bibliographystyle{plain}
+\bibliography{refs}
 \end{document}
 
 
-%The most basic algorithm for this code is given below.
-%
-%\begin{algorithm}
-%\caption{Multifidelity Finite Basis Physics Informed Neural Network}\label{alg:cap}
-%\begin{algorithmic}
-%\Require $\Omega$, \verb|batch_generator|
-%\State $nn_{sf} \gets$ \verb|train_single_fidelity_network()|
-%\State $X \gets x$
-%\State $N \gets n$
-%\While{$N \neq 0$}
-%\If{$N$ is even}
-%    \State $X \gets X \times X$
-%    \State $N \gets \frac{N}{2}$  \Comment{This is a comment}
-%\ElsIf{$N$ is odd}
-%    \State $y \gets y \times X$
-%    \State $N \gets N - 1$
-%\EndIf
-%\EndWhile
-%\end{algorithmic}
-%\end{algorithm}
-
-
-%\section*{Summary of Papers}
-%\begin{itemize}
-%\item PINNs: A PINN penalizes the solution if it does not satisfy the physical constraints of the differential equation. PINNs train on a single initial condition.
-%\item Multifidelity PINNs: These are PINNs that are capable of learning from a combination of low and high fidelity data. To this end, MPINNs learn correlations between the different data fidelitites and use this correlation to overcome sparse high fidelity data.
-%\item Multifidelity DeepONets: Multifidelity DeepONets use multifidelity data just like MPINNs. However, DeepONets learn the differential equation for all initial conditions.
-%\item Multifidelity Continual Learning: This method attempts to increase the domain of accuracy of a neural network. Suppose we have a neural net, $\mathcal{NN}_{i-1}$, that can solve a PDE on $\Omega_{i-1}$. $\mathcal{NN}_{i-1}$ is used as a low fidelity approximation train a neural net $\mathcal{NN}_i$ to solve the PDE on a larger set: $\Omega_i$.
-%\item Fixed Points in PINNs: PINNs have a tendency to converge to fixed points that satisfy the physical constraints of the PDE, but not the initial or boundary conditions. This problem is less prevalent when one trains the PINN on a shorter time interval.
-%\item MDD for PINNs: This method iteratively partitions the domain of the PDE into a sequence of overlapping sub-domains and trains PINNs on each sub-domains. The PINN trained on the previous level is used as a low-fidelity approximation for the PINNs on the lower levels.
-%\item Point Selection for PINNs: This paper introduces a probability distribution for sampling new points to compute the PINN residual and improve training.
-%This paper introduces a probability distribution using the residual that is used to find the best locations to sample the residual and train the PINN.
-%\item How and Why PINNs Fail to Train: This paper linearizes the neural network about the initial parametrization, $\theta^0$, and performs analysis on the path of the continuous gradient descent of the neural network using this linearization. A variety of very strong assumptions are needed for this analysis to be useful.
-%\item Respecting Causality: This paper introduces an adjustment to the PINN loss function that encourages the PINN to solve the differential equation at earlier time steps before the later ones. This helps improve performance.
-%\end{itemize}
-%\section*{Hard Bias in PINNs to Satisfy Structure of Dynamical Systems}
-%Within the PINNs 
-%Physics informed neural networks struggle to capture When analyzing a dynamical system, there are a variety of features that one uses to characterize the solution behavior. These features include
-%\begin{itemize}
-%	\item Fixed points: \begin{itemize}
-%	\item 
-%	\end{itemize}
-%\end{itemize}
-%\pagebreak
