@@ -106,6 +106,11 @@ class MF_class_EWC:
         w = lax.cond(condition, lambda u: (1 + np.cos(math.pi*(u-mu)/sigma))**2, lambda _: 0., u)
         return w
     
+    
+    def accumulator(self,carry,x):
+        sum = carry + x
+        return sum, sum
+
     # Changed this function
     def w_jl(self, j, l, u):
         # mu = self.Tmax*(j-1)/(l-1) # j starts at zero
@@ -163,7 +168,6 @@ class MF_class_EWC:
         
         return s1, s2
 
-
     # Define ODE residual
     def residual_net(self, params, u):
 
@@ -213,11 +217,17 @@ class MF_class_EWC:
         # Compute forward pass
         res1_pred, res2_pred = vmap(self.residual_net, (None, 0))(params, u)
         # Compute loss
+        res1_sqr = (res1_pred)**2
+        res2_sqr = (res2_pred)**2
+        _, causal_weights1 = lax.scan(self.accumulator,np.zeros(1),res2_sqr)
+        _, causal_weights2 = lax.scan(self.accumulator,np.zeros(1),res1_sqr)
+        causal_weights1 = np.exp(-0.1*causal_weights1)
+        causal_weights2 = np.exp(-0.1*causal_weights2)
 
-        loss_res1 = np.mean((res1_pred)**2)
-        loss_res2 = np.mean((res2_pred)**2)
+        loss_res1 = np.mean(res1_sqr*causal_weights1)
+        loss_res2 = np.mean(res2_sqr*causal_weights2)
         loss_res = loss_res1 + loss_res2
-        return loss_res   
+        return loss_res
 
     # Define total loss
     def loss(self, params, ic_batch, res_batch, val_batch):

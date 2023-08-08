@@ -90,17 +90,16 @@ if __name__ == "__main__":
     batch_size = 100
     batch_size_res = int(batch_size/2)
 
-    steps_to_train = np.arange(5)
+    steps_to_train = np.arange(4)
     # reload = [True, True, True, False, False, False]
-    reload = [False, False, False, False, False, False]
+    reload = [False, False, False, False]
 
-    reloadA = True
+    reloadA = False
 
     k = 2
     c = 0 
 
-    # epochs = 10000
-    epochs = 1000
+    epochs = 10000
     epochsA2 = 100000
     lr = optimizers.exponential_decay(1e-3, decay_steps=2000, decay_rate=0.99)
     # N_low = 200 
@@ -110,10 +109,17 @@ if __name__ == "__main__":
     layers_A = [1, N_low, N_low, N_low, N_low, N_low, 2]
     layers_sizes_nl = [3, N_nl, N_nl, N_nl, 2]
     layers_sizes_l = [2,  4, 2]
-    min_A = 0
-    min_B = 10
+    # min_A = 0
+    # min_B = 10
+    min_A = int(sys.argv[1])
+    min_B = int(sys.argv[2])
+    # print(min_A + "\n")
+    print("min_A: %i \n" % min_A)
+    print("min_B: %i \n" % min_B)
+
     Tmax = min_B
     delta = 1.9
+    
     path = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/pend_causal_dd"
     # path = "/people/beec613/pnnl_research/code/damiens_code/good_code/pend_causal_dd"
     data_range = np.arange(0,int(2*min_B))
@@ -125,7 +131,8 @@ if __name__ == "__main__":
     # saving settings
     # ====================================
     save_str = "MF_loop"
-    results_dir_A = path + "/out_results/pend_" + str(int(min_A)) + "_" + str(int(min_B)) + "/results_A/"+save_str
+    results_dir_A = path + "/out_results/pend_" + str(min_A) + "_" + str(min_B) + "/results_A/"+save_str
+    print(results_dir_A)
     if not os.path.exists(results_dir_A):
         os.makedirs(results_dir_A)
         
@@ -184,12 +191,11 @@ if __name__ == "__main__":
     batch_size_res = int(batch_size/2)    
     batch_size_pts = batch_size - batch_size_res                            
                                      
-    
     key, subkey = random.split(key)
 
     res_pts = coords[0] + (coords[1]-coords[0])*random.uniform(key, shape=[20000,1])
     res_val = model_A.predict_res(params_A, res_pts)
-    err = res_val**k/np.mean( res_val**k) + c
+    err = res_val**k/np.mean(res_val**k) + c
     err_norm = err/np.sum(err)                        
     res_dataset = DataGenerator_res2(coords, res_pts, err_norm, batch_size_res, batch_size)
     res_data = iter(res_dataset)
@@ -217,9 +223,6 @@ if __name__ == "__main__":
         
         else:     
             model.train(ic_dataset, res_dataset, data_dataset, nIter=epochsA2)
-        
-
-
 
             print('\n ... Level ' + str(step) + ' Training done ...')
             scipy.io.savemat(results_dir +"losses.mat", 
@@ -243,13 +246,6 @@ if __name__ == "__main__":
         err_norm = err/np.sum(err)                        
       
         res_dataset = DataGenerator_res2(coords, res_pts, err_norm, batch_size_res, batch_size)
-
-      
-            
-
-
-
-
     
 # =============================================
 # =============================================
