@@ -90,17 +90,17 @@ if __name__ == "__main__":
     batch_size = 100
     batch_size_res = int(batch_size/2)
 
-    steps_to_train = np.arange(4)
+    steps_to_train = np.arange(1)
     # reload = [True, True, True, False, False, False]
-    reload = [False, False, False, False]
+    reload = [False]
 
-    reloadA = False
+    reloadA = True
 
     k = 2
     c = 0 
 
     epochs = 10000
-    epochsA2 = 100000
+    epochsA2 = 20000
     lr = optimizers.exponential_decay(1e-3, decay_steps=2000, decay_rate=0.99)
     # N_low = 200 
     N_low = 100
@@ -114,14 +114,14 @@ if __name__ == "__main__":
     min_A = int(sys.argv[1])
     min_B = int(sys.argv[2])
     # print(min_A + "\n")
-    print("min_A: %i \n" % min_A)
-    print("min_B: %i \n" % min_B)
+    #print("min_A: %i \n" % min_A)
+    #print("min_B: %i \n" % min_B)
 
     Tmax = min_B
     delta = 1.9
     
-    path = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/pend_causal_dd"
-    # path = "/people/beec613/pnnl_research/code/damiens_code/good_code/pend_causal_dd"
+    #path = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/pend_causal_dd"
+    path = "/people/beec613/pnnl_research/code/damiens_code/good_code/pend_causal_dd"
     data_range = np.arange(0,int(2*min_B))
     d_vx = scipy.io.loadmat(path + "/data.mat")
     t_data_full, s_data_full = (d_vx["u"].astype(np.float32), 
@@ -132,7 +132,7 @@ if __name__ == "__main__":
     # ====================================
     save_str = "MF_loop"
     results_dir_A = path + "/out_results/pend_" + str(min_A) + "_" + str(min_B) + "/results_A/"+save_str
-    print(results_dir_A)
+    #print(results_dir_A)
     if not os.path.exists(results_dir_A):
         os.makedirs(results_dir_A)
         
