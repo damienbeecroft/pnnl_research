@@ -26,12 +26,12 @@ import numpy as onp
 
 if __name__ == "__main__":
     # Modified
-    
+    Tmax = 10
     b = 0.05
     g = 9.81
     l = 1
     m = 1
-    Ntrain = 5
+    Ntrain = 1
     
     errors = onp.zeros([Ntrain+1])
     
@@ -50,8 +50,7 @@ if __name__ == "__main__":
     y = np.linspace(0, 50, 2000)
     s = odeint(system, u.flatten(), y)
     
-    
-    outdir = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/Pendulum_DD/Pendulum_DD/out_results/pend_0.0_20.0/"
+    outdir = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/pend_causal_dd/out_results/pend_0_10/"
     suff = "MF_loop"
 
     net_data_dirA = outdir + "results_A/" + suff + "/"
@@ -118,7 +117,7 @@ if __name__ == "__main__":
     plt.xlim(drange)
     plt.legend(fontsize=12, ncol=1, loc='center left', bbox_to_anchor=(1, 0.5))
     plt.ylim([-1.5, 1.5])
-    plt.xlim([-0, 20])
+    plt.xlim([-0, Tmax])
     plt.tick_params(labelsize=16)
     plt.tight_layout()
     plt.savefig(outdir + suff +  '_s1.png', format='png')
@@ -132,7 +131,7 @@ if __name__ == "__main__":
     plt.tick_params(labelsize=16)
     plt.tight_layout()
     plt.ylim([-3.5, 3.5])
-    plt.xlim([-0, 20])
+    plt.xlim([-0, Tmax])
 
 
     plt.savefig(outdir + suff  + '_s2.png', format='png')

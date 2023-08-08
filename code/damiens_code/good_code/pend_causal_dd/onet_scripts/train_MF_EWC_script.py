@@ -90,17 +90,17 @@ if __name__ == "__main__":
     batch_size = 100
     batch_size_res = int(batch_size/2)
 
-    steps_to_train = np.arange(1)
+    steps_to_train = np.arange(3)
     # reload = [True, True, True, False, False, False]
-    reload = [False]
+    reload = [False, False, False]
 
-    reloadA = True
+    reloadA = False
 
     k = 2
     c = 0 
 
     epochs = 10000
-    epochsA2 = 20000
+    epochsA2 = 100000
     lr = optimizers.exponential_decay(1e-3, decay_steps=2000, decay_rate=0.99)
     # N_low = 200 
     N_low = 100

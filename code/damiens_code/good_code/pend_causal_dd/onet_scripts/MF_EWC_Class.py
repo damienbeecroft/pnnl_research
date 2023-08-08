@@ -221,8 +221,8 @@ class MF_class_EWC:
         res2_sqr = (res2_pred)**2
         _, causal_weights1 = lax.scan(self.accumulator,np.zeros(1),res2_sqr)
         _, causal_weights2 = lax.scan(self.accumulator,np.zeros(1),res1_sqr)
-        causal_weights1 = np.exp(-0.0001*causal_weights1)
-        causal_weights2 = np.exp(-0.0001*causal_weights2)
+        causal_weights1 = np.exp(-0.00001*causal_weights1)
+        causal_weights2 = np.exp(-0.00001*causal_weights2)
 
         loss_res1 = np.mean(res1_sqr*causal_weights1)
         loss_res2 = np.mean(res2_sqr*causal_weights2)
