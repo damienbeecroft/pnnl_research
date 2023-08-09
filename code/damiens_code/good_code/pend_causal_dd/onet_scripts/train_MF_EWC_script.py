@@ -83,15 +83,15 @@ def save_dataDNN(model, params,  save_results_to, save_prfx):
 
 if __name__ == "__main__":
     ics_weight = 1.0
-    res_weight = 1.0 
+    res_weight = 5.0 
     data_weight  = 0.0
     pen_weight  = 0.000001
 
     batch_size = 100
-    batch_size_res = int(batch_size/2)
+    batch_size_res = 0
+    # batch_size_res = int(batch_size/2)
 
     steps_to_train = np.arange(3)
-    # reload = [True, True, True, False, False, False]
     reload = [False, False, False]
 
     reloadA = False
@@ -99,16 +99,19 @@ if __name__ == "__main__":
     k = 2
     c = 0 
 
-    epochs = 10000
+    epochs = 100000
     epochsA2 = 100000
     lr = optimizers.exponential_decay(1e-3, decay_steps=2000, decay_rate=0.99)
-    # N_low = 200 
-    N_low = 100
-    N_nl = 80
+    N_low = 200 
+    # N_low = 100
+    # N_nl = 80
+    N_nl = 100
     # layers_A = [1, N_low, N_low, N_low, 2]
     layers_A = [1, N_low, N_low, N_low, N_low, N_low, 2]
     layers_sizes_nl = [3, N_nl, N_nl, N_nl, 2]
-    layers_sizes_l = [2,  4, 2]
+    layers_sizes_l = [2, 2]
+    # layers_sizes_l = [2,  4, 2]
+
     # min_A = 0
     # min_B = 10
     min_A = int(sys.argv[1])
@@ -120,7 +123,7 @@ if __name__ == "__main__":
     Tmax = min_B
     delta = 1.9
     
-    #path = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/pend_causal_dd"
+    # path = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/pend_causal_dd"
     path = "/people/beec613/pnnl_research/code/damiens_code/good_code/pend_causal_dd"
     data_range = np.arange(0,int(2*min_B))
     d_vx = scipy.io.loadmat(path + "/data.mat")
@@ -187,16 +190,14 @@ if __name__ == "__main__":
 
     k = 2
     c = 0 
-    key = random.PRNGKey(1234)
-    batch_size_res = int(batch_size/2)    
-    batch_size_pts = batch_size - batch_size_res                            
+    key = random.PRNGKey(1234)                        
                                      
     key, subkey = random.split(key)
 
     res_pts = coords[0] + (coords[1]-coords[0])*random.uniform(key, shape=[20000,1])
     res_val = model_A.predict_res(params_A, res_pts)
     err = res_val**k/np.mean(res_val**k) + c
-    err_norm = err/np.sum(err)                        
+    err_norm = err/np.sum(err)
     res_dataset = DataGenerator_res2(coords, res_pts, err_norm, batch_size_res, batch_size)
     res_data = iter(res_dataset)
     res_batch = next(res_data)
@@ -242,8 +243,8 @@ if __name__ == "__main__":
         key, subkey = random.split(key)
         res_pts = coords[0] + (coords[1]-coords[0])*random.uniform(key, shape=[20000,1])
         res_val = model.predict_res(params, res_pts)
-        err = res_val**k/np.mean( res_val**k) + c
-        err_norm = err/np.sum(err)                        
+        err = res_val**k/np.mean(res_val**k) + c
+        err_norm = err/np.sum(err)
       
         res_dataset = DataGenerator_res2(coords, res_pts, err_norm, batch_size_res, batch_size)
     

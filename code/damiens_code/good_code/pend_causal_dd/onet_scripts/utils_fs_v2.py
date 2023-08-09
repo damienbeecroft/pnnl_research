@@ -112,7 +112,7 @@ class DataGenerator_res2(data.Dataset):
         inputs, outputs = self.__data_generation(subkey)
         return inputs, outputs
 
-    # @partial(jit, static_argnums=(0,))
+    @partial(jit, static_argnums=(0,))
     def __data_generation(self, key):
         'Generates data containing batch_size samples'
         random_batch_size = self.batch_size-self.batch_size_res
@@ -236,8 +236,9 @@ def nonlinear_DNN(branch_layers, activation=swish):
 def linear_DNN(branch_layers):
 
     def xavier_init_j(key, d_in, d_out):
-        glorot_stddev = 1. / np.sqrt((d_in + d_out) / 2.)
-        W = glorot_stddev * random.normal(key, (d_in, d_out))
+        # glorot_stddev = 1. / np.sqrt((d_in + d_out) / 2.)
+        # W = glorot_stddev * random.normal(key, (d_in, d_out))
+        W = np.identity(d_in)
         b = np.zeros(d_out)
         return W, b
     def init(rng_key1):

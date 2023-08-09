@@ -226,6 +226,8 @@ class MF_class_EWC:
 
         loss_res1 = np.mean(res1_sqr*causal_weights1)
         loss_res2 = np.mean(res2_sqr*causal_weights2)
+        # loss_res1 = np.mean(res1_sqr)
+        # loss_res2 = np.mean(res2_sqr)
         loss_res = loss_res1 + loss_res2
         return loss_res
 

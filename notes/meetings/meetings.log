@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.6.20)  27 JUL 2023 11:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.6.20)  9 AUG 2023 09:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -533,8 +533,8 @@ Package rerunfilecheck Info: File `meetings.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 10664 strings out of 476331
- 167005 string characters out of 5786821
+ 10665 strings out of 476331
+ 167016 string characters out of 5786821
  1863660 words of memory out of 5000000
  30925 multiletter control sequences out of 15000+600000
  520653 words of font info for 65 fonts, out of 8000000 for 9000
@@ -554,9 +554,9 @@ pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
 /amsfonts/cm/cmsy10.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/t
 ype1/public/amsfonts/cm/cmsy7.pfb><C:/Users/beec613/AppData/Local/Programs/MiKT
 eX/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on meetings.pdf (9 pages, 164134 bytes).
+Output written on meetings.pdf (9 pages, 165500 bytes).
 PDF statistics:
- 139 PDF objects out of 1000 (max. 8388607)
- 33 named destinations out of 1000 (max. 500000)
+ 140 PDF objects out of 1000 (max. 8388607)
+ 34 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
