@@ -257,17 +257,17 @@ if __name__ == "__main__":
     res_weight = 1.0
     ut_weight = 1
 
-    ymin_A = 0.
-    ymin_B = 1.
-    # ymin_A = float(sys.argv[1])
-    # ymin_B = float(sys.argv[2])
+    # ymin_A = 0.
+    # ymin_B = 1.
+    ymin_A = float(sys.argv[1])
+    ymin_B = float(sys.argv[2])
     # print("ymin_A: %.3f" % ymin_A)
     #==== parameters that I am adding =====
     delta = 1.9
     #======================================
 
-    steps_to_train = np.arange(2)
-    reload = [False, False]
+    steps_to_train = np.arange(3)
+    reload = [False, False, False]
     
     reloadA = False
 
@@ -278,8 +278,8 @@ if __name__ == "__main__":
     # ====================================
     # saving settings
     # ====================================
-    # path_to_wave = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/wave_dd/out_results/wave_" + str(int(ymin_A)) + "_" + str(int(ymin_B))
-    path_to_wave = "/people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/out_results/wave_" + str(int(ymin_A)) + "_" + str(int(ymin_B))
+    # path_to_wave = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/wave_dd/out_results/wave_" + str(int(ymin_A)) + "_" + str(ymin_B)
+    path_to_wave = "/people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/out_results/wave_" + str(int(ymin_A)) + "_" + str(ymin_B)
     save_str = "MF_loop"
     results_dir_A = path_to_wave + "/results_A/" + save_str
     if not os.path.exists(results_dir_A):

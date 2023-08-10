@@ -106,7 +106,6 @@ class MF_class_EWC:
         w = lax.cond(condition, lambda u: (1 + np.cos(math.pi*(u-mu)/sigma))**2, lambda _: 0., u)
         return w
     
-    
     def accumulator(self,carry,x):
         sum = carry + x
         return sum, sum
@@ -219,8 +218,8 @@ class MF_class_EWC:
         # Compute loss
         res1_sqr = (res1_pred)**2
         res2_sqr = (res2_pred)**2
-        _, causal_weights1 = lax.scan(self.accumulator,np.zeros(1),res2_sqr)
-        _, causal_weights2 = lax.scan(self.accumulator,np.zeros(1),res1_sqr)
+        _, causal_weights1 = lax.scan(self.accumulator,np.zeros(1),res1_sqr)
+        _, causal_weights2 = lax.scan(self.accumulator,np.zeros(1),res2_sqr)
         causal_weights1 = np.exp(-0.00001*causal_weights1)
         causal_weights2 = np.exp(-0.00001*causal_weights2)
 

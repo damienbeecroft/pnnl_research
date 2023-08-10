@@ -463,21 +463,6 @@ class MF_DNN_class:
         w = lax.cond(condition, lambda u: (1 + np.cos(math.pi*(u-mu)/sigma))**2, lambda _: 0., u)
         return w
 
-    # def w_jl(self,j, l, t, x):        
-    #     L = np.sqrt(l)
-    #     J = np.array([j % L, j // L])
-    #     mu = self.dom_lens*J/(L-1)
-    #     sigma = self.dom_lens*(self.delta/2.0)/(L-1)
-    #     t_conditions = (t < (mu[0] + sigma[0])) & (t > (mu[0] - sigma[0]))
-    #     x_conditions = (x < (mu[1] + sigma[1])) & (x > (mu[1] - sigma[1]))
-    #     conditions = x_conditions & t_conditions
-    #     # conditions = conditions.reshape(-1) 
-    #     # t = t.reshape(-1)
-    #     # x = x.reshape(-1)
-    #     t_w = vmap(self.weight_condition,(0,0,None,None))(conditions,t,mu[0],sigma[0])
-    #     x_w = vmap(self.weight_condition,(0,0,None,None))(conditions,x,mu[1],sigma[1])
-    #     weight = t_w*x_w
-    #     return weight
 
     def w_jl(self, j, l, u):
         # mu = self.Tmax*(j-1)/(l-1) # j starts at zero
