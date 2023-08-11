@@ -51,7 +51,7 @@ if __name__ == "__main__":
     y = np.linspace(0, 50, 2000)
     s = odeint(system, u.flatten(), y)
 
-    Tmaxes = [10,12,14,16,18]
+    Tmaxes = [10,12,14,16,18,20,22,24,26,28,30]
     for Tmax in Tmaxes:
       # Tmax = 20
       outdir = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/" + pend_dir + "/out_results/pend_0_" + str(Tmax) + "/"

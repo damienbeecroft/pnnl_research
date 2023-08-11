@@ -238,12 +238,23 @@ def r(x, a, c):
     
 if __name__ == "__main__":
 
+    ymin_A = float(sys.argv[1])
+    ymin_B = float(sys.argv[2])
+    init_lr = float(sys.argv[3]) # try 1e-2, 1e-3, 1e-4 
+    decay = float(sys.argv[4]) # with decay rates 0.95 and 0.99
+    N_nl = int(sys.argv[5]) # try 60 and 80
+
+    # ymin_A = 0.
+    # ymin_B = 1.
+    # init_lr = 1e-3
+    # decay = 0.99
+    # N_nl = 80
+
     N_low = 100
     layers = [2, N_low, N_low, N_low, N_low, N_low, 1]
-    N_low=120
-    layer_sizes_nl = [3,N_low, N_low, N_low, N_low, N_low, 1]
-    # layer_sizes_l = [1,20, 1]
-    layer_sizes_l = [1,1]
+    layer_sizes_nl = [3,N_nl, N_nl, N_nl, N_nl, 1]
+    layer_sizes_l = [1, 20, 1]
+    # layer_sizes_l = [1,1]
     
     a = 0.5
     c = 2
@@ -251,17 +262,13 @@ if __name__ == "__main__":
     batch_size_s = 300
     epochs = 100000
     epochsA2 = 100000
-    lr = optimizers.exponential_decay(1e-3, decay_steps=2000, decay_rate=0.99)
+
+    lr = optimizers.exponential_decay(init_lr, decay_steps=2000, decay_rate=decay) 
     lrA = optimizers.exponential_decay(1e-4, decay_steps=2000, decay_rate=0.95)
     ics_weight = 20.0
     res_weight = 1.0
     ut_weight = 1
 
-    # ymin_A = 0.
-    # ymin_B = 1.
-    ymin_A = float(sys.argv[1])
-    ymin_B = float(sys.argv[2])
-    # print("ymin_A: %.3f" % ymin_A)
     #==== parameters that I am adding =====
     delta = 1.9
     #======================================
@@ -278,10 +285,10 @@ if __name__ == "__main__":
     # ====================================
     # saving settings
     # ====================================
-    # path_to_wave = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/wave_dd/out_results/wave_" + str(int(ymin_A)) + "_" + str(ymin_B)
-    path_to_wave = "/people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/out_results/wave_" + str(int(ymin_A)) + "_" + str(ymin_B)
+    # path_to_wave = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/wave_dd/out_results/wave_" + str(int(ymin_A)) + "_" + str(ymin_B) + "_" + str(init_lr) + "_" + str(decay) + "_" + str(N_nl)
+    path_to_wave = "/people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/out_results/wave_" + str(int(ymin_A)) + "_" + str(ymin_B) + "_" + str(init_lr) + "_" + str(decay) + "_" + str(N_nl)
     save_str = "MF_loop"
-    results_dir_A = path_to_wave + "/results_A/" + save_str
+    results_dir_A = path_to_wave + "/results_A/" + save_str + "/"
     if not os.path.exists(results_dir_A):
         os.makedirs(results_dir_A)
 

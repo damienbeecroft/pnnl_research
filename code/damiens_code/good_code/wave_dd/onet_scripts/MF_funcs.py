@@ -512,6 +512,9 @@ class MF_DNN_class:
             # u_l = u_l[:, 0]
             w = self.w_jl(idx, self.Ndomains[-1], t)
             weight_sum += w
+            # import matplotlib.pyplot as plt
+            # sorting = np.argsort(t[0].val)
+            # plt.plot(t[0].val[sorting],w[0].val[sorting])
             pred += w*(u_nl + u_l) 
 
             idx += 1
@@ -605,7 +608,7 @@ class MF_DNN_class:
         return loss_res   
     
     # Define total loss
-    @partial(jit, static_argnums=(0,))
+    # @partial(jit, static_argnums=(0,))
     def loss(self, params,  ics_batch, bc1_batch, bc2_batch, res_batch):
         loss_ics = self.loss_ics(params, ics_batch)
         loss_bc1 = self.loss_bcs(params, bc1_batch)
@@ -621,7 +624,7 @@ class MF_DNN_class:
 
     
         # Define a compiled update step
-    @partial(jit, static_argnums=(0,))
+    # @partial(jit, static_argnums=(0,))
     def step(self, i, opt_state, ics_batch, bc1_batch, bc2_batch, res_batch):
         params = self.get_params(opt_state)
 
