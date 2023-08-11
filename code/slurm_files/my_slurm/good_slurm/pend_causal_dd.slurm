@@ -27,3 +27,9 @@ python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_causal_
 python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_causal_dd/onet_scripts/train_MF_EWC_script.py 0 14
 python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_causal_dd/onet_scripts/train_MF_EWC_script.py 0 16
 python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_causal_dd/onet_scripts/train_MF_EWC_script.py 0 18
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_causal_dd/onet_scripts/train_MF_EWC_script.py 0 20
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_causal_dd/onet_scripts/train_MF_EWC_script.py 0 22
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_causal_dd/onet_scripts/train_MF_EWC_script.py 0 24
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_causal_dd/onet_scripts/train_MF_EWC_script.py 0 26
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_causal_dd/onet_scripts/train_MF_EWC_script.py 0 28 
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_causal_dd/onet_scripts/train_MF_EWC_script.py 0 30

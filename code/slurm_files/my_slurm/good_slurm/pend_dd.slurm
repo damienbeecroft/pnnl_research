@@ -22,8 +22,9 @@ source /share/apps/python/miniconda3.9/etc/profile.d/conda.sh
 conda activate jax-gpu 
 # :os.environ["XLA_PYTHON_CLIENT_PREALLOCATE"]="false"
 
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_dd/onet_scripts/train_MF_EWC_script.py 0 10
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_dd/onet_scripts/train_MF_EWC_script.py 0 12
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_dd/onet_scripts/train_MF_EWC_script.py 0 14
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_dd/onet_scripts/train_MF_EWC_script.py 0 16
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_dd/onet_scripts/train_MF_EWC_script.py 0 18
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_dd/onet_scripts/train_MF_EWC_script.py 0 20
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_dd/onet_scripts/train_MF_EWC_script.py 0 22
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_dd/onet_scripts/train_MF_EWC_script.py 0 24
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_dd/onet_scripts/train_MF_EWC_script.py 0 26
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_dd/onet_scripts/train_MF_EWC_script.py 0 28
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/pend_dd/onet_scripts/train_MF_EWC_script.py 0 30

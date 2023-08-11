@@ -22,4 +22,8 @@ source /share/apps/python/miniconda3.9/etc/profile.d/conda.sh
 conda activate jax-gpu 
 # :os.environ["XLA_PYTHON_CLIENT_PREALLOCATE"]="false"
 
+#python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 0.6 
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 0.8
 python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1.2
+#python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1.4
