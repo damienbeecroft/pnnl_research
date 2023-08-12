@@ -15,7 +15,6 @@ Created on Mon Aug 26 16:24:15 2019
 
 
 import jax.numpy as np
-import matplotlib
 import math
 import matplotlib.pyplot as plt
 import scipy.io
