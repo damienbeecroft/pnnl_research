@@ -608,7 +608,7 @@ class MF_DNN_class:
         return loss_res   
     
     # Define total loss
-    # @partial(jit, static_argnums=(0,))
+    @partial(jit, static_argnums=(0,))
     def loss(self, params,  ics_batch, bc1_batch, bc2_batch, res_batch):
         loss_ics = self.loss_ics(params, ics_batch)
         loss_bc1 = self.loss_bcs(params, bc1_batch)
@@ -624,7 +624,7 @@ class MF_DNN_class:
 
     
         # Define a compiled update step
-    # @partial(jit, static_argnums=(0,))
+    @partial(jit, static_argnums=(0,))
     def step(self, i, opt_state, ics_batch, bc1_batch, bc2_batch, res_batch):
         params = self.get_params(opt_state)
 
