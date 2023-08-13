@@ -39,7 +39,7 @@ if __name__ == "__main__":
         for learning_rate in learning_rates:
             for decay_rate in decay_rates:
                 for width in widths:
-                    path = 'C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/wave_dd/saved_results2/run2/wave_0_' + str(Tmax) + '_' + str(learning_rate) + '_' + str(decay_rate) + '_' + str(width) + '/'
+                    path = 'C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/wave_dd/out_results/wave_0_' + str(Tmax) + '_' + str(learning_rate) + '_' + str(decay_rate) + '_' + str(width) + '/'
                     # A
                     fig1, ax = plt.subplots()
 
