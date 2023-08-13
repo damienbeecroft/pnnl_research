@@ -252,7 +252,7 @@ if __name__ == "__main__":
 
     N_low = 100
     layers = [2, N_low, N_low, N_low, N_low, N_low, 1]
-    layer_sizes_nl = [3,N_nl, N_nl, N_nl, N_nl, 1]
+    layer_sizes_nl = [3,N_nl, N_nl, N_nl, 1]
     # layer_sizes_l = [1, 20, 1]
     layer_sizes_l = [1,1]
     

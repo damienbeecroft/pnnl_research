@@ -374,8 +374,9 @@ if __name__ == "__main__":
 
     N_low =200
     layers = [2, N_low, N_low, N_low, N_low, N_low, 1]
-    layer_sizes_nl = [3, N_nl, N_nl, N_nl, N_nl, 1]
-    layer_sizes_l = [1, 20, 1]
+    layer_sizes_nl = [3, N_nl, N_nl, N_nl, 1]
+    # layer_sizes_l = [1, 20, 1]
+    layer_sizes_l = [1, 1]
 
     batch_size_s = 100
     epochs = 100000
