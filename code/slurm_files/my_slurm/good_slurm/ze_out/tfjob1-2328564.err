@@ -1,0 +1,4 @@
+Now you should run one of the following depending on your shell
+source /share/apps/python/miniconda3.9/etc/profile.d/conda.sh
+source /share/apps/python/miniconda3.9/etc/profile.d/conda.csh
+slurmstepd: error: *** JOB 2328564 ON dl06 CANCELLED AT 2023-08-11T15:19:05 ***
