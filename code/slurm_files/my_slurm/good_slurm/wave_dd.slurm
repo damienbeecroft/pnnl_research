@@ -28,16 +28,16 @@ conda activate jax-gpu
 #python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1.2
 #python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1.4
 
-#python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.01 0.95 80
-#python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.001 0.95 80
-#python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.0001 0.95 80
-#python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.01 0.99 80
-#python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.001 0.99 80
-#python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.0001 0.99 80
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.01 0.95 60
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.001 0.95 60
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.0001 0.95 60
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.01 0.99 60
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.001 0.99 60
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.0001 0.99 60
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.01 0.95 40
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.001 0.95 40
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.0001 0.95 40
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.01 0.99 40
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.001 0.99 40
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.0001 0.99 40
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.01 0.95 30
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.001 0.95 30
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.0001 0.95 30
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.01 0.99 30
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.001 0.99 30
+python -u /people/beec613/pnnl_research/code/damiens_code/good_code/wave_dd/onet_scripts/MF_script_loop.py 0 1 0.0001 0.99 30
 
