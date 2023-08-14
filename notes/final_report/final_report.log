@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.6.20)  9 AUG 2023 14:02
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.6.20)  14 AUG 2023 16:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -539,10 +539,10 @@ Package hyperref Info: Link coloring OFF on input line 37.
  [1
 
 {C:/Users/beec613/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
-<imgs/me.jpg, id=14, 4095.3pt x 3083.52pt>
+<imgs/me.jpg, id=38, 4095.3pt x 3083.52pt>
 File: imgs/me.jpg Graphic file (type jpg)
 <use imgs/me.jpg>
-Package pdftex.def Info: imgs/me.jpg  used on input line 71.
+Package pdftex.def Info: imgs/me.jpg  used on input line 70.
 (pdftex.def)             Requested size: 422.77664pt x 318.29776pt.
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
@@ -564,30 +564,35 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 80.
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 [2]
-<imgs/domain_decomp.png, id=37, 974.89218pt x 519.44063pt>
-File: imgs/domain_decomp.png Graphic file (type png)
-<use imgs/domain_decomp.png>
-Package pdftex.def Info: imgs/domain_decomp.png  used on input line 101.
-(pdftex.def)             Requested size: 328.82707pt x 175.20457pt.
- [3]
-<imgs/batch1.png, id=47, 765.6103pt x 666.23906pt>
-File: imgs/batch1.png Graphic file (type png)
-<use imgs/batch1.png>
-Package pdftex.def Info: imgs/batch1.png  used on input line 110.
-(pdftex.def)             Requested size: 328.82707pt x 286.1519pt.
- (final_report.bbl [4 <./imgs/domain_decomp.png>]) [5 <./imgs/batch1.png>] (fin
-al_report.aux)
+<imgs/mfpinns2.png, id=61, 728.7225pt x 408.02437pt>
+File: imgs/mfpinns2.png Graphic file (type png)
+<use imgs/mfpinns2.png>
+Package pdftex.def Info: imgs/mfpinns2.png  used on input line 101.
+(pdftex.def)             Requested size: 328.82707pt x 184.11357pt.
+<imgs/domain_decomp2.png, id=67, 400.49625pt x 179.16937pt>
+File: imgs/domain_decomp2.png Graphic file (type png)
+<use imgs/domain_decomp2.png>
+Package pdftex.def Info: imgs/domain_decomp2.png  used on input line 110.
+(pdftex.def)             Requested size: 328.82707pt x 147.11394pt.
+ [3 <./imgs/mfpinns2.png>]
+<imgs/mffbpinn.png, id=82, 910.15031pt x 618.81187pt>
+File: imgs/mffbpinn.png Graphic file (type png)
+<use imgs/mffbpinn.png>
+Package pdftex.def Info: imgs/mffbpinn.png  used on input line 119.
+(pdftex.def)             Requested size: 375.80544pt x 255.50854pt.
+ [4 <./imgs/domain_decomp2.png>] [5 <./imgs/mffbpinn.png>] [6] (final_report.bb
+l [7]) [8] (final_report.aux)
 Package rerunfilecheck Info: File `final_report.out' has not changed.
-(rerunfilecheck)             Checksum: 9814C2D956916ADB9290ECA4E25C967A;103.
+(rerunfilecheck)             Checksum: DE00A45C7E9A267E40B9C5278E252577;1218.
  ) 
 Here is how much of TeX's memory you used:
- 11333 strings out of 476331
- 178711 string characters out of 5786821
+ 11370 strings out of 476331
+ 179295 string characters out of 5786821
  1858660 words of memory out of 5000000
- 31587 multiletter control sequences out of 15000+600000
+ 31611 multiletter control sequences out of 15000+600000
  518491 words of font info for 55 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,10n,76p,1321b,557s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,10n,76p,1986b,557s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
 m/cmbx12.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public
 /amsfonts/cm/cmmi12.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/t
@@ -598,10 +603,11 @@ grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/beec613/AppData
 3/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Use
 rs/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.
 pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
-/cm/cmti12.pfb>
-Output written on final_report.pdf (6 pages, 2749571 bytes).
+/cm/cmsy8.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/publi
+c/amsfonts/cm/cmti12.pfb>
+Output written on final_report.pdf (9 pages, 2832805 bytes).
 PDF statistics:
- 105 PDF objects out of 1000 (max. 8388607)
- 17 named destinations out of 1000 (max. 500000)
- 24 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 162 PDF objects out of 1000 (max. 8388607)
+ 29 named destinations out of 1000 (max. 500000)
+ 77 words of extra memory for PDF output out of 10000 (max. 10000000)
 

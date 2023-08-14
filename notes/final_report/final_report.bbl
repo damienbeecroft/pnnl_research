@@ -22,4 +22,9 @@ Franz~M. Rohrhofer, Stefan Posch, Clemens Gößnitzer, and Bernhard~C. Geiger.
 \newblock On the role of fixed points of dynamical systems in training
   physics-informed neural networks, 2023.
 
+\bibitem{causality}
+Sifan Wang, Shyam Sankaran, and Paris Perdikaris.
+\newblock Respecting causality is all you need for training physics-informed
+  neural networks, 2022.
+
 \end{thebibliography}

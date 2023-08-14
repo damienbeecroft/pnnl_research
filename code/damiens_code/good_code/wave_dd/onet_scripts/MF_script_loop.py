@@ -273,10 +273,14 @@ if __name__ == "__main__":
     delta = 1.9
     #======================================
 
-    steps_to_train = np.arange(3)
-    reload = [False, False, False]
+    # steps_to_train = np.arange(3)
+    # reload = [False, False, False]
     
-    reloadA = False
+    # reloadA = False
+    steps_to_train = np.arange(4)
+    reload = [True, True, True, False]
+    
+    reloadA = True
 
     
     l = 0

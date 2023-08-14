@@ -14,20 +14,36 @@
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces My internship at Pacific Northwest National Lab was virtual. My office was anywhere I lugged my computer. On some of my more adventurous days I ventured all the way down to my living room to use the television as a secondary monitor. On an even more auspicious occasion my girlfriend and soon to be doctor Caitlin Neher was kind enough to take my photo for this final report.}}{1}{figure.1}\protected@file@percent }
+\newlabel{fig:me}{{1}{1}{My internship at Pacific Northwest National Lab was virtual. My office was anywhere I lugged my computer. On some of my more adventurous days I ventured all the way down to my living room to use the television as a secondary monitor. On an even more auspicious occasion my girlfriend and soon to be doctor Caitlin Neher was kind enough to take my photo for this final report}{figure.1}{}}
 \citation{pinns}
 \citation{fixedpts}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{2}{section.1}\protected@file@percent }
 \newlabel{eq:dq}{{1}{2}{Introduction}{equation.1.1}{}}
+\newlabel{eq:loss}{{1}{2}{Introduction}{equation.1.2}{}}
+\citation{mfpinns}
+\citation{mfpinns}
 \citation{mfpinns}
 \citation{fbpinns}
+\citation{fbpinns}
+\citation{fbpinns}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Description of Project}{3}{section.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces This is a graphic of a multifidelity PINN from Meng at al. \cite  {mfpinns}. The multifidelity PINN takes in the low fidelity approximations ($u_{i-1}$) and the collocation points ($x$, $t$) and outputs a new set of approximations ($u_i$). This network can then be differentiated to see how well it satisfies the differential equation.}}{3}{figure.2}\protected@file@percent }
+\newlabel{fig:mfpinn}{{2}{3}{This is a graphic of a multifidelity PINN from Meng at al. \cite {mfpinns}. The multifidelity PINN takes in the low fidelity approximations ($u_{i-1}$) and the collocation points ($x$, $t$) and outputs a new set of approximations ($u_i$). This network can then be differentiated to see how well it satisfies the differential equation}{figure.2}{}}
+\citation{causality}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces This is a graphic illustrating multilevel finite basis PINNs from Dolean et al. \cite  {fbpinns}. Level 1 is trained first. Then, level 2 is trained to correct for the residual of level 1. Levels 1 and 2 are averaged to get the new estimate of the global solution. Level 3 is trained to correct for the errors of the new global solution. Levels 1, 2, and 3 are averaged. This process continues until a desired level of accuracy is achieved.}}{4}{figure.3}\protected@file@percent }
+\newlabel{fig:fbpinn}{{3}{4}{This is a graphic illustrating multilevel finite basis PINNs from Dolean et al. \cite {fbpinns}. Level 1 is trained first. Then, level 2 is trained to correct for the residual of level 1. Levels 1 and 2 are averaged to get the new estimate of the global solution. Level 3 is trained to correct for the errors of the new global solution. Levels 1, 2, and 3 are averaged. This process continues until a desired level of accuracy is achieved}{figure.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Contributions Made to the Project}{4}{section.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces A simple diagram of the MFFBPINN algorithm for a 1D problem where the number of domains is doubled at each step.}}{5}{figure.4}\protected@file@percent }
+\newlabel{fig:mffbpinn}{{4}{5}{A simple diagram of the MFFBPINN algorithm for a 1D problem where the number of domains is doubled at each step}{figure.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}New Skills and Knowledge}{6}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Experience and Impact on My Career}{6}{section.5}\protected@file@percent }
 \bibstyle{plain}
 \bibdata{refs}
 \bibcite{fbpinns}{1}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces A simple diagram of the MFFBPINN algorithm for a 1D problem where the number of domains is doubled at each step.}}{4}{figure.2}\protected@file@percent }
-\newlabel{fig:dd}{{2}{4}{A simple diagram of the MFFBPINN algorithm for a 1D problem where the number of domains is doubled at each step}{figure.2}{}}
 \bibcite{mfpinns}{2}
 \bibcite{pinns}{3}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Relevance to the Mission of NSF}{7}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Acknowledgements}{7}{section.7}\protected@file@percent }
 \bibcite{fixedpts}{4}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Diagram illustrating the first method for implementing the MFFBPINN.}}{5}{figure.3}\protected@file@percent }
-\newlabel{fig:batch1}{{3}{5}{Diagram illustrating the first method for implementing the MFFBPINN}{figure.3}{}}
-\gdef \@abspage@last{6}
+\bibcite{causality}{5}
+\gdef \@abspage@last{9}

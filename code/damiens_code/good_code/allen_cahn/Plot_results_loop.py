@@ -34,7 +34,7 @@ if __name__ == "__main__":
     Tmaxes = [1.0]
     learning_rates = [0.01,0.001,0.0001]
     decay_rates = [0.95,0.99]
-    widths = [60,80]
+    widths = [30,40]
     for Tmax in Tmaxes:
         for learning_rate in learning_rates:
             for decay_rate in decay_rates:
