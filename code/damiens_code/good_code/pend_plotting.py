@@ -35,7 +35,9 @@ if __name__ == "__main__":
     
     Tmax = 22
     # pend_dir = "pend_dd"
-    pend_dirs = ["pend", "pend_dd", "pend_causal_dd"]
+    # pend_dirs = ["pend", "pend_dd", "pend_causal_dd"]
+    pend_dirs = ["pend", "pend_dd"]
+    pend_dir_names = ["MF Pendulum", "MF Pendulum w/ DD"]
 
     u = np.asarray([1.0, 1.0])
     u = jax.device_put(u)
@@ -45,8 +47,9 @@ if __name__ == "__main__":
     s = odeint(system, u.flatten(), y)
 
     fig3, bx = plt.subplots(figsize=(4,3))
+    idx = 0
     for pend_dir in pend_dirs:
-        outdir = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/" + pend_dir + "/out_results/pend_0_" + str(Tmax) + "/"
+        outdir = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/" + pend_dir + "/saved_results2/pend_0_" + str(Tmax) + "/"
         suff = "MF_loop"
 
         net_data_dirA = outdir + "results_A/" + suff + "/"
@@ -57,20 +60,6 @@ if __name__ == "__main__":
         d_vx = scipy.io.loadmat(net_data_dirA + "beta_test.mat")
         uA, predA= (d_vx["U_res"].astype(np.float32), d_vx["S_pred"].astype(np.float32))
 
-        # d_vx = scipy.io.loadmat("C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/" + pend_dir + "/data.mat")
-        # t_data, s_data = (d_vx["u"].astype(np.float32), 
-        #             d_vx["s"].astype(np.float32))
-        
-            
-        # fig1, ax = plt.subplots(figsize=(8,3))
-        # fig2, gx = plt.subplots(figsize=(8,3))
-        # fig3, lx = plt.subplots(figsize=(8,3))
-        
-        # plt.figure(fig2.number)
-        # plt.plot(y, s[:, 1], 'k', linestyle=':', linewidth=2, label='Exact')
-        # #  plt.scatter(t_data, s_data[:, 1], c='#59a14f')
-        # i=1
-        # plt.plot(uA[:, 0], predA[:, i],  'k', linestyle='-', label='A prediction')
         err = np.linalg.norm(s[0:400, :].flatten()-predA[0:400, :].flatten(), 2)/np.linalg.norm(s[0:400, :].flatten(), 2)
         errors[0] = err
         print(err)
@@ -86,13 +75,14 @@ if __name__ == "__main__":
             errors[i+1] = err
 
         plt.figure(fig3.number)
-
-        plt.semilogy(np.arange(Ntrain + 1), errors, marker='o', label = pend_dir)
+        print(i)
+        plt.semilogy(np.arange(Ntrain + 1), errors, marker='o', label = pend_dir_names[idx])
         plt.xlabel('Level', fontsize=14)
-        plt.ylabel('Relative L2 error', fontsize=14)
+        plt.ylabel('Relative $L_2$ Error', fontsize=14)
         plt.tick_params(labelsize=14)
         plt.legend()
         plt.tight_layout()
+        idx += 1
 
     plt.savefig('C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/pend_errors.png', format='png')
     # outdir = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/"

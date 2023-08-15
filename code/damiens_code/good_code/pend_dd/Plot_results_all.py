@@ -51,6 +51,8 @@ if __name__ == "__main__":
     s = odeint(system, u.flatten(), y)
 
     Tmaxes = [10,12,14,16,18,20,22,24,26,28,30]
+    # Tmaxes = [22]
+
 
     for Tmax in Tmaxes:
       # Tmax = 20
@@ -78,7 +80,7 @@ if __name__ == "__main__":
       plt.plot(y, s[:, 0], 'k', linestyle=':', linewidth=2, label='Exact')
   #   plt.scatter(t_data, s_data[:, 0], c='#59a14f')
       i=0
-      plt.plot(uA[:, i], predA[:, i],  'k', linestyle='-', label='A prediction')
+      plt.plot(uA[:, i], predA[:, i],  'k', linestyle='-', label='Single Fidelity')
       
       
       
@@ -86,7 +88,7 @@ if __name__ == "__main__":
       plt.plot(y, s[:, 1], 'k', linestyle=':', linewidth=2, label='Exact')
     #  plt.scatter(t_data, s_data[:, 1], c='#59a14f')
       i=1
-      plt.plot(uA[:, 0], predA[:, i],  'k', linestyle='-', label='A prediction')
+      plt.plot(uA[:, 0], predA[:, i],  'k', linestyle='-', label='Single Fidelity')
       err = np.linalg.norm(s[0:400, :].flatten()-predA[0:400, :].flatten(), 2)/np.linalg.norm(s[0:400, :].flatten(), 2)
       errors[0] = err
       print(err)
@@ -102,14 +104,14 @@ if __name__ == "__main__":
           plt.figure(fig1.number)
       #   plt.scatter(t_data, s_data[:, 0], c='#59a14f')
           # plt.plot(u[:, 0], pred[0, :, 0],  label = lab_str)
-          plt.plot(u[:, 0], pred[0, :, 0], label = str(i) + " Predicted")
+          plt.plot(u[:, 0], pred[0, :, 0], label = "Level " + str(i + 1))
           
           
           
           plt.figure(fig2.number)
         #  plt.scatter(t_data, s_data[:, 1], c='#59a14f')
           # plt.plot(u[:, 0], pred[1, :, 0],   label = lab_str)
-          plt.plot(u[:, 0], pred[1, :, 0],   label = str(i) + " Predicted")
+          plt.plot(u[:, 0], pred[1, :, 0],   label = "Level " + str(i + 1))
 
           
           err = np.linalg.norm(s[0:400, :].flatten()-pred[:, 0:400, 0].T.flatten(), 2)/np.linalg.norm(s[0:400, :].flatten(), 2)
@@ -138,6 +140,8 @@ if __name__ == "__main__":
       plt.ylim([-1.5, 1.5])
       plt.xlim([-0, Tmax])
       plt.tick_params(labelsize=16)
+      plt.ylabel("$s_1$",fontsize=12)
+      plt.xlabel("t",fontsize=12)
       plt.tight_layout()
       plt.savefig(outdir + suff +  '_s1.png', format='png')
 
@@ -148,10 +152,11 @@ if __name__ == "__main__":
 
       plt.legend(fontsize=12, ncol=1, loc='center left', bbox_to_anchor=(1, 0.5))
       plt.tick_params(labelsize=16)
-      plt.tight_layout()
       plt.ylim([-3.5, 3.5])
       plt.xlim([-0, Tmax])
-
+      plt.ylabel("$s_2$",fontsize=12)
+      plt.xlabel("t",fontsize=12)
+      plt.tight_layout()
 
       plt.savefig(outdir + suff  + '_s2.png', format='png')
 

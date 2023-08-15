@@ -30,7 +30,7 @@ from scipy.interpolate import griddata
 #import matplotlib.pyplot as plt
 #import numpy as np
 
-def save_data_MF(model, params, save_results_to):
+def save_data_MF(model, params, save_results_to, c):
     nn = 100
     dom_coords = np.array([[0.0, 0.0],[1.0, 1.0]])
     t = np.linspace(dom_coords[0, 0], dom_coords[1, 0], nn)
@@ -53,7 +53,7 @@ def save_data_MF(model, params, save_results_to):
                               'U_star':U_star, 
                               'U_pred':U_pred}, format='4')
 
-def save_data(model, params, save_results_to):
+def save_data(model, params, save_results_to, c):
     nn = 100
     dom_coords = np.array([[0.0, 0.0],[1.0, 1.0]])
     t = np.linspace(dom_coords[0, 0], dom_coords[1, 0], nn)
@@ -257,7 +257,7 @@ if __name__ == "__main__":
     layer_sizes_l = [1,1]
     
     a = 0.5
-    c = 2
+    c1 = 2
     batch_size = 300
     batch_size_s = 300
     epochs = 100000
@@ -277,10 +277,10 @@ if __name__ == "__main__":
     # reload = [False, False, False]
     
     # reloadA = False
-    steps_to_train = np.arange(4)
-    reload = [True, True, True, False]
+    steps_to_train = np.arange(3)
+    reload = [False, False, False]
     
-    reloadA = True
+    reloadA = False
 
     
     l = 0
@@ -307,10 +307,10 @@ if __name__ == "__main__":
     bc2_coords = np.array([[ymin_A, 1.0],[ymin_B, 1.0]])
     dom_coords = np.array([[ymin_A, 0.0],[ymin_B, 1.0]])
 
-    ics_sampler = DataGenerator_ICS(2, ics_coords, lambda x: u(x, a, c), lambda x: u_t(x, a, c), batch_size)
-    bc1 = DataGenerator(2, bc1_coords, lambda x: u(x, a, c), batch_size_s)
-    bc2 = DataGenerator(2, bc2_coords, lambda x: u(x, a, c), batch_size_s)
-    res_sampler = DataGenerator(2, dom_coords, lambda x: r(x, a, c), batch_size)
+    ics_sampler = DataGenerator_ICS(2, ics_coords, lambda x: u(x, a, c1), lambda x: u_t(x, a, c1), batch_size)
+    bc1 = DataGenerator(2, bc1_coords, lambda x: u(x, a, c1), batch_size_s)
+    bc2 = DataGenerator(2, bc2_coords, lambda x: u(x, a, c1), batch_size_s)
+    res_sampler = DataGenerator(2, dom_coords, lambda x: r(x, a, c1), batch_size)
 
     if reloadA:
         params_A = model_A.unravel_params(np.load(results_dir_A + '/params.npy'))
@@ -328,7 +328,7 @@ if __name__ == "__main__":
         flat_params, _  = ravel_pytree(model_A.get_params(model_A.opt_state))
         np.save(results_dir_A + 'params.npy', flat_params)
     
-        save_data(model_A, params_A, results_dir_A)
+        save_data(model_A, params_A, results_dir_A, c1)
 
     # ====================================
     # DNN model A2
@@ -351,8 +351,8 @@ if __name__ == "__main__":
     res_pts = dom_coords[0:1,:] + (dom_coords[1:2,:]-dom_coords[0:1,:])*random.uniform(key, shape=[20000, 2])
     res_val = model_A.predict_res(params_A, res_pts)
     err = res_val**k/np.mean( res_val**k) + c
-    err_norm = err/np.sum(err)                        
-    res_sampler = DataGenerator_MF(2, dom_coords, res_pts, err_norm, lambda x: r(x, a, c), batch_size_pts, batch_size_res)
+    err_norm = err/np.sum(err)
+    res_sampler = DataGenerator_MF(2, dom_coords, res_pts, err_norm, lambda x: r(x, a, c1), batch_size_pts, batch_size_res)
     
     Ndomains = []
     for step in steps_to_train:
@@ -377,7 +377,7 @@ if __name__ == "__main__":
             model.train(ics_sampler, bc1, bc2, res_sampler, nIter=epochsA2, F = 0, lam = [])
         
             print('\n ... A2 Training done ...')
-            scipy.io.savemat(results_dir +"losses.mat", 
+            scipy.io.savemat(results_dir + "losses.mat", 
                          {'training_loss':model.loss_training_log,
                           'res_loss':model.loss_res_log,
                           'ics_loss':model.loss_ics_log,
@@ -387,7 +387,7 @@ if __name__ == "__main__":
             flat_params, _  = ravel_pytree(params)
             np.save(results_dir + 'params.npy', flat_params)
         
-            save_data_MF(model, params, results_dir)
+            save_data_MF(model, params, results_dir,c1)
             
         params_prev.append(params)
         
@@ -396,7 +396,7 @@ if __name__ == "__main__":
         res_val = model.predict_res(params, res_pts)
         err = res_val**k/np.mean( res_val**k) + c
         err_norm = err/np.sum(err)                        
-        res_sampler = DataGenerator_MF(2, dom_coords, res_pts, err_norm, lambda x: r(x, a, c), batch_size_pts, batch_size_res)
+        res_sampler = DataGenerator_MF(2, dom_coords, res_pts, err_norm, lambda x: r(x, a, c1), batch_size_pts, batch_size_res)
       
         
         

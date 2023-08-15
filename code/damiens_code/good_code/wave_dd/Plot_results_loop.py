@@ -31,10 +31,15 @@ if __name__ == "__main__":
     
     errors = onp.zeros(n_runs + 1)
 
+    # Tmaxes = [1.0]
+    # learning_rates = [0.01,0.001,0.0001]
+    # decay_rates = [0.95,0.99]
+    # widths = [30,40]
+
     Tmaxes = [1.0]
-    learning_rates = [0.01,0.001,0.0001]
-    decay_rates = [0.95,0.99]
-    widths = [30,40]
+    learning_rates = [0.01]
+    decay_rates = [0.95]
+    widths = [30]
     for Tmax in Tmaxes:
         for learning_rate in learning_rates:
             for decay_rate in decay_rates:
@@ -217,7 +222,7 @@ if __name__ == "__main__":
                     plt.figure(figsize=(5, 4))
                     plt.semilogy(np.arange(n_runs + 1), errors, marker='o')
                     plt.xlabel('Iteration', fontsize=14)
-                    plt.ylabel('Relative L2 error', fontsize=14)
+                    plt.ylabel('Relative $L_2$ error', fontsize=14)
                     plt.tick_params(labelsize=14)
                     plt.tight_layout()
 

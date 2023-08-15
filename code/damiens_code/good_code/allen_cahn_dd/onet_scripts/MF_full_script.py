@@ -110,10 +110,6 @@ def save_data(model, params, save_results_to, path_to_AC):
                                   'U_pred':U_pred}, format='4')
 
 
-
-
-
-
 class DataGenerator_ICS_A(data.Dataset):
     def __init__(self, dim, coords, func, 
                  batch_size=64, rng_key=random.PRNGKey(1234)):
@@ -347,7 +343,7 @@ def u0(x):
     """
     t = x[:,0:1]
     x = x[:,1:2]
-    return x*x*np.cos(np.pi * x) 
+    return x*x*np.cos(np.pi * x)
                 
 # =============================================
 # =============================================
