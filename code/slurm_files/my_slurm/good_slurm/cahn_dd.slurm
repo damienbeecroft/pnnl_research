@@ -35,17 +35,17 @@ conda activate jax-gpu
 #python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.001 0.99 60
 #python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.0001 0.99 60
 
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.01 0.95 40
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.001 0.95 40
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.0001 0.95 40
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.01 0.99 40
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.001 0.99 40
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.0001 0.99 40
+#python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.01 0.95 40
+#python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.001 0.95 40
+#python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.0001 0.95 40
+#python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.01 0.99 40
+#python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.001 0.99 40
+#python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.0001 0.99 40
 python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.01 0.95 30
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.001 0.95 30
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.0001 0.95 30
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.01 0.99 30
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.001 0.99 30
-python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.0001 0.99 30
+#python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.001 0.95 30
+#python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.0001 0.95 30
+#python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.01 0.99 30
+#python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.001 0.99 30
+#python -u /people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn_dd/onet_scripts/MF_full_script.py 0 1 0.0001 0.99 30
 
 
