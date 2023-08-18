@@ -56,7 +56,7 @@ if __name__ == "__main__":
 
     for Tmax in Tmaxes:
       # Tmax = 20
-      outdir = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/" + pend_dir + "/out_results/pend_0_" + str(Tmax) + "/"
+      outdir = "C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/" + pend_dir + "/saved_results2/pend_0_" + str(Tmax) + "/"
       suff = "MF_loop"
 
       net_data_dirA = outdir + "results_A/" + suff + "/"

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.6.20)  14 AUG 2023 16:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.6.20)  17 AUG 2023 15:03
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -444,12 +444,100 @@ Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
 )
 Document Style - pseudocode environments for use with the `algorithmicx' style
 )
+(C:\Users\beec613\AppData\Local\Programs\MiKTeX\tex/latex/caption\subcaption.st
+y
+Package: subcaption 2023/02/19 v1.6 Sub-captions (AR)
+ (C:\Users\beec613\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption.sty
+Package: caption 2023/03/12 v3.6j Customizing captions (AR)
+(C:\Users\beec613\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption3.sty
+Package: caption3 2023/03/12 v2.4 caption3 kernel (AR)
+\caption@tempdima=\dimen173
+\captionmargin=\dimen174
+\caption@leftmargin=\dimen175
+\caption@rightmargin=\dimen176
+\caption@width=\dimen177
+\caption@indent=\dimen178
+\caption@parindent=\dimen179
+\caption@hangindent=\dimen180
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count304
+\c@continuedfloat=\count305
+Package caption Info: float package is loaded.
+Package caption Info: hyperref package is loaded.
+)
+Package caption Info: New subtype `subfigure' on input line 239.
+\c@subfigure=\count306
+Package caption Info: New subtype `subtable' on input line 239.
+\c@subtable=\count307
+)
 (C:\Users\beec613\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-p
 dftex.def
 File: l3backend-pdftex.def 2023-03-30 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count304
+\l__color_backend_stack_int=\count308
 \l__pdf_internal_box=\box100
-) (final_report.aux)
+) (final_report.aux
+
+LaTeX Warning: Label `subfig:a' multiply defined.
+
+
+LaTeX Warning: Label `sub@subfig:a' multiply defined.
+
+
+LaTeX Warning: Label `subfig:b' multiply defined.
+
+
+LaTeX Warning: Label `sub@subfig:b' multiply defined.
+
+
+LaTeX Warning: Label `subfig:a' multiply defined.
+
+
+LaTeX Warning: Label `sub@subfig:a' multiply defined.
+
+
+LaTeX Warning: Label `subfig:b' multiply defined.
+
+
+LaTeX Warning: Label `sub@subfig:b' multiply defined.
+
+
+LaTeX Warning: Label `subfig:a' multiply defined.
+
+
+LaTeX Warning: Label `sub@subfig:a' multiply defined.
+
+
+LaTeX Warning: Label `subfig:b' multiply defined.
+
+
+LaTeX Warning: Label `sub@subfig:b' multiply defined.
+
+
+LaTeX Warning: Label `subfig:a' multiply defined.
+
+
+LaTeX Warning: Label `sub@subfig:a' multiply defined.
+
+
+LaTeX Warning: Label `subfig:b' multiply defined.
+
+
+LaTeX Warning: Label `sub@subfig:b' multiply defined.
+
+
+LaTeX Warning: Label `subfig:a' multiply defined.
+
+
+LaTeX Warning: Label `sub@subfig:a' multiply defined.
+
+
+LaTeX Warning: Label `subfig:b' multiply defined.
+
+
+LaTeX Warning: Label `sub@subfig:b' multiply defined.
+
+)
 \openout1 = `final_report.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 37.
@@ -479,15 +567,15 @@ LaTeX Font Info:    ... okay on input line 37.
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: 
-* h-part:(L,W,R)=(72.26999pt, 469.75502pt, 72.26999pt)
-* v-part:(T,H,B)=(72.26999pt, 650.43001pt, 72.26999pt)
+* h-part:(L,W,R)=(43.36243pt, 527.57014pt, 43.36243pt)
+* v-part:(T,H,B)=(43.36243pt, 708.24513pt, 43.36243pt)
 * \paperwidth=614.295pt
 * \paperheight=794.96999pt
-* \textwidth=469.75502pt
-* \textheight=650.43001pt
-* \oddsidemargin=0.0pt
-* \evensidemargin=0.0pt
-* \topmargin=-37.0pt
+* \textwidth=527.57014pt
+* \textheight=708.24513pt
+* \oddsidemargin=-28.90756pt
+* \evensidemargin=-28.90756pt
+* \topmargin=-65.90756pt
 * \headheight=12.0pt
 * \headsep=25.0pt
 * \topskip=12.0pt
@@ -509,16 +597,16 @@ LaTeX Font Info:    ... okay on input line 37.
 (C:\Users\beec613\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.
 mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count305
-\scratchdimen=\dimen173
+\scratchcounter=\count309
+\scratchdimen=\dimen181
 \scratchbox=\box101
-\nofMPsegments=\count306
-\nofMParguments=\count307
+\nofMPsegments=\count310
+\nofMParguments=\count311
 \everyMPshowfont=\toks33
-\MPscratchCnt=\count308
-\MPscratchDim=\dimen174
-\MPnumerator=\count309
-\makeMPintoPDFobject=\count310
+\MPscratchCnt=\count312
+\MPscratchDim=\dimen182
+\MPnumerator=\count313
+\makeMPintoPDFobject=\count314
 \everyMPtoPDFconversion=\toks34
 )
 (C:\Users\beec613\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf
@@ -536,14 +624,16 @@ Package hyperref Info: Link coloring OFF on input line 37.
 \@outlinefile=\write3
 \openout3 = `final_report.out'.
 
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
  [1
 
 {C:/Users/beec613/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
-<imgs/me.jpg, id=38, 4095.3pt x 3083.52pt>
+<imgs/me.jpg, id=58, 4095.3pt x 3083.52pt>
 File: imgs/me.jpg Graphic file (type jpg)
 <use imgs/me.jpg>
 Package pdftex.def Info: imgs/me.jpg  used on input line 70.
-(pdftex.def)             Requested size: 422.77664pt x 318.29776pt.
+(pdftex.def)             Requested size: 474.8099pt x 357.49097pt.
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
@@ -564,50 +654,118 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 80.
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 [2]
-<imgs/mfpinns2.png, id=61, 728.7225pt x 408.02437pt>
+<imgs/mfpinns2.png, id=82, 728.7225pt x 408.02437pt>
 File: imgs/mfpinns2.png Graphic file (type png)
 <use imgs/mfpinns2.png>
 Package pdftex.def Info: imgs/mfpinns2.png  used on input line 101.
-(pdftex.def)             Requested size: 328.82707pt x 184.11357pt.
-<imgs/domain_decomp2.png, id=67, 400.49625pt x 179.16937pt>
+(pdftex.def)             Requested size: 316.5453pt x 177.2339pt.
+<imgs/domain_decomp2.png, id=89, 400.49625pt x 179.16937pt>
 File: imgs/domain_decomp2.png Graphic file (type png)
 <use imgs/domain_decomp2.png>
 Package pdftex.def Info: imgs/domain_decomp2.png  used on input line 110.
-(pdftex.def)             Requested size: 328.82707pt x 147.11394pt.
+(pdftex.def)             Requested size: 316.5453pt x 141.62152pt.
  [3 <./imgs/mfpinns2.png>]
-<imgs/mffbpinn.png, id=82, 910.15031pt x 618.81187pt>
-File: imgs/mffbpinn.png Graphic file (type png)
-<use imgs/mffbpinn.png>
-Package pdftex.def Info: imgs/mffbpinn.png  used on input line 119.
-(pdftex.def)             Requested size: 375.80544pt x 255.50854pt.
- [4 <./imgs/domain_decomp2.png>] [5 <./imgs/mffbpinn.png>] [6] (final_report.bb
-l [7]) [8] (final_report.aux)
+<imgs/weights.png, id=109, 409.7709pt x 312.2064pt>
+File: imgs/weights.png Graphic file (type png)
+<use imgs/weights.png>
+Package pdftex.def Info: imgs/weights.png  used on input line 133.
+(pdftex.def)             Requested size: 237.40495pt x 180.87976pt.
+ [4 <./imgs/domain_decomp2.png>]
+<imgs/mffbpinns4.png, id=123, 830.35219pt x 680.5425pt>
+File: imgs/mffbpinns4.png Graphic file (type png)
+<use imgs/mffbpinns4.png>
+Package pdftex.def Info: imgs/mffbpinns4.png  used on input line 142.
+(pdftex.def)             Requested size: 263.78506pt x 216.18925pt.
+ [5 <./imgs/weights.png>] [6 <./imgs/mffbpinns4.png>]
+<imgs/MF_loop_s1_dd.png, id=137, 578.16pt x 216.81pt>
+File: imgs/MF_loop_s1_dd.png Graphic file (type png)
+<use imgs/MF_loop_s1_dd.png>
+Package pdftex.def Info: imgs/MF_loop_s1_dd.png  used on input line 168.
+(pdftex.def)             Requested size: 258.51227pt x 96.94164pt.
+<imgs/MF_loop_s1.png, id=138, 578.16pt x 216.81pt>
+File: imgs/MF_loop_s1.png Graphic file (type png)
+<use imgs/MF_loop_s1.png>
+Package pdftex.def Info: imgs/MF_loop_s1.png  used on input line 174.
+(pdftex.def)             Requested size: 258.51227pt x 96.94164pt.
+<imgs/pend_errors2.png, id=139, 289.08pt x 216.81pt>
+File: imgs/pend_errors2.png Graphic file (type png)
+<use imgs/pend_errors2.png>
+Package pdftex.def Info: imgs/pend_errors2.png  used on input line 185.
+(pdftex.def)             Requested size: 211.02483pt x 158.26666pt.
+ [7 <./imgs/MF_loop_s1_dd.png> <./imgs/MF_loop_s1.png> <./imgs/pend_errors2.png
+>]
+<imgs/wave_dd.png, id=152, 722.7pt x 216.81pt>
+File: imgs/wave_dd.png Graphic file (type png)
+<use imgs/wave_dd.png>
+Package pdftex.def Info: imgs/wave_dd.png  used on input line 234.
+(pdftex.def)             Requested size: 342.91737pt x 102.87663pt.
+<imgs/wave.png, id=153, 722.7pt x 216.81pt>
+File: imgs/wave.png Graphic file (type png)
+<use imgs/wave.png>
+Package pdftex.def Info: imgs/wave.png  used on input line 240.
+(pdftex.def)             Requested size: 342.91737pt x 102.87663pt.
+<imgs/wave_errors.png, id=154, 361.35pt x 289.08pt>
+File: imgs/wave_errors.png Graphic file (type png)
+<use imgs/wave_errors.png>
+Package pdftex.def Info: imgs/wave_errors.png  used on input line 291.
+(pdftex.def)             Requested size: 237.40495pt x 189.92441pt.
+ [8 <./imgs/wave_dd.png> <./imgs/wave.png>] [9 <./imgs/wave_errors.png>]
+<imgs/cahn_dd3.png, id=171, 722.7pt x 216.81pt>
+File: imgs/cahn_dd3.png Graphic file (type png)
+<use imgs/cahn_dd3.png>
+Package pdftex.def Info: imgs/cahn_dd3.png  used on input line 376.
+(pdftex.def)             Requested size: 342.91737pt x 102.87663pt.
+<imgs/cahn3.png, id=172, 722.7pt x 216.81pt>
+File: imgs/cahn3.png Graphic file (type png)
+<use imgs/cahn3.png>
+Package pdftex.def Info: imgs/cahn3.png  used on input line 382.
+(pdftex.def)             Requested size: 342.91737pt x 102.87663pt.
+<imgs/cahn_errors.png, id=173, 361.35pt x 289.08pt>
+File: imgs/cahn_errors.png Graphic file (type png)
+<use imgs/cahn_errors.png>
+Package pdftex.def Info: imgs/cahn_errors.png  used on input line 432.
+(pdftex.def)             Requested size: 237.40495pt x 189.92441pt.
+ [10 <./imgs/cahn_dd3.png> <./imgs/cahn3.png>]
+[11 <./imgs/cahn_errors.png>] (final_report.bbl [12] [13]) [14]
+(final_report.aux)
+
+LaTeX Warning: There were multiply-defined labels.
+
 Package rerunfilecheck Info: File `final_report.out' has not changed.
-(rerunfilecheck)             Checksum: DE00A45C7E9A267E40B9C5278E252577;1218.
+(rerunfilecheck)             Checksum: C444101FC580C8585D51B1FE9B1F22E4;1860.
  ) 
 Here is how much of TeX's memory you used:
- 11370 strings out of 476331
- 179295 string characters out of 5786821
- 1858660 words of memory out of 5000000
- 31611 multiletter control sequences out of 15000+600000
- 518491 words of font info for 55 fonts, out of 8000000 for 9000
+ 12945 strings out of 476331
+ 210238 string characters out of 5786821
+ 1874660 words of memory out of 5000000
+ 33142 multiletter control sequences out of 15000+600000
+ 521402 words of font info for 67 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,10n,76p,1986b,557s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
-m/cmbx12.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public
-/amsfonts/cm/cmmi12.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/t
-ype1/public/amsfonts/cm/cmmi8.pfb><C:/Users/beec613/AppData/Local/Programs/MiKT
-eX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/beec613/AppData/Local/Pro
-grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/beec613/AppData
-/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/beec61
-3/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Use
-rs/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.
+ 75i,12n,77p,1835b,539s stack positions out of 10000i,1000n,20000p,200000b,200000s
+
+pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist
+, replaced by a fixed one
+
+<C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
+cmbx12.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public/a
+msfonts/cm/cmex10.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/typ
+e1/public/amsfonts/cm/cmmi12.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTe
+X/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/beec613/AppData/Local/Prog
+rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/beec613/AppData/
+Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/beec61
+3/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Us
+ers/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.
 pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
-/cm/cmsy8.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/publi
-c/amsfonts/cm/cmti12.pfb>
-Output written on final_report.pdf (9 pages, 2832805 bytes).
+/cm/cmr6.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/type1/public
+/amsfonts/cm/cmr7.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/fonts/typ
+e1/public/amsfonts/cm/cmr8.pfb><C:/Users/beec613/AppData/Local/Programs/MiKTeX/
+fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/beec613/AppData/Local/Progr
+ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/beec613/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/beec613
+/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on final_report.pdf (15 pages, 3284149 bytes).
 PDF statistics:
- 162 PDF objects out of 1000 (max. 8388607)
- 29 named destinations out of 1000 (max. 500000)
- 77 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 281 PDF objects out of 1000 (max. 8388607)
+ 52 named destinations out of 1000 (max. 500000)
+ 167 words of extra memory for PDF output out of 10000 (max. 10000000)
 

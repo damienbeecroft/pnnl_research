@@ -36,8 +36,8 @@ if __name__ == "__main__":
     Tmax = 22
     # pend_dir = "pend_dd"
     # pend_dirs = ["pend", "pend_dd", "pend_causal_dd"]
-    pend_dirs = ["pend", "pend_dd"]
-    pend_dir_names = ["MF Pendulum", "MF Pendulum w/ DD"]
+    pend_dirs = ["pend_dd", "pend"]
+    pend_dir_names = ["MF Pendulum w/ DD", "MF Pendulum"]
 
     u = np.asarray([1.0, 1.0])
     u = jax.device_put(u)

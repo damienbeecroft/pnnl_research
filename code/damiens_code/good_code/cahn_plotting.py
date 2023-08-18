@@ -129,8 +129,8 @@ if __name__ == "__main__":
         
     
     plt.figure(figsize=(5, 4))
-    plt.semilogy(np.arange(n_runs + 1), errors, marker='o', label='MF Wave w/ DD')
-    plt.semilogy(np.arange(n_runs2 + 1), errors2, marker='o', label='MF Wave')
+    plt.semilogy(np.arange(n_runs + 1), errors, marker='o', label='MF Allen-Cahn w/ DD')
+    plt.semilogy(np.arange(n_runs2 + 1), errors2, marker='o', label='MF Allen-Cahn')
     plt.xlabel('Iteration', fontsize=14)
     plt.ylabel('Relative $L_2$ error', fontsize=14)
     plt.tick_params(labelsize=14)

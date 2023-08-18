@@ -31,9 +31,11 @@ if __name__ == "__main__":
     
     errors = onp.zeros(n_runs + 1)
 
-    Tmaxes = [0.8,1.0,1.2]
+    Tmaxes = [1.0]
+    # Tmaxes = [0.8,1.0,1.2]
     for Tmax in Tmaxes:
-        path = 'C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/wave/out_results/wave_0_' + str(Tmax) + '/'
+        path = 'C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/wave/saved_results2/wave_0_' + str(Tmax) + '/'
+        # path = 'C:/Users/beec613/Desktop/pnnl_research/code/damiens_code/good_code/wave/out_results/wave_0_' + str(Tmax) + '/'
         # A
         fig1, ax = plt.subplots()
 

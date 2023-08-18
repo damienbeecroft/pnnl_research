@@ -5,6 +5,10 @@ Victorita Dolean, Alexander Heinlein, Siddhartha Mishra, and Ben Moseley.
 \newblock Multilevel domain decomposition-based architectures for
   physics-informed neural networks, 2023.
 
+\bibitem{mfdeeponets}
+Amanda~A. Howard, Mauro Perego, George~E. Karniadakis, and Panos Stinis.
+\newblock Multifidelity deep operator networks, 2022.
+
 \bibitem{mfpinns}
 Xuhui Meng and George~Em Karniadakis.
 \newblock A composite neural network that learns from multi-fidelity data:
@@ -21,10 +25,5 @@ Maziar Raissi, Paris Perdikaris, and George~E. Karniadakis.
 Franz~M. Rohrhofer, Stefan Posch, Clemens Gößnitzer, and Bernhard~C. Geiger.
 \newblock On the role of fixed points of dynamical systems in training
   physics-informed neural networks, 2023.
-
-\bibitem{causality}
-Sifan Wang, Shyam Sankaran, and Paris Perdikaris.
-\newblock Respecting causality is all you need for training physics-informed
-  neural networks, 2022.
 
 \end{thebibliography}
