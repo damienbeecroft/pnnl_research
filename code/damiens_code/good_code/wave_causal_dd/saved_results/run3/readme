@@ -1,0 +1,2 @@
+I trained one extra layer of four neural nets. I trained for 200000 iterations.
+ It seems like the code is simply not converging as it should.

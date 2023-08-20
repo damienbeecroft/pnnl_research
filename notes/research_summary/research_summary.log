@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.6.20)  22 JUN 2023 16:40
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.6.20)  31 JUL 2023 16:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -518,12 +518,18 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 {C:/Users/beec613/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}] [2]
 No file research_summary.bbl.
 (research_summary.aux)
-Package rerunfilecheck Info: File `research_summary.out' has not changed.
-(rerunfilecheck)             Checksum: 9814C2D956916ADB9290ECA4E25C967A;103.
+
+Package rerunfilecheck Warning: File `research_summary.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `research_summary.out':
+(rerunfilecheck)             Before: 4B12325085146683D9FCAAC1A8592140;104
+(rerunfilecheck)             After:  9814C2D956916ADB9290ECA4E25C967A;103.
  ) 
 Here is how much of TeX's memory you used:
  10642 strings out of 476331
- 166936 string characters out of 5786821
+ 166972 string characters out of 5786821
  1864660 words of memory out of 5000000
  30929 multiletter control sequences out of 15000+600000
  521183 words of font info for 66 fonts, out of 8000000 for 9000

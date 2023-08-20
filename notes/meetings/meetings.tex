@@ -237,8 +237,24 @@ In this meeting I want to clarify any remaining questions that I have about the 
 	\item[A] It seems that \verb|u| is the set of collocation points where the neural net is analyzed. \verb|ul| is low-fidelity solution at these collocation points. This notation is rather confusing. Be careful.
 \end{itemize}
 
+%\begin{itemize}
+%%\item Try changing the data generator so that the points know ahead of time where they are going to end up.
+%%\item Look at how the parameters are accessed in Amanda's code and try to adjust my code so that I can access the parameters properly.
+%\end{itemize}
+
+%\begin{itemize}
+%\item You can precompute the weights that correspond to each batch ahead of time and generate them in the batch.
+%\item Preselect the points in the batch. Don't randomly choose some points in each batch.
+%\end{itemize}
+
+\section*{Amanda's Comments}
 \begin{itemize}
-\item Try changing the data generator so that the points know ahead of time where they are going to end up.
-\item Look at how the parameters are accessed in Amanda's code and try to adjust my code so that I can access the parameters properly.
+\item Increase residual weight
+\item Remove residual point selection
+\item Increase the size of the non-local network
+\item Do the wave equation with a larger network size
+\item Soft attention mechanism and neural tangent kernel for training the hyper-parameters
+\item Training to 500 with wave equation converged
+
 \end{itemize}
 \end{document}

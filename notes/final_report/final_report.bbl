@@ -1,0 +1,29 @@
+\begin{thebibliography}{1}
+
+\bibitem{fbpinns}
+Victorita Dolean, Alexander Heinlein, Siddhartha Mishra, and Ben Moseley.
+\newblock Multilevel domain decomposition-based architectures for
+  physics-informed neural networks, 2023.
+
+\bibitem{mfdeeponets}
+Amanda~A. Howard, Mauro Perego, George~E. Karniadakis, and Panos Stinis.
+\newblock Multifidelity deep operator networks, 2022.
+
+\bibitem{mfpinns}
+Xuhui Meng and George~Em Karniadakis.
+\newblock A composite neural network that learns from multi-fidelity data:
+  Application to function approximation and inverse {PDE} problems.
+\newblock {\em Journal of Computational Physics}, 401:109020, jan 2020.
+
+\bibitem{pinns}
+Maziar Raissi, Paris Perdikaris, and George~E. Karniadakis.
+\newblock Physics informed deep learning (part {I):} data-driven solutions of
+  nonlinear partial differential equations.
+\newblock {\em CoRR}, abs/1711.10561, 2017.
+
+\bibitem{fixedpts}
+Franz~M. Rohrhofer, Stefan Posch, Clemens Gößnitzer, and Bernhard~C. Geiger.
+\newblock On the role of fixed points of dynamical systems in training
+  physics-informed neural networks, 2023.
+
+\end{thebibliography}

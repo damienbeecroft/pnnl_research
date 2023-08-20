@@ -1,0 +1,11 @@
+Now you should run one of the following depending on your shell
+source /share/apps/python/miniconda3.9/etc/profile.d/conda.sh
+source /share/apps/python/miniconda3.9/etc/profile.d/conda.csh
+Could not find conda environment: test-env
+You can list all discoverable environments with `conda info --envs`.
+
+/tmp/slurmd/job2168250/slurm_script: line 21: os.environ[XLA_PYTHON_CLIENT_PREALLOCATE]=false: command not found
+Traceback (most recent call last):
+  File "/people/beec613/pnnl_research/code/damiens_code/Pendulum_DD/Pendulum_DD/onet_scripts/train_MF_EWC_script.py", line 12, in <module>
+    import scipy.io
+ModuleNotFoundError: No module named 'scipy'

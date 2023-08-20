@@ -1,0 +1,1 @@
+For this run, I did 200000 iterations and I increased the residual penalty from 1 to 10. It seems like the method did not finish converging. I think I will let it run a bit longer.

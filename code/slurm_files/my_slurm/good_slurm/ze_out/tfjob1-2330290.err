@@ -1,0 +1,27 @@
+Now you should run one of the following depending on your shell
+source /share/apps/python/miniconda3.9/etc/profile.d/conda.sh
+source /share/apps/python/miniconda3.9/etc/profile.d/conda.csh
+Traceback (most recent call last):
+  File "/people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn/onet_scripts/MF_full_script.py", line 50, in <module>
+    import skopt
+ModuleNotFoundError: No module named 'skopt'
+Traceback (most recent call last):
+  File "/people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn/onet_scripts/MF_full_script.py", line 50, in <module>
+    import skopt
+ModuleNotFoundError: No module named 'skopt'
+Traceback (most recent call last):
+  File "/people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn/onet_scripts/MF_full_script.py", line 50, in <module>
+    import skopt
+ModuleNotFoundError: No module named 'skopt'
+Traceback (most recent call last):
+  File "/people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn/onet_scripts/MF_full_script.py", line 50, in <module>
+    import skopt
+ModuleNotFoundError: No module named 'skopt'
+Traceback (most recent call last):
+  File "/people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn/onet_scripts/MF_full_script.py", line 50, in <module>
+    import skopt
+ModuleNotFoundError: No module named 'skopt'
+Traceback (most recent call last):
+  File "/people/beec613/pnnl_research/code/damiens_code/good_code/allen_cahn/onet_scripts/MF_full_script.py", line 50, in <module>
+    import skopt
+ModuleNotFoundError: No module named 'skopt'
