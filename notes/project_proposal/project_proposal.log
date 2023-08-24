@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12) (preloaded format=pdflatex 2022.2.12)  20 AUG 2023 14:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12) (preloaded format=pdflatex 2022.2.12)  23 AUG 2023 16:18
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**c:/Users/damie/GitHub/pnnl_research/notes/final_report/final_report.tex
-(c:/Users/damie/GitHub/pnnl_research/notes/final_report/final_report.tex
+**c:/Users/damie/GitHub/pnnl_research/notes/project_proposal/project_proposal.tex
+(c:/Users/damie/GitHub/pnnl_research/notes/project_proposal/project_proposal.tex
 LaTeX2e <2021-11-15> patch level 1
 L3 programming layer <2021-11-22> (C:\Users\damie\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
 Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
@@ -385,88 +385,27 @@ Package caption Info: New subtype `subtable' on input line 239.
 File: l3backend-pdftex.def 2021-10-18 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count305
 \l__pdf_internal_box=\box99
-) (final_report.aux
+) (project_proposal.aux)
+\openout1 = `project_proposal.aux'.
 
-LaTeX Warning: Label `subfig:a' multiply defined.
-
-
-LaTeX Warning: Label `sub@subfig:a' multiply defined.
-
-
-LaTeX Warning: Label `subfig:b' multiply defined.
-
-
-LaTeX Warning: Label `sub@subfig:b' multiply defined.
-
-
-LaTeX Warning: Label `subfig:a' multiply defined.
-
-
-LaTeX Warning: Label `sub@subfig:a' multiply defined.
-
-
-LaTeX Warning: Label `subfig:b' multiply defined.
-
-
-LaTeX Warning: Label `sub@subfig:b' multiply defined.
-
-
-LaTeX Warning: Label `subfig:a' multiply defined.
-
-
-LaTeX Warning: Label `sub@subfig:a' multiply defined.
-
-
-LaTeX Warning: Label `subfig:b' multiply defined.
-
-
-LaTeX Warning: Label `sub@subfig:b' multiply defined.
-
-
-LaTeX Warning: Label `subfig:a' multiply defined.
-
-
-LaTeX Warning: Label `sub@subfig:a' multiply defined.
-
-
-LaTeX Warning: Label `subfig:b' multiply defined.
-
-
-LaTeX Warning: Label `sub@subfig:b' multiply defined.
-
-
-LaTeX Warning: Label `subfig:a' multiply defined.
-
-
-LaTeX Warning: Label `sub@subfig:a' multiply defined.
-
-
-LaTeX Warning: Label `subfig:b' multiply defined.
-
-
-LaTeX Warning: Label `sub@subfig:b' multiply defined.
-
-)
-\openout1 = `final_report.aux'.
-
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -521,7 +460,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
  (C:\Users\damie\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-Package hyperref Info: Link coloring OFF on input line 37.
+Package hyperref Info: Link coloring OFF on input line 52.
  (C:\Users\damie\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
  (C:\Users\damie\AppData\Local\Programs\MiKTeX\tex/latex/refcount\refcount.sty
@@ -531,129 +470,40 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count312
 )
-LaTeX Info: Redefining \ref on input line 37.
-LaTeX Info: Redefining \pageref on input line 37.
-LaTeX Info: Redefining \nameref on input line 37.
- (final_report.out) (final_report.out)
+LaTeX Info: Redefining \ref on input line 52.
+LaTeX Info: Redefining \pageref on input line 52.
+LaTeX Info: Redefining \nameref on input line 52.
+ (project_proposal.out) (project_proposal.out)
 \@outlinefile=\write3
-\openout3 = `final_report.out'.
+\openout3 = `project_proposal.out'.
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
- [1
-
-{C:/Users/damie/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
-<imgs/me.jpg, id=58, 4095.3pt x 3083.52pt>
-File: imgs/me.jpg Graphic file (type jpg)
-<use imgs/me.jpg>
-Package pdftex.def Info: imgs/me.jpg  used on input line 70.
-(pdftex.def)             Requested size: 474.8099pt x 357.49097pt.
-
-pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.76 \newpage
-              [1 <./imgs/me.jpg>]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 80.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 54.
  (C:\Users\damie\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 80.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 54.
  (C:\Users\damie\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) [2]
-<imgs/mfpinns2.png, id=82, 728.7225pt x 408.02437pt>
-File: imgs/mfpinns2.png Graphic file (type png)
-<use imgs/mfpinns2.png>
-Package pdftex.def Info: imgs/mfpinns2.png  used on input line 101.
-(pdftex.def)             Requested size: 316.5453pt x 177.2339pt.
-<imgs/domain_decomp2.png, id=89, 400.49625pt x 179.16937pt>
-File: imgs/domain_decomp2.png Graphic file (type png)
-<use imgs/domain_decomp2.png>
-Package pdftex.def Info: imgs/domain_decomp2.png  used on input line 110.
-(pdftex.def)             Requested size: 316.5453pt x 141.62152pt.
- [3 <./imgs/mfpinns2.png>]
-<imgs/weights.png, id=109, 409.7709pt x 312.2064pt>
-File: imgs/weights.png Graphic file (type png)
-<use imgs/weights.png>
-Package pdftex.def Info: imgs/weights.png  used on input line 133.
-(pdftex.def)             Requested size: 237.40495pt x 180.87976pt.
- [4 <./imgs/domain_decomp2.png>]
-<imgs/mffbpinns4.png, id=123, 830.35219pt x 680.5425pt>
-File: imgs/mffbpinns4.png Graphic file (type png)
-<use imgs/mffbpinns4.png>
-Package pdftex.def Info: imgs/mffbpinns4.png  used on input line 142.
-(pdftex.def)             Requested size: 263.78506pt x 216.18925pt.
- [5 <./imgs/weights.png>] [6 <./imgs/mffbpinns4.png>]
-<imgs/MF_loop_s1_dd.png, id=137, 578.16pt x 216.81pt>
-File: imgs/MF_loop_s1_dd.png Graphic file (type png)
-<use imgs/MF_loop_s1_dd.png>
-Package pdftex.def Info: imgs/MF_loop_s1_dd.png  used on input line 168.
-(pdftex.def)             Requested size: 258.51227pt x 96.94164pt.
-<imgs/MF_loop_s1.png, id=138, 578.16pt x 216.81pt>
-File: imgs/MF_loop_s1.png Graphic file (type png)
-<use imgs/MF_loop_s1.png>
-Package pdftex.def Info: imgs/MF_loop_s1.png  used on input line 174.
-(pdftex.def)             Requested size: 258.51227pt x 96.94164pt.
-<imgs/pend_errors2.png, id=139, 289.08pt x 216.81pt>
-File: imgs/pend_errors2.png Graphic file (type png)
-<use imgs/pend_errors2.png>
-Package pdftex.def Info: imgs/pend_errors2.png  used on input line 185.
-(pdftex.def)             Requested size: 211.02483pt x 158.26666pt.
- [7 <./imgs/MF_loop_s1_dd.png> <./imgs/MF_loop_s1.png> <./imgs/pend_errors2.png>]
-<imgs/wave_dd.png, id=152, 722.7pt x 216.81pt>
-File: imgs/wave_dd.png Graphic file (type png)
-<use imgs/wave_dd.png>
-Package pdftex.def Info: imgs/wave_dd.png  used on input line 234.
-(pdftex.def)             Requested size: 342.91737pt x 102.87663pt.
-<imgs/wave.png, id=153, 722.7pt x 216.81pt>
-File: imgs/wave.png Graphic file (type png)
-<use imgs/wave.png>
-Package pdftex.def Info: imgs/wave.png  used on input line 240.
-(pdftex.def)             Requested size: 342.91737pt x 102.87663pt.
-<imgs/wave_errors.png, id=154, 361.35pt x 289.08pt>
-File: imgs/wave_errors.png Graphic file (type png)
-<use imgs/wave_errors.png>
-Package pdftex.def Info: imgs/wave_errors.png  used on input line 291.
-(pdftex.def)             Requested size: 237.40495pt x 189.92441pt.
- [8 <./imgs/wave_dd.png> <./imgs/wave.png>] [9 <./imgs/wave_errors.png>]
-<imgs/cahn_dd3.png, id=171, 722.7pt x 216.81pt>
-File: imgs/cahn_dd3.png Graphic file (type png)
-<use imgs/cahn_dd3.png>
-Package pdftex.def Info: imgs/cahn_dd3.png  used on input line 376.
-(pdftex.def)             Requested size: 342.91737pt x 102.87663pt.
-<imgs/cahn3.png, id=172, 722.7pt x 216.81pt>
-File: imgs/cahn3.png Graphic file (type png)
-<use imgs/cahn3.png>
-Package pdftex.def Info: imgs/cahn3.png  used on input line 382.
-(pdftex.def)             Requested size: 342.91737pt x 102.87663pt.
-<imgs/cahn_errors.png, id=173, 361.35pt x 289.08pt>
-File: imgs/cahn_errors.png Graphic file (type png)
-<use imgs/cahn_errors.png>
-Package pdftex.def Info: imgs/cahn_errors.png  used on input line 432.
-(pdftex.def)             Requested size: 237.40495pt x 189.92441pt.
- [10 <./imgs/cahn_dd3.png> <./imgs/cahn3.png>] [11 <./imgs/cahn_errors.png>] (final_report.bbl [12] [13]) [14] (final_report.aux)
+) [1
 
-LaTeX Warning: There were multiply-defined labels.
-
-Package rerunfilecheck Info: File `final_report.out' has not changed.
-(rerunfilecheck)             Checksum: C444101FC580C8585D51B1FE9B1F22E4;1860.
+{C:/Users/damie/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}] [2] (project_proposal.aux)
+Package rerunfilecheck Info: File `project_proposal.out' has not changed.
+(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 12902 strings out of 478659
- 208307 string characters out of 2845920
- 525074 words of memory out of 3000000
- 30766 multiletter control sequences out of 15000+600000
- 412545 words of font info for 62 fonts, out of 8000000 for 9000
+ 12646 strings out of 478659
+ 203772 string characters out of 2845920
+ 506132 words of memory out of 3000000
+ 30577 multiletter control sequences out of 15000+600000
+ 411886 words of font info for 60 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 67i,12n,77p,1888b,535s stack positions out of 5000i,500n,10000p,200000b,80000s
-
-pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist, replaced by a fixed one
-
-<C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on final_report.pdf (15 pages, 3284147 bytes).
+ 67i,6n,77p,368b,330s stack positions out of 5000i,500n,10000p,200000b,80000s
+<C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb>
+Output written on project_proposal.pdf (2 pages, 55058 bytes).
 PDF statistics:
- 281 PDF objects out of 1000 (max. 8388607)
- 52 named destinations out of 1000 (max. 500000)
- 167 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 42 PDF objects out of 1000 (max. 8388607)
+ 8 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

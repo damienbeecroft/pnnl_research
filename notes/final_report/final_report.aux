@@ -2,10 +2,13 @@
 \providecommand\hyper@newdestlabel[2]{}
 \providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
 \HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
 \global\let\oldnewlabel\newlabel
 \gdef\newlabel#1#2{\newlabelxx{#1}#2}
 \gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
 \AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
 \let\newlabel\oldnewlabel
 \fi}
 \fi}
@@ -51,7 +54,7 @@
 \newlabel{sub@subfig:a}{{a}{7}{\relax }{figure.caption.8}{}}
 \newlabel{subfig:b}{{7b}{7}{\relax }{figure.caption.8}{}}
 \newlabel{sub@subfig:b}{{b}{7}{\relax }{figure.caption.8}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces (a) The errors for the pendulum results in Figure \ref {fig:pend_res} by level. Level 0 corresponds to the single fidelity network. The performance is comparable. The addition of domain decomposition does not affect the convergence much. (b) This is the table of hyperparameters for both MFFBPINNs. All hyperparameters were the same for these tests.\relax }}{7}{figure.caption.8}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces (a) The errors for the pendulum results in Figure \ref  {fig:pend_res} by level. Level 0 corresponds to the single fidelity network. The performance is comparable. The addition of domain decomposition does not affect the convergence much. (b) This is the table of hyperparameters for both MFFBPINNs. All hyperparameters were the same for these tests.\relax }}{7}{figure.caption.8}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2}Wave Equation}{8}{subsubsection.3.2.2}\protected@file@percent }
 \newlabel{subfig:a}{{8a}{8}{\relax }{figure.caption.9}{}}
 \newlabel{sub@subfig:a}{{a}{8}{\relax }{figure.caption.9}{}}
@@ -59,7 +62,7 @@
 \newlabel{sub@subfig:b}{{b}{8}{\relax }{figure.caption.9}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Here we test two MFFBPINNs on the wave equation. The MFFBPINN without the domain decomposition converges here. The other does not. It seems that adding the domain decomposition can complicate convergence.\relax }}{8}{figure.caption.9}\protected@file@percent }
 \newlabel{fig:wave_res}{{8}{8}{Here we test two MFFBPINNs on the wave equation. The MFFBPINN without the domain decomposition converges here. The other does not. It seems that adding the domain decomposition can complicate convergence.\relax }{figure.caption.9}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces The errors for the wave equation results in Figure \ref {fig:wave_res} by level. The addition of domain decomposition seems to stymy the convergence. The (a) was trained for three levels and (b) was trained for 6.\relax }}{9}{figure.caption.10}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces The errors for the wave equation results in Figure \ref  {fig:wave_res} by level. The addition of domain decomposition seems to stymy the convergence. The (a) was trained for three levels and (b) was trained for 6.\relax }}{9}{figure.caption.10}\protected@file@percent }
 \newlabel{subfig:a}{{10a}{9}{\relax }{figure.caption.11}{}}
 \newlabel{sub@subfig:a}{{a}{9}{\relax }{figure.caption.11}{}}
 \newlabel{subfig:b}{{10b}{9}{\relax }{figure.caption.11}{}}
@@ -72,7 +75,7 @@
 \newlabel{sub@subfig:b}{{b}{10}{\relax }{figure.caption.12}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Here we test two MFFBPINNs on the Allen-Cahn equation. (a) outperforms (b), however neither converge to the true solution.\relax }}{10}{figure.caption.12}\protected@file@percent }
 \newlabel{fig:cahn_res}{{11}{10}{Here we test two MFFBPINNs on the Allen-Cahn equation. (a) outperforms (b), however neither converge to the true solution.\relax }{figure.caption.12}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces The errors for the Allen-Cahn equation results in Figure \ref {fig:cahn_res} by level. This is the only problem we tested with heterogeneous structure. It stands to reason that the domain decomposition would help the convergence.\relax }}{11}{figure.caption.13}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces The errors for the Allen-Cahn equation results in Figure \ref  {fig:cahn_res} by level. This is the only problem we tested with heterogeneous structure. It stands to reason that the domain decomposition would help the convergence.\relax }}{11}{figure.caption.13}\protected@file@percent }
 \newlabel{subfig:a}{{13a}{11}{\relax }{figure.caption.14}{}}
 \newlabel{sub@subfig:a}{{a}{11}{\relax }{figure.caption.14}{}}
 \newlabel{subfig:b}{{13b}{11}{\relax }{figure.caption.14}{}}
