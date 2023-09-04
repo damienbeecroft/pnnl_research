@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex project_proposal"] 1693785383 "project_proposal.aux" "project_proposal.bbl" "project_proposal" 1693785388 0
-  "./refs.bib" 1692906667 2055 9b18a5a179338142e4823ec32fa172c0 ""
+["bibtex project_proposal"] 1693849755 "project_proposal.aux" "project_proposal.bbl" "project_proposal" 1693849758 0
+  "./refs.bib" 1693849749 2055 9b18a5a179338142e4823ec32fa172c0 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/bibtex/bst/bibtex/plain.bst" 1291868336 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
-  "project_proposal.aux" 1693785386 777 500fd02ce3298b0d5bc9d1fa8043cf49 "pdflatex"
+  "project_proposal.aux" 1693849757 777 500fd02ce3298b0d5bc9d1fa8043cf49 "pdflatex"
   (generated)
   "project_proposal.bbl"
   "project_proposal.blg"
   (rewritten before read)
-["pdflatex"] 1693785384 "c:/Users/damie/GitHub/pnnl_research/notes/project_proposal/project_proposal.tex" "project_proposal.pdf" "project_proposal" 1693785388 0
+["pdflatex"] 1693849756 "c:/Users/damie/GitHub/pnnl_research/notes/project_proposal/project_proposal.tex" "project_proposal.pdf" "project_proposal" 1693849758 0
   "C:/Users/damie/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1692566607 83071 43f05d89335a2539fc48c7f46abff9bd ""
   "C:/Users/damie/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1644711715 9769967 aa9fb1fc023ff14bec81a350b3fecd44 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1233955448 1004 54797486969f23fa377b128694d548df ""
@@ -104,11 +104,11 @@
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/tex/latex/tools/multicol.sty" 1636713860 32262 2bb622a0aa56c4a7a5cbdfe9d122c15a ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388494052 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1636288472 56029 3f7889dab51d620aa43177c391b7b190 ""
-  "c:/Users/damie/GitHub/pnnl_research/notes/project_proposal/project_proposal.tex" 1693785383 12193 4929dee0631e8860552c5edfaa759d1b ""
-  "project_proposal.aux" 1693785386 777 500fd02ce3298b0d5bc9d1fa8043cf49 "pdflatex"
-  "project_proposal.bbl" 1693785384 342 d3f3fccf8e49b8be012f072a0a8ad345 "bibtex project_proposal"
-  "project_proposal.out" 1693785386 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "project_proposal.tex" 1693785383 12193 4929dee0631e8860552c5edfaa759d1b ""
+  "c:/Users/damie/GitHub/pnnl_research/notes/project_proposal/project_proposal.tex" 1693849749 12365 4929dee0631e8860552c5edfaa759d1b ""
+  "project_proposal.aux" 1693849757 777 500fd02ce3298b0d5bc9d1fa8043cf49 "pdflatex"
+  "project_proposal.bbl" 1693849756 342 d3f3fccf8e49b8be012f072a0a8ad345 "bibtex project_proposal"
+  "project_proposal.out" 1693849757 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "project_proposal.tex" 1693849749 12365 4929dee0631e8860552c5edfaa759d1b ""
   (generated)
   "project_proposal.aux"
   "project_proposal.log"
