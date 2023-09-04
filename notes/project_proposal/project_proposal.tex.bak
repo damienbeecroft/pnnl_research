@@ -51,35 +51,18 @@
 \date{August 2022}
 \begin{document}
 \maketitle
-\section*{Project One}
-\subsection*{Abstract}
-How does one appropriately combine the vast wealth of theory from numerical analysis 
-and dynamical systems with physics informed neural networks to most efficiently and 
-accurately solve differential equations? This is a complex problem whose answer depends 
-heavily upon the equation, the available data, and a multitude of other factors. I will
-explore this trade-off to provide guidelines for how to incorporate data and theory effectively 
-for a range of different scenarios. In this paper I explore a variety of test problems, each
-with wildly different properties: the Helmholtz equation, Burger's equation, and Navier-Stokes equation.
+\section*{Introduction}
+How does one appropriately combine the vast wealth of theory from numerical analysis and dynamical systems with machine learning and data science to most efficiently and accurately solve differential equations? This is a complex problem whose answer depends heavily upon the equation, the available data, and a multitude of other factors. I want to focus my thesis work around answering this question. There are many new machine algorithms coming out for solving machine 
+
 
 \newpage
-\subsection*{Introduction}
-In this paper we use multifidelity physics informed neural networks (MFPINNs)
-as the sole algorithm for our trials. However, unlike in previous works, the single fidelity solver
-will be a classical numerical method as opposed to a PINN. This framework is ideal because it can naturally
-incorporate numerical methods along with PINNs and many other methods (such as training a PINN to 
-learn the residual of a numerical solution) can be interpreted as a sub-case of training an MFPINN.
-There are three broad metrics for success in the trials that we perform in this paper: accuracy, speed, and generalizability.
-With these three variables we construct the Pareto front of MFPINNs as one shifts the computational burden between
-the numerical method and the PINN.
-
-From the studies of Kochkov et al. \cite{fluidml} we know that there exist scenarios in which machine learning
-indeed extends the Pareto front of classical numerical methods. This paper examines the usage of machine learning 
-to improve finite volume method approximations of fluids with high accuracy solution data. 
-They report that their method is roughly eighty times faster than the classical finite volume method.
+\section*{Project Ideas}
+\subsection*{Project One}
+Kochkov et al. \cite{fluidml} examines the usage of machine learning to improve finite volume method approximations of fluids 
+with the availability of high accuracy solution data. They report that their method is roughly eighty times faster than the classical finite volume method.
 Furthermore, their algorithm is applied locally and can therefore be scaled to be used for different initial and boundary conditions.
-I will reproduce these results within my studies and subsequently extend upon them to see how the performance changes as one has
-less or lower quality solution data.
-
+Can similar results be achieved when one has little or no solution data to train on?
+Can the benefits of machine learning be made robust or does one need to cherry pick results in order to see improvement? In this first project I will extend upon the research of Kochkov et al. \cite{fluidml} to ascertain the interplay between PINNs and numerical analysis. The first step is to select a series of test problems.
 
 
 The first and central project is an analysis of a multifidelity finite basis PINN (MFFBPINN) with a numerical method as the single-fidelity solver. For this project I would choose one differential equation
@@ -133,12 +116,6 @@ improve upon the numerical solver?
 % is no longer an easy task? What if we have access to solution data or theoretical knowledge of fixed point? Can MFFBPINNs correct for the biases 
 % in numerical solvers e.g. the artificial viscosity introduced in some finite volume
 % methods for the inviscid Burger's equation?
-
-
-% Can similar results be achieved when one has little or no solution data to train on?
-% Can the benefits of machine learning be made robust or does one need to cherry pick results in order to see improvement? 
-% In this first project I will extend upon the research of Kochkov et al. \cite{fluidml} to ascertain the interplay between PINNs and numerical analysis. The first step is to select a series of test problems.
-
 \subsection*{Project Two}
 After the PINN experiments are done I want to repeat the studies from project one with multifidelity finite basis DeepONets. 
 DeepONets do not work well alone. I wonder whether the aide of numerical analysis can make DeepONets viable. This is the 
@@ -161,13 +138,3 @@ numerical solvers through a combination of numerical solvers and the neural tang
 %In the second implementation of the MFFBPINN, distinct batches of residual points are created for each intersection of the subdomains on the highest level. These batch points are then fed down to the neural networks on the lower levels to get the low fidelity approximations. This method is illustrated in Figure
 % None of the work on physics informed neural networks (PINNs) that I have seen leverages the vast wealth of 
 % existing numerical methods.
-
-% How does one appropriately combine the vast wealth of theory from numerical analysis 
-% and dynamical systems with machine learning and data science to most efficiently and 
-% accurately solve differential equations? This is a complex problem whose answer depends 
-% heavily upon the equation, the available data, and a multitude of other factors. I will
-% explore this trade-off to provide guidelines for how to incorporate data and theory effectively 
-% for a range of different scenarios. In this paper I explore a variety of test problems, each
-% with wildly different theoretical properties: the heat equation, the Helmholtz equation, Burger's equation, 
-% and Navier-Stokes equation. This group of diverse equations will help us achieve a holistic perspective
-% on how and when to leverage data science. 

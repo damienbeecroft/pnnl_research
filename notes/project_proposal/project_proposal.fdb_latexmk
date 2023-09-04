@@ -1,5 +1,13 @@
 # Fdb version 4
-["pdflatex"] 1692832691 "c:/Users/damie/GitHub/pnnl_research/notes/project_proposal/project_proposal.tex" "project_proposal.pdf" "project_proposal" 1692832692 0
+["bibtex project_proposal"] 1693785383 "project_proposal.aux" "project_proposal.bbl" "project_proposal" 1693785388 0
+  "./refs.bib" 1692906667 2055 9b18a5a179338142e4823ec32fa172c0 ""
+  "C:/Users/damie/AppData/Local/Programs/MiKTeX/bibtex/bst/bibtex/plain.bst" 1291868336 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
+  "project_proposal.aux" 1693785386 777 500fd02ce3298b0d5bc9d1fa8043cf49 "pdflatex"
+  (generated)
+  "project_proposal.bbl"
+  "project_proposal.blg"
+  (rewritten before read)
+["pdflatex"] 1693785384 "c:/Users/damie/GitHub/pnnl_research/notes/project_proposal/project_proposal.tex" "project_proposal.pdf" "project_proposal" 1693785388 0
   "C:/Users/damie/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1692566607 83071 43f05d89335a2539fc48c7f46abff9bd ""
   "C:/Users/damie/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1644711715 9769967 aa9fb1fc023ff14bec81a350b3fecd44 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1233955448 1004 54797486969f23fa377b128694d548df ""
@@ -20,10 +28,14 @@
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/tfm/public/cm/cmsy10.tfm" 1136768653 1124 6c73e740cf17375f03eec0ee63599741 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/tfm/public/cm/cmsy6.tfm" 1136768653 1116 933a60c408fc0a863a92debe84b2d294 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/tfm/public/cm/cmsy8.tfm" 1136768653 1120 8b7d695260f3cff42e636090a8002094 ""
+  "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/tfm/public/cm/cmti12.tfm" 1136768653 1484 ed72f8f5cf654cda15ecc8e32bfcbee5 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1247596666 32080 340ef9bf63678554ee606688e7b5339d ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb" 1247596667 36741 0ee9e374ec3e30da87cdfb0ea3575226 ""
+  "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb" 1247596666 35469 dcf3a5f2fc1862f5952e3ee5eb1d98c4 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb" 1247596667 32722 d7379af29a190c3f453aba36302ff5a9 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb" 1247596666 32362 bc3f3eec7ab7d65fe700963d4017d32c ""
+  "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1247596667 32569 5e5ddc8df908dea60932f3c484a54c0d ""
+  "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti12.pfb" 1247596667 36118 fad905eba93cff5bce1e185fe980a177 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/tex/context/base/mkii/supp-pdf.mkii" 1580393758 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/tex/generic/atbegshi/atbegshi.sty" 1575574700 24708 5584a51a7101caf7e6bbf1fc27d8f7b1 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/tex/generic/bigintcalc/bigintcalc.sty" 1576437202 40635 c40361e206be584d448876bba8a64a3b ""
@@ -92,10 +104,11 @@
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/tex/latex/tools/multicol.sty" 1636713860 32262 2bb622a0aa56c4a7a5cbdfe9d122c15a ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388494052 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1636288472 56029 3f7889dab51d620aa43177c391b7b190 ""
-  "c:/Users/damie/GitHub/pnnl_research/notes/project_proposal/project_proposal.tex" 1692832691 6427 a0890ef57ed1885f96910854cf4190e3 ""
-  "project_proposal.aux" 1692832692 686 4ce905362b6645b598ea182482e9aeed "pdflatex"
-  "project_proposal.out" 1692832692 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "project_proposal.tex" 1692832691 6427 a0890ef57ed1885f96910854cf4190e3 ""
+  "c:/Users/damie/GitHub/pnnl_research/notes/project_proposal/project_proposal.tex" 1693785383 12193 4929dee0631e8860552c5edfaa759d1b ""
+  "project_proposal.aux" 1693785386 777 500fd02ce3298b0d5bc9d1fa8043cf49 "pdflatex"
+  "project_proposal.bbl" 1693785384 342 d3f3fccf8e49b8be012f072a0a8ad345 "bibtex project_proposal"
+  "project_proposal.out" 1693785386 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "project_proposal.tex" 1693785383 12193 4929dee0631e8860552c5edfaa759d1b ""
   (generated)
   "project_proposal.aux"
   "project_proposal.log"

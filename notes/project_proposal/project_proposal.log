@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12) (preloaded format=pdflatex 2022.2.12)  23 AUG 2023 16:18
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12) (preloaded format=pdflatex 2022.2.12)  3 SEP 2023 16:56
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -488,22 +488,22 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 54.
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
-{C:/Users/damie/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}] [2] (project_proposal.aux)
+{C:/Users/damie/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}] [2] (project_proposal.bbl [3]) [4] (project_proposal.aux)
 Package rerunfilecheck Info: File `project_proposal.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 12646 strings out of 478659
- 203772 string characters out of 2845920
- 506132 words of memory out of 3000000
- 30577 multiletter control sequences out of 15000+600000
- 411886 words of font info for 60 fonts, out of 8000000 for 9000
+ 12658 strings out of 478659
+ 203991 string characters out of 2845920
+ 507161 words of memory out of 3000000
+ 30581 multiletter control sequences out of 15000+600000
+ 412233 words of font info for 61 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 67i,6n,77p,368b,330s stack positions out of 5000i,500n,10000p,200000b,80000s
-<C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on project_proposal.pdf (2 pages, 55058 bytes).
+ 67i,8n,77p,368b,336s stack positions out of 5000i,500n,10000p,200000b,80000s
+<C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on project_proposal.pdf (4 pages, 95673 bytes).
 PDF statistics:
- 42 PDF objects out of 1000 (max. 8388607)
- 8 named destinations out of 1000 (max. 500000)
+ 69 PDF objects out of 1000 (max. 8388607)
+ 12 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
