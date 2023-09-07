@@ -28,6 +28,8 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{subcaption}
+% \usepackage[ruled,vlined]{algorithm2e}
+
 % MACROS
 % Set Theory
 \def\N{\mathbb{N}}
@@ -44,100 +46,141 @@
 \def\l{\left}
 \def\r{\right}
 \def\~{\tilde}
+\def\t{\text}
 \date{August 2022}
-\doublespacing
+% \doublespacing
 \title{Project Proposals}
 \author{Damien Beecroft}
 \date{August 2022}
 \begin{document}
 \maketitle
-\section*{Project One}
-\subsection*{Abstract}
+\section{Combining Numerics and PINNs for Optimal Modelling of Differential Equations}
+\subsection{Abstract}
 How does one appropriately combine the vast wealth of theory from numerical analysis 
 and dynamical systems with physics informed neural networks to most efficiently and 
 accurately solve differential equations? This is a complex problem whose answer depends 
-heavily upon the equation, the available data, and a multitude of other factors. I will
-explore this trade-off to provide guidelines for how to incorporate data and theory effectively 
-for a range of different scenarios. In this paper I explore a variety of test problems, each
-with wildly different properties: the Helmholtz equation, Burger's equation, and Navier-Stokes equation.
+heavily upon the equation, the available data, and a multitude of other factors. We
+will explore this trade-off to provide guidelines for how to incorporate data and theory effectively 
+for a range of different scenarios through a variety of test problems with wildly 
+different properties: the heat equation, the Helmholtz equation, Burger's equation, and Navier-Stokes equation.
 
-\newpage
-\subsection*{Introduction}
-In this paper we use multifidelity physics informed neural networks (MFPINNs)
-as the sole algorithm for our trials. However, unlike in previous works, the single fidelity solver
-will be a classical numerical method as opposed to a PINN. This framework is ideal because it can naturally
-incorporate numerical methods along with PINNs and many other methods (such as training a PINN to 
-learn the residual of a numerical solution) can be interpreted as a sub-case of training an MFPINN.
+\subsection{Introduction}
+In this paper we study the efficacy of numerics assisted PINNs. In this work a numerics assisted PINN refers to 
+an algorithm where a numerical method that serves as the low fidelity source to a multifidelity physics informed neural network (MFPINN) \cite{mfpinns}.
+This framework is a natural way to incorporate numerical methods and PINNs. Furthermore, other methods (such as training a PINN to 
+learn the residual of a numerical solution) can be interpreted as a sub-case of training a physics assisted PINN.
 There are three broad metrics for success in the trials that we perform in this paper: accuracy, speed, and generalizability.
-With these three variables we construct the Pareto front of MFPINNs as one shifts the computational burden between
-the numerical method and the PINN.
+With these three variables we will construct the Pareto front of numerics assister PINNs as one shifts the computational burden between
+the numerical method and the MFPINN. This will give the reader a holistic view of the trade-offs between numerics and machine learning
+in physics applications.
+
+\subsection{Body}
+\subsubsection*{Accuracy and Speed}
 
 From the studies of Kochkov et al. \cite{fluidml} we know that there exist scenarios in which machine learning
-indeed extends the Pareto front of classical numerical methods. This paper examines the usage of machine learning 
+indeed extends the Pareto front of PDE solvers. Kochkov et al. \cite{fluidml} examines the usage of machine learning 
 to improve finite volume method approximations of fluids with high accuracy solution data. 
 They report that their method is roughly eighty times faster than the classical finite volume method.
-Furthermore, their algorithm is applied locally and can therefore be scaled to be used for different initial and boundary conditions.
-I will reproduce these results within my studies and subsequently extend upon them to see how the performance changes as one has
-less or lower quality solution data.
+Furthermore, their model is trained on local information and can therefore be scaled to be used for different initial and boundary conditions.
+We will reproduce these results within these studies and subsequently extend upon them to see how the performance changes as one has less solution data
+and must rely more and more on the physical constraints.
+
+Incorporating a numerical method into the PINN framework will help overcome convergence issues that hinder the efficacy of PINNs.
+Numerical methods do not have a spectral bias that makes it difficult to converge to oscillatory solutions \cite{bias}. Furthermore,
+numerical algorithms do not converge to unstable fixed points as PINNs often do \cite{fixedpts}. There are many ways that numerics can 
+correct pathological behavior in PINNs. It remains to be seen whether the converse also occurs. Can PINNs correct for the
+biases of numerical methods? We will use simulations of finite volume methods on Burger's equation to tackle this problem. Certain finite
+volume methods introduce artificial viscosity into the solution due to approximation error. We will examine whether
+PINNs can detect that this phenomena is non-physical and subsequently correct for it.
+
+The experiments will be performed as follows. For each differential equation we will choose a high accuracy numerical method and use it
+as the true solution. Then, we will vary the amount of computational resouces of the numerical method and the MFPINN. For instance, say
+that I have a set of grid sizes $G$ and a set of MFPINN sizes $N$. We will run numerics assisted PINNs on every combination of grid size in $G$ 
+and network size in $N$. In otherwords, we will sample our numerics assisted PINN architecture from $G \times N$. We will run each model until it
+has achieved the accuracy of the ``true solution" is reached or the method has hit a preset training time. These studies will be repeated for each
+problem with a varying amount of solutions data. We will also perform extensive studies on problems with irregular domains since this 
+has proven to be a major weakness of numerical methods. With all this information we hope to get a holistic view of when PINNs can improve upon classical
+numerical schemes.
+
+\subsubsection*{Generalizability}
+
+Another important aspect of our tests is generalizability. It may be worth training a model for a long time given that it can solve a 
+range of problems without retraining. We will take the numerics assisted PINNs trained in the last section
+and see how well they perform on the same differential equations with different initial and boundary conditions. We will plot how the accuracy of
+the numerics assisted PINNs changes depending on how different the initial and boundary conditions are from any of the problems in the training
+data set. We expect differential equations with predominantly local dynamics (Burger's equation and Navier Stokes) to have an easier time generalizing than 
+differential equations whose local dynamics are strongly coupled to the global state (the Helmholtz and heat equations).
+
+\subsection{Expected Takeaways and ``Who Cares?''}
+
+The field of physics informed machine learning has serious problems with reproducibility and benchmarking. 
+Quality of PINN results are often dependent on hyperparameters that are tuned through an arduous cycle of trial and error.
+This hyperparameter tuning is fine and good for showing how far one can push an algorithm. However, the need for tuning 
+does not bode well for the robustness of PINNs. In my studies I intend to factor in the time required for hyperparameter tuning
+into the comparison so that we may ascertain the strength of the method.
+
+Adding numerics to the PINN training process undoubtedly makes convergence easier. If a PINN is incapable of improving
+on a numerical method in this simpler scenario it is a sign that machine learning may not an effective tool for this particular
+problem. Hopefully we will be able to extract patterns from these experiments and come up with guiding principles that can help
+engineers make informed decisions on how to effectively combine the vast wealth of theory from numerical analysis 
+and dynamical systems with physics informed neural networks.
+
+\section{Analysis of Mini-Batch Gradient Descent for Physics Informed Neural Nets}
+
+\subsection{Abstract}
+
+The convergence rates of numerical methods are heavily dependent on the density of collocation points in the solution domain. Physics informed neural networks (PINNs) attempt to solve the same problems, however there are no theoretical results that provide guidance as to the quantity and density of collocation points in each batch to achieve convergence. This is the topic of this paper.
+
+\subsection{Introduction}
+
+Suppose that we are attempting to solve the following evolution equation on some open solution domain $\Omega$ with boundary $\partial \Omega$ for time $t \in (0,t_{\text{f}}] = T$. $\Omega, \partial \Omega \subset \mathbb{R}^d$.
+
+\begin{align} 
+	u^*(t,x)_t + N[u^*(t,x)] = 0& \quad \text{for} \quad x \in \Omega, \: t \in T \notag\\
+	B[u^*(t,x)] = 0& \quad \text{for} \quad x \in \partial \Omega , \: t \in T\\
+	u^*(0,x) - u_0(x) = 0& \quad \text{for} \quad x \in \Omega \cup \partial \Omega \notag
+\end{align} \label{eq:dq}
+
+\noindent In equation \ref{eq:dq} $N$ and $B$ are differential operators and $u_0(x)$ is the initial state of the differential equation. We assume throughout this report that this differential equation is well posed with $u^*: \mathbb{R}^d \to \mathbb{R}^p$ as the true solution. Henceforth, we refer to $\Omega \cup \partial \Omega$ as $\overline{\Omega}$.
+
+We want to train a neural network to solve equation \ref{eq:dq}. We call this neural network $u(t,x;\theta)$. $\theta$ denotes the parameters of the neural net. We often drop the inputs or parameters of $u(t,x;\theta)$ for simplicity of notation, opting to call it $u(t,x)$ or $u$ instead. We would like this network to achieve a low loss in the following sense.\footnote{For now we ignore the regularization of the network through parameter magnitude penalization and the incorporation of solution data into the model. I will probably revisit the problem with these considerations later on.}
+\begin{equation}
+\mathcal{L_{\text{sup}}} = \sup_{(t,x) \in T \times\Omega} \| u_t + N[u] \|_2^2 + \sup_{(t,x) \in T \times \partial \Omega} \| B[u] \|_2^2 + \sup_{(t,x) \in \{0\} \times \overline{\Omega}} \| u - u_0 \|_2^2
+\end{equation}
+
+\noindent Unfortunately, the above loss is not feasible to optimize with gradient descent since it is not differentiable. We therefore turn our attention to a surrogate loss.
+
+\begin{equation}
+    \mathcal{L_{\t{int}}} = \int_{T} \int_{\Omega} \| u_t + N[u] \|_2^2 \t dx \t dt + \int_{T} \int_{\partial \Omega} \|B[u] \|_2^2 \t dx \t dt + \int_{\overline{\Omega}} \|u(0,x) - u_0(x) \|_2^2 \t dx
+\end{equation}
+
+\noindent This loss function is differentiable.\footnote{I believe that I can bound $\mathcal{L}_{\t{sup}}$ in terms of $\mathcal{L}_{\t{int}}$ assuming that our objective function is Lipschitz. If I can do this I can achieve a type of uniform convergence of the solution which would be very nice.} However, these integrals cannot be computed analytically. In practice researchers sample collocation points separately from the sets $T \times \Omega$, $T \times \partial \Omega$, and $\{0\} \times \overline{\Omega}$. We refer to these as the solution, boundary, and initial domains respectively. These mini-batches of collocation points are used to update the neural network parameters, $\theta$. For now, let us assume that the points are sampled uniformly at random from each of domains. The process we have just described culminates in the following algorithm.
+
+\begin{algorithm}
+\caption{Physics Informed Neural Network Training Process}\label{alg:pinn}
+% \hspace*{\algorithmicindent} 
+\begin{algorithmic}
+    \State \textbf{Input:} Neural network--$u(t,x;\theta)$, Number of training iteration--M, Learning rate--$\epsilon$
+    \For{j in 1:M}
+    \State Sample $\{(t^s_j,x^s_j)\}_{j=1}^{N_s}$ where $(t^s_k,x^s_k) \thicksim \t{Unif}(T \times \Omega)$ \Comment{Sample solution domain collocation points}
+    \State Sample $\{(t^b_j,x^b_j)\}_{j=1}^{N_b}$ where $(t^b_k,x^b_k) \thicksim \t{Unif}(T \times \partial \Omega)$ \Comment{Sample boundary domain collocation points}
+    \State Sample $\{(t^i_j,x^i_j)\}_{j=1}^{N_i}$ where $(t^i_k,x^i_k) \thicksim \t{Unif}(\{0\} \times \overline{\Omega})$ \Comment{Sample initial domain collocation points}
+    \State $L_s \gets \sum_{j=1}^{N_s} \| u(t^s_j,x^s_j)_t + N[u(t^s_j,x^s_j)] \|_2^2$
+    \State $L_b \gets \sum_{j=1}^{N_b} \| B[u(t^b_j,x^b_j)] \|_2^2$
+    \State $L_i \gets \sum_{j=1}^{N_i} \| u(t^i_j,x^i_j) - u_0(x^i_j) \|_2^2$
+    \State $L \gets L_b + L_s + L_i$
+    \State $\theta \gets \theta - \epsilon \nabla_{\theta} L$
+    \EndFor
+    \State \textbf{Return:} $u(t,x;\theta)$
+\end{algorithmic}
+\end{algorithm}
+
+In this paper we study when we can expect algorithm \ref{alg:pinn} to converge in the sense of
+$\mathcal{L_{\t{int}}}$ and therefore (I believe) $\mathcal{L_{\text{sup}}}$.
 
 
 
-The first and central project is an analysis of a multifidelity finite basis PINN (MFFBPINN) with a numerical method as the single-fidelity solver. For this project I would choose one differential equation
-to analyze--most likely the two-dimensional Navier-Stokes equation at a reasonable Reynold's number--and perform a wide array of tests on
-this sample problem. 
-\begin{align*}
-    u_t + u u_x + v u_y - \nu u_{xx} &= - \frac{p_x}{\rho} \\
-    v_t + u v_x + v v_y - \nu v_{yy} &= - \frac{p_y}{\rho} 
-\end{align*}
-Navier-Stokes is an ideal test problem because classical numerical
-methods are known to struggle simulating fluids. Furthermore, the dynamics depend on the local state of the differential
-equation. This means our our neural network--if trained properly--will have an easier time generalizing to problems outside
-of the training domain. I intend to use a finite volume method as the numerical solver.
-There are two main numerical experiments I want to perform in this paper. The first experiment will be to vary the 
-ratio of computational resources that are allocated to the numerical solver versus the PINNs while keeping the total 
-computation time and available solution data constant. The second experiment will be to fix the structure of the MFFBPINN while changing the amount of
-solution data that is available. I will use the results from these experiments to address the following questions.
-What are the trade-offs when one is choosing between funneling computational resources into neural networks as opposed to 
-a finer mesh? When do neural networks become a useful tool for modelling? Can MFFBPINNs correct for the biases 
-in numerical solvers e.g. the artificial viscosity? Can I reproduce the results of Kochkov et al. \cite{fluidml} in the scenario where only
-training data is used? It would also be interesting to repeat these experiments on more 
-complex domains where we cannot leverage grid regularity e.g. flow around a complicated shape or through an irregular pipe. 
-How does this change the efficacy of machine learning?
-
-The last problem I want to address is a theoretical one. Assuming that the numerical solver is sufficiently accurate, the MFFBPINN be close to the 
-true solution even before initialization. Therefore, analyzing the linearized loss landscape should give a good approximation of where the true solution 
-is as well as how well conditioned the problem is. Furthermore, when one trains a PINN they sample the residual at a finite number of collocation 
-points from an uncountably infinite number of domain points. How large does the batch need to be so that we can expect that the neural network will 
-improve upon the numerical solver?
-
-
-% In this project I will the vary amount of available solution data for training and the ratio of 
-% computational resources that are allocated to the numerical solver versus the PINNs.
-
-
-
-
-% to reveal the effects on the accuracy and efficiency of the solver.
-% The first and central project is to use a numerical method as the single fidelity solver for a 
-% multifidelity finite basis PINN (MFFBPINN). My first test problem will be on an equation whose dynamics are
-% determined by the local state. Potential candidates are Navier-Stokes
-
-
-% I will start by choosing a set of test problems and 
-% running numerical methods to ascertain their speed and accuracy. Then, I will take these numerical 
-% methods and make them the single fidelity solvers for MFFBPINNs. I will then do a comparison 
-% between the classical numerical methods and the MFFBPINNs. Can machine learning push the numerical
-% method past the round off error that occurs due to the inherent ill conditioning of numerical methods?
-% How do the timings of the methods compare? Would it be simply more beneficial to make a finer grid as opposed to 
-% adding a neural network? Are the results different if the problem domain is not regular and grid collocation 
-% is no longer an easy task? What if we have access to solution data or theoretical knowledge of fixed point? Can MFFBPINNs correct for the biases 
-% in numerical solvers e.g. the artificial viscosity introduced in some finite volume
-% methods for the inviscid Burger's equation?
-
-
-% Can similar results be achieved when one has little or no solution data to train on?
-% Can the benefits of machine learning be made robust or does one need to cherry pick results in order to see improvement? 
-% In this first project I will extend upon the research of Kochkov et al. \cite{fluidml} to ascertain the interplay between PINNs and numerical analysis. The first step is to select a series of test problems.
+\newpage
 
 \subsection*{Project Two}
 After the PINN experiments are done I want to repeat the studies from project one with multifidelity finite basis DeepONets. 

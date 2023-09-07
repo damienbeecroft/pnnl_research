@@ -7,4 +7,22 @@ Dmitrii Kochkov, Jamie~A. Smith, Ayya Alieva, Qing Wang, Michael~P. Brenner,
 \newblock {\em Proceedings of the National Academy of Sciences},
   118(21):e2101784118, 2021.
 
+\bibitem{mfpinns}
+Xuhui Meng and George~Em Karniadakis.
+\newblock A composite neural network that learns from multi-fidelity data:
+  Application to function approximation and inverse {PDE} problems.
+\newblock {\em Journal of Computational Physics}, 401:109020, jan 2020.
+
+\bibitem{fixedpts}
+Franz~M. Rohrhofer, Stefan Posch, Clemens Gößnitzer, and Bernhard~C. Geiger.
+\newblock On the role of fixed points of dynamical systems in training
+  physics-informed neural networks, 2023.
+
+\bibitem{bias}
+Zhi-Qin~John Xu.
+\newblock Frequency principle: Fourier analysis sheds light on deep neural
+  networks.
+\newblock {\em Communications in Computational Physics}, 28(5):1746--1767, jun
+  2020.
+
 \end{thebibliography}
