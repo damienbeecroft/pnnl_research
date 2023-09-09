@@ -1,5 +1,10 @@
 \begin{thebibliography}{1}
 
+\bibitem{gd}
+Guillaume Garrigos and Robert~M. Gower.
+\newblock Handbook of convergence theorems for (stochastic) gradient methods,
+  2023.
+
 \bibitem{fluidml}
 Dmitrii Kochkov, Jamie~A. Smith, Ayya Alieva, Qing Wang, Michael~P. Brenner,
   and Stephan Hoyer.

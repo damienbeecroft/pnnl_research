@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex project_proposal"] 1694039363 "project_proposal.aux" "project_proposal.bbl" "project_proposal" 1694039813 0
-  "./refs.bib" 1693950060 2988 cd0375632c91258eb47f994a6ae8ba5e ""
+["bibtex project_proposal"] 1694210653 "project_proposal.aux" "project_proposal.bbl" "project_proposal" 1694211291 0
+  "./refs.bib" 1694196096 3252 6ca13d2c4542d7a36bac635a7f72ddc0 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/bibtex/bst/bibtex/plain.bst" 1291868336 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
-  "project_proposal.aux" 1694039812 2351 255becd63a1f17d0e2bb1658b2c61772 "pdflatex"
+  "project_proposal.aux" 1694211290 2758 ee9d24937622aba9c0de2f5d018989d0 "pdflatex"
   (generated)
   "project_proposal.bbl"
   "project_proposal.blg"
   (rewritten before read)
-["pdflatex"] 1694039810 "c:/Users/damie/GitHub/pnnl_research/notes/project_proposal/project_proposal.tex" "project_proposal.pdf" "project_proposal" 1694039813 0
-  "C:/Users/damie/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1692566607 83071 43f05d89335a2539fc48c7f46abff9bd ""
+["pdflatex"] 1694211288 "c:/Users/damie/GitHub/pnnl_research/notes/project_proposal/project_proposal.tex" "project_proposal.pdf" "project_proposal" 1694211291 0
+  "C:/Users/damie/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1694196635 83071 43f05d89335a2539fc48c7f46abff9bd ""
   "C:/Users/damie/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1644711715 9769967 aa9fb1fc023ff14bec81a350b3fecd44 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1233955448 1004 54797486969f23fa377b128694d548df ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1233955448 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -39,11 +39,14 @@
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1247596667 35752 024fb6c41858982481f6968b5fc26508 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb" 1247596667 32722 d7379af29a190c3f453aba36302ff5a9 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb" 1247596666 32362 bc3f3eec7ab7d65fe700963d4017d32c ""
+  "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb" 1247596667 32734 69e00a6b65cedb993666e42eedb3d48f ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb" 1247596667 32762 7fee39e011c23b3589931effd97b9702 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb" 1247596667 32726 39f0f9e62e84beb801509898a605dbd5 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1247596667 32569 5e5ddc8df908dea60932f3c484a54c0d ""
+  "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy6.pfb" 1247596667 32587 65067f817f408bc71a7312f3d9828a9b ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb" 1247596667 32626 5abc8bb2f28aa647d4c70f8ea38cc0d3 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti12.pfb" 1247596667 36118 fad905eba93cff5bce1e185fe980a177 ""
+  "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmex8.pfb" 1247596670 30273 87a352d78b6810ae5cfdc68d2fb827b2 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb" 1247596673 34694 870c211f62cb72718a00e353f14f254d ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/tex/context/base/mkii/supp-pdf.mkii" 1580393758 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/tex/generic/atbegshi/atbegshi.sty" 1575574700 24708 5584a51a7101caf7e6bbf1fc27d8f7b1 ""
@@ -113,11 +116,11 @@
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/tex/latex/tools/multicol.sty" 1636713860 32262 2bb622a0aa56c4a7a5cbdfe9d122c15a ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388494052 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/damie/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1636288472 56029 3f7889dab51d620aa43177c391b7b190 ""
-  "c:/Users/damie/GitHub/pnnl_research/notes/project_proposal/project_proposal.tex" 1694039809 16970 7047d1fc84598a4ecea65c413a5455d8 ""
-  "project_proposal.aux" 1694039812 2351 255becd63a1f17d0e2bb1658b2c61772 "pdflatex"
-  "project_proposal.bbl" 1694039364 1051 b52bf27077c2981435acbdda4aedbc8e "bibtex project_proposal"
-  "project_proposal.out" 1694039812 1639 b7fd59f76be93cf769f893920676022d "pdflatex"
-  "project_proposal.tex" 1694039809 16970 7047d1fc84598a4ecea65c413a5455d8 ""
+  "c:/Users/damie/GitHub/pnnl_research/notes/project_proposal/project_proposal.tex" 1694211286 21443 2e7fd4d87c50ab80f97f878c433269c0 ""
+  "project_proposal.aux" 1694211290 2758 ee9d24937622aba9c0de2f5d018989d0 "pdflatex"
+  "project_proposal.bbl" 1694210654 1196 54df6d1d0a60be177c9687a3f1c6b49e "bibtex project_proposal"
+  "project_proposal.out" 1694211290 1984 3a23834616cb8189437217b693d28a76 "pdflatex"
+  "project_proposal.tex" 1694211286 21443 2e7fd4d87c50ab80f97f878c433269c0 ""
   (generated)
   "project_proposal.aux"
   "project_proposal.log"

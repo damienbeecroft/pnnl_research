@@ -28,8 +28,9 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{subcaption}
-% \usepackage[ruled,vlined]{algorithm2e}
-
+\newtheorem{theorem}{Theorem}
+\newtheorem{problem}{Problem}
+\setcounter{section}{-1}
 % MACROS
 % Set Theory
 \def\N{\mathbb{N}}
@@ -54,15 +55,13 @@
 \date{August 2022}
 \begin{document}
 \maketitle
+\section{Preface}
+
+Hello Panos and Amanda, in the sections that follow I detail a few project ideas that I have for my PhD thesis in Applied Mathematics at the University of Washington. I am excited to share my ideas and I thank you for the opportunity to pursue them under your guidance. These proposals are very preliminary and are certainly subject to revision. All feedback is appreciated!
+
 \section{Combining Numerics and PINNs for Optimal Modelling of Differential Equations}
 \subsection{Abstract}
-How does one appropriately combine the vast wealth of theory from numerical analysis 
-and dynamical systems with physics informed neural networks to most efficiently and 
-accurately solve differential equations? This is a complex problem whose answer depends 
-heavily upon the equation, the available data, and a multitude of other factors. We
-will explore this trade-off to provide guidelines for how to incorporate data and theory effectively 
-for a range of different scenarios through a variety of test problems with wildly 
-different properties: the heat equation, the Helmholtz equation, Burger's equation, and Navier-Stokes equation.
+How does one appropriately combine the vast wealth of theory from numerical analysis and dynamical systems with physics informed neural networks to most efficiently and accurately solve differential equations? This is a complex problem whose answer depends heavily upon the equation, the available data, and a multitude of other factors. Wewill explore this trade-off to provide guidelines for how to incorporate data and theory effectively for a range of different scenarios through a variety of test problems with wildly different properties: the heat equation, the Helmholtz equation, Burger's equation, and Navier-Stokes equation.
 
 \subsection{Introduction}
 In this paper we study the efficacy of numerics assisted PINNs. In this work a numerics assisted PINN refers to 
@@ -129,75 +128,119 @@ and dynamical systems with physics informed neural networks.
 
 \subsection{Abstract}
 
-The convergence rates of numerical methods are heavily dependent on the density of collocation points in the solution domain. Physics informed neural networks (PINNs) attempt to solve the same problems, however there are no theoretical results that provide guidance as to the quantity and density of collocation points in each batch to achieve convergence. This is the topic of this paper.
+Despite the publication of thousands of papers on PINNs, their convergence behavio is still not well understood. Furthermore, most of the guidance we do have on hyperparameter selection comes from experimental data, not theoretical analysis. In this paper we analyze the PINN training process through the lens of minibatching stochastic gradient descent (MiniSGD) to produce theoretical principles that can aide one in choosing hyperparameters that lead to accelerated training.
 
 \subsection{Introduction}
 
 Suppose that we are attempting to solve the following evolution equation on some open solution domain $\Omega$ with boundary $\partial \Omega$ for time $t \in (0,t_{\text{f}}] = T$. $\Omega, \partial \Omega \subset \mathbb{R}^d$.
 
-\begin{align} 
+\begin{align} \label{eq:dq}
 	u^*(t,x)_t + N[u^*(t,x)] = 0& \quad \text{for} \quad x \in \Omega, \: t \in T \notag\\
 	B[u^*(t,x)] = 0& \quad \text{for} \quad x \in \partial \Omega , \: t \in T\\
 	u^*(0,x) - u_0(x) = 0& \quad \text{for} \quad x \in \Omega \cup \partial \Omega \notag
-\end{align} \label{eq:dq}
+\end{align} 
 
 \noindent In equation \ref{eq:dq} $N$ and $B$ are differential operators and $u_0(x)$ is the initial state of the differential equation. We assume throughout this report that this differential equation is well posed with $u^*: \mathbb{R}^d \to \mathbb{R}^p$ as the true solution. Henceforth, we refer to $\Omega \cup \partial \Omega$ as $\overline{\Omega}$.
 
 We want to train a neural network to solve equation \ref{eq:dq}. We call this neural network $u(t,x;\theta)$. $\theta$ denotes the parameters of the neural net. We often drop the inputs or parameters of $u(t,x;\theta)$ for simplicity of notation, opting to call it $u(t,x)$ or $u$ instead. We would like this network to achieve a low loss in the following sense.\footnote{For now we ignore the regularization of the network through parameter magnitude penalization and the incorporation of solution data into the model. I will probably revisit the problem with these considerations later on.}
 \begin{equation}
-\mathcal{L_{\text{sup}}} = \sup_{(t,x) \in T \times\Omega} \| u_t + N[u] \|_2^2 + \sup_{(t,x) \in T \times \partial \Omega} \| B[u] \|_2^2 + \sup_{(t,x) \in \{0\} \times \overline{\Omega}} \| u - u_0 \|_2^2
+\mathcal{L_{\text{sup}}} = \sup_{(t,x) \in T \times\Omega} \| u_t + N[u] \|_{\infty} + \sup_{(t,x) \in T \times \partial \Omega} \| B[u] \|_{\infty} + \sup_{(t,x) \in \{0\} \times \overline{\Omega}} \| u - u_0 \|_{\infty}
 \end{equation}
 
 \noindent Unfortunately, the above loss is not feasible to optimize with gradient descent since it is not differentiable. We therefore turn our attention to a surrogate loss.
 
-\begin{equation}
+\begin{equation} \label{eq:Lint}
     \mathcal{L_{\t{int}}} = \int_{T} \int_{\Omega} \| u_t + N[u] \|_2^2 \t dx \t dt + \int_{T} \int_{\partial \Omega} \|B[u] \|_2^2 \t dx \t dt + \int_{\overline{\Omega}} \|u(0,x) - u_0(x) \|_2^2 \t dx
-\end{equation}
+\end{equation} 
 
-\noindent This loss function is differentiable.\footnote{I believe that I can bound $\mathcal{L}_{\t{sup}}$ in terms of $\mathcal{L}_{\t{int}}$ assuming that our objective function is Lipschitz. If I can do this I can achieve a type of uniform convergence of the solution which would be very nice.} However, these integrals cannot be computed analytically. In practice researchers sample collocation points separately from the sets $T \times \Omega$, $T \times \partial \Omega$, and $\{0\} \times \overline{\Omega}$. We refer to these as the solution, boundary, and initial domains respectively. These mini-batches of collocation points are used to update the neural network parameters, $\theta$. For now, let us assume that the points are sampled uniformly at random from each of domains. The process we have just described culminates in the following algorithm.
+\noindent This loss function is differentiable.\footnote{I believe that I can bound $\mathcal{L}_{\t{sup}}$ in terms of $\mathcal{L}_{\t{int}}$ assuming that our objective function is Lipschitz. If I can do this I can achieve a type of uniform convergence of the solution which would be very nice.} However, these integrals cannot be computed analytically. In practice researchers sample collocation points separately from the sets $T \times \Omega$, $T \times \partial \Omega$, and $\{0\} \times \overline{\Omega}$. We refer to these as the solution, boundary, and initial domains respectively. These mini-batches of collocation points are used to update the neural network parameters, $\theta$. For now, let us assume that the points are sampled uniformly at random from each of domains. The process we have just described culminates in algorithm \ref{alg:pinn}. 
 
 \begin{algorithm}
 \caption{Physics Informed Neural Network Training Process}\label{alg:pinn}
 % \hspace*{\algorithmicindent} 
 \begin{algorithmic}
-    \State \textbf{Input:} Neural network--$u(t,x;\theta)$, Number of training iteration--M, Learning rate--$\epsilon$
-    \For{j in 1:M}
-    \State Sample $\{(t^s_j,x^s_j)\}_{j=1}^{N_s}$ where $(t^s_k,x^s_k) \thicksim \t{Unif}(T \times \Omega)$ \Comment{Sample solution domain collocation points}
-    \State Sample $\{(t^b_j,x^b_j)\}_{j=1}^{N_b}$ where $(t^b_k,x^b_k) \thicksim \t{Unif}(T \times \partial \Omega)$ \Comment{Sample boundary domain collocation points}
-    \State Sample $\{(t^i_j,x^i_j)\}_{j=1}^{N_i}$ where $(t^i_k,x^i_k) \thicksim \t{Unif}(\{0\} \times \overline{\Omega})$ \Comment{Sample initial domain collocation points}
-    \State $L_s \gets \sum_{j=1}^{N_s} \| u(t^s_j,x^s_j)_t + N[u(t^s_j,x^s_j)] \|_2^2$
-    \State $L_b \gets \sum_{j=1}^{N_b} \| B[u(t^b_j,x^b_j)] \|_2^2$
-    \State $L_i \gets \sum_{j=1}^{N_i} \| u(t^i_j,x^i_j) - u_0(x^i_j) \|_2^2$
+    \State \textbf{Input:} Neural network: $u(t,x;\theta_0)$, Number of training iterations: J, Learning rate: $\epsilon$
+    \For{j in 1:J}
+    \State Sample $\{(t^s_j,x^s_j)\}_{j=1}^{N_s}$ where $(t^s_k,x^s_k) \thicksim \t{Unif}(T \times \Omega)$ \Comment{Sample solution domain points}
+    \State Sample $\{(t^b_j,x^b_j)\}_{j=1}^{N_b}$ where $(t^b_k,x^b_k) \thicksim \t{Unif}(T \times \partial \Omega)$ \Comment{Sample boundary domain points}
+    \State Sample $\{(t^i_j,x^i_j)\}_{j=1}^{N_i}$ where $(t^i_k,x^i_k) \thicksim \t{Unif}(\{0\} \times \overline{\Omega})$ \Comment{Sample initial domain points}
+    \State $L_s \gets \sum_{j=1}^{N_s} \| u(t^s_j,x^s_j)_t + N[u(t^s_j,x^s_j)] \|_2^2$ \Comment{Solution loss}
+    \State $L_b \gets \sum_{j=1}^{N_b} \| B[u(t^b_j,x^b_j)] \|_2^2$ \Comment{Boundary loss}
+    \State $L_i \gets \sum_{j=1}^{N_i} \| u(t^i_j,x^i_j) - u_0(x^i_j) \|_2^2$ \Comment{Initial condition loss}
     \State $L \gets L_b + L_s + L_i$
-    \State $\theta \gets \theta - \epsilon \nabla_{\theta} L$
+    \State $\theta_j \gets \theta_{j-1} - \epsilon \nabla_{\theta_{j-1}} L$
     \EndFor
-    \State \textbf{Return:} $u(t,x;\theta)$
+    \State \textbf{Return:} $u(t,x;\theta_J)$
 \end{algorithmic}
 \end{algorithm}
 
-In this paper we study when we can expect algorithm \ref{alg:pinn} to converge in the sense of
-$\mathcal{L_{\t{int}}}$ and therefore (I believe) $\mathcal{L_{\text{sup}}}$.
+In this paper we study when we can expect algorithm \ref{alg:pinn} to converge in the sense of $\mathcal{L_{\t{int}}}$ and therefore (I believe) $\mathcal{L_{\text{sup}}}$. Algorithm \ref{alg:pinn} is optimizing a highly non-linear function which makes analysis of the entire training process intractable. However, if we restrict our analysis to parts of the loss landscape that are locally convex--where we will find minima--we can begin to understand the convergence behavior.
+
+\subsection{Minibatching Stochastic Gradient Descent}
+
+Before we dive into the analysis of PINN convergence, we first give a synopsis of relevant results in minibatching stochastic gradient descent. In Garrigos et al. \cite{gd} they analyze the following scenario.\footnote{I strongly encourage reading through section 6 of Garrigos et al. \cite{gd} if you want to understand what follows.}
+
+\begin{problem} \label{prob:sum}
+    (Finite sum of functions) We want to minimize $f: \mathbb{R}^d \to \mathbb{R}$
+    where
+    \begin{equation}
+        f(x) \equiv \frac{1}{M} \sum_{i=1}^{M} f_i(x)
+    \end{equation}
+    and $f_i: \mathbb{R}^d \to \mathbb{R}$. Furthermore, we assume that each $f_i$ is convex and $L_i$-smooth. We define $L_{max} \equiv \max_{i \in \mathbb{N}_{\leq M}} L_i$ where $\mathbb{N}_{\leq M} \equiv \{1,2,\hdots, M \}$. Furthermore, we denote the Lipschitz 
+\end{problem}
+
+The framework from loss equation \ref{eq:Lint} does not exactly fit into this framework. However, we will come back to this issue later. Suppose that $M$ is large and instead of performing gradient descent on all of $f$, we would prefer to perform minibatching stochastic gradient descent (MiniSGD) to find the optimum. Let $B_t \subset \mathbb{N}_{\leq M}$, $|B_t| = m < M$. Every iteration of MiniSGD the indices, $B_t$, are resampled. The subscript $t$ denotes the MiniSGD iteration. The MiniSGD step is defined as follows.
+
+\begin{align}
+    \nabla f_{B_t}(x_t) &\equiv \frac{1}{m} \sum_{i \in B_t} \nabla f_i(x_t)\\
+    x_{t+1} &= x_t - \gamma_t \nabla f_{B_t}(x_t)
+\end{align}
+
+We define the following things.
 
 
+Garrigos et al. \cite{gd} provide the following convergence bound for the application of MiniSGD to problem \ref{prob:sum}.
 
-\newpage
+\begin{theorem}
+    Consider a sequence $(x_t)_{t \in \mathbb{N}}$ generated by the MiniSGD algorithm with stepsizes $0 < \gamma_t < \frac{1}{2 \tilde{L}}$. It follows that
 
-\subsection*{Project Two}
-After the PINN experiments are done I want to repeat the studies from project one with multifidelity finite basis DeepONets. 
-DeepONets do not work well alone. I wonder whether the aide of numerical analysis can make DeepONets viable. This is the 
-very important experiment. Having to retrain a network for every set of initial conditions is unreasonable in a wide range of applications.
-\subsection*{Project Three}
-I think it would be interesting to look at the loss landscape of the MFFBPINNs with numerical solvers. We know that at 
-the beginning of training you are within a certain error $\epsilon$ of the true solution. This means that evaluating a linear
-or quadratic approximation of the neural network at initialization would likely give one a good approximation of the loss landscape at the minima. Furthermore, there is something that has struck me as a bit strange about the PINN training process.
-In numerical methods the density of grid points is paramount to successful convergence. However, density of collocation points in batches for PINNs is not--at least in my experience--treated with the same importance. When one creates a batch of collocation points 
-I believe they should be sampled at or above the Nyquist frequency of the highest frequency mode in the solution. I am curious to see 
-whether my intuition can be tested by analyzing the loss landscape. It may also be interesting to analyze the convergence of MFFBPINNs with
-numerical solvers through a combination of numerical solvers and the neural tangent kernel.
+    \begin{equation}
+        \mathbb{E}[f(\overline{x}_t) - \inf f] \leq \frac{\|x_0 - x_*\|^2}{2 \sum_{k=0}^{t-1} \gamma_k(1-2\gamma_k \tilde{L})} + \frac{\sigma_b^* \sum_{k=0}^{t-1} \gamma_k^2}{\sum_{k=0}^{t-1} \gamma_k (1 - 2 \gamma_k \tilde{L})} 
+    \end{equation}
+
+    where $\overline{x}_t \equiv \sum_{k=0}^{t-1} p_{t,k} x_k$, with $p_{t,k} \equiv \frac{\gamma_k (1 - 2 \gamma_k \tilde{L})}{\sum_{i=0}^{t-1} \gamma_i (1 - 2 \gamma_i \tilde{L})}$. $\tilde{L}$ is the expected smoothness constant of the minibatch and $\sigma_b^*$ is the minibatch gradient noise.
+\end{theorem}
+
 \bibliographystyle{plain}
 \bibliography{refs}
 \end{document}
 
+
+% Before I dive into the proposals I thought it beneficial to give a brief synopsis of my views on the field of physics informed machine learning and the role I envision myself playing in this field.
+
+% During the course of my research, I experienced first-hand the training difficulties of PINNs. I often felt frustrated for the lack of theory 
+
+
+% Many of the hyperparameters used in training are selected ad hoc, despite having significant influence on the success of training. How does one appropriately choose collocation points 
+
+% The convergence rates of numerical methods are heavily dependent on the density of collocation points in the solution domain. Physics informed neural networks (PINNs) attempt to solve the same problems, however there are no theoretical results that provide guidance as to the quantity and density of collocation points in each batch to achieve convergence.
+
+% In this paper we try to give a theoretical basis for the 
+
+% \newpage
+% i \in \{1,2,\hdots, n \}
+% \subsection*{Project Two}
+% After the PINN experiments are done I want to repeat the studies from project one with multifidelity finite basis DeepONets. 
+% DeepONets do not work well alone. I wonder whether the aide of numerical analysis can make DeepONets viable. This is the 
+% very important experiment. Having to retrain a network for every set of initial conditions is unreasonable in a wide range of applications.
+% \subsection*{Project Three}
+% I think it would be interesting to look at the loss landscape of the MFFBPINNs with numerical solvers. We know that at 
+% the beginning of training you are within a certain error $\epsilon$ of the true solution. This means that evaluating a linear
+% or quadratic approximation of the neural network at initialization would likely give one a good approximation of the loss landscape at the minima. Furthermore, there is something that has struck me as a bit strange about the PINN training process.
+% In numerical methods the density of grid points is paramount to successful convergence. However, density of collocation points in batches for PINNs is not--at least in my experience--treated with the same importance. When one creates a batch of collocation points 
+% I believe they should be sampled at or above the Nyquist frequency of the highest frequency mode in the solution. I am curious to see 
+% whether my intuition can be tested by analyzing the loss landscape. It may also be interesting to analyze the convergence of MFFBPINNs with
+% numerical solvers through a combination of numerical solvers and the neural tangent kernel.
 
 %During the course of this internship, we developed two main ways to implement this algorithm. Each one is centered around how batching is done. In the first implementation, a batch containing points in the entire domain $\Omega$ is sent to the MFFBPINN. In this construction we use a tree of neural networks. The zeroth level creates its solution prediction. The networks on the first level (which are all children of the single fidelity network on the zeroth level) then look at the points in the original batch and the low fidelity solution from the zeroth layer and make their own approximation for the points that are within their subdomains. The child of each network in the second level then take in the batch points and approximations of their parents and create new approximations on the points in their subdomains and so on and so forth. A diagram illustrating this process is given in figure \ref{fig:batch1}. This method scales well with higher dimension and is rather flexible with respect to the shape of the subdomains.
 
