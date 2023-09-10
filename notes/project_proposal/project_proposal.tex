@@ -94,7 +94,7 @@ PINNs can detect that this phenomena is non-physical and subsequently correct fo
 
 The experiments will be performed as follows. For each differential equation we will choose a high accuracy numerical method and use it
 as the true solution. Then, we will vary the amount of computational resouces of the numerical method and the MFPINN. For instance, say
-that I have a set of grid sizes $G$ and a set of MFPINN sizes $N$. We will run numerics assisted PINNs on every combination of grid size in $G$ 
+that we have a set of grid sizes $G$ and a set of MFPINN sizes $N$. We will run numerics assisted PINNs on every combination of grid size in $G$ 
 and network size in $N$. In otherwords, we will sample our numerics assisted PINN architecture from $G \times N$. We will run each model until it
 has achieved the accuracy of the ``true solution" is reached or the method has hit a preset training time. These studies will be repeated for each
 problem with a varying amount of solutions data. We will also perform extensive studies on problems with irregular domains since this 
@@ -115,7 +115,7 @@ differential equations whose local dynamics are strongly coupled to the global s
 The field of physics informed machine learning has serious problems with reproducibility and benchmarking. 
 Quality of PINN results are often dependent on hyperparameters that are tuned through an arduous cycle of trial and error.
 This hyperparameter tuning is fine and good for showing how far one can push an algorithm. However, the need for tuning 
-does not bode well for the robustness of PINNs. In my studies I intend to factor in the time required for hyperparameter tuning
+does not bode well for the robustness of PINNs. In these studies we intend to factor in the time required for hyperparameter tuning
 into the comparison so that we may ascertain the strength of the method.
 
 Adding numerics to the PINN training process undoubtedly makes convergence easier. If a PINN is incapable of improving
@@ -128,7 +128,7 @@ and dynamical systems with physics informed neural networks.
 
 \subsection{Abstract}
 
-Despite the publication of thousands of papers on PINNs, their convergence behavio is still not well understood. Furthermore, most of the guidance we do have on hyperparameter selection comes from experimental data, not theoretical analysis. In this paper we analyze the PINN training process through the lens of minibatching stochastic gradient descent (MiniSGD) to produce theoretical principles that can aide one in choosing hyperparameters that lead to accelerated training.
+The convergence behavior of PINNs is not well understood. Furthermore, most of the guidance we do have on hyperparameter selection comes from experimental data, not theoretical analysis. In this paper we analyze the PINN training process through the lens of minibatching stochastic gradient descent (MiniSGD) to produce theoretical principles that can aide one in choosing hyperparameters that lead to accelerated training.
 
 \subsection{Introduction}
 
@@ -140,9 +140,9 @@ Suppose that we are attempting to solve the following evolution equation on some
 	u^*(0,x) - u_0(x) = 0& \quad \text{for} \quad x \in \Omega \cup \partial \Omega \notag
 \end{align} 
 
-\noindent In equation \ref{eq:dq} $N$ and $B$ are differential operators and $u_0(x)$ is the initial state of the differential equation. We assume throughout this report that this differential equation is well posed with $u^*: \mathbb{R}^d \to \mathbb{R}^p$ as the true solution. Henceforth, we refer to $\Omega \cup \partial \Omega$ as $\overline{\Omega}$.
+\noindent In Equation \ref{eq:dq}, $N$ and $B$ are differential operators and $u_0(x)$ is the initial state of the differential equation. We assume throughout this report that this differential equation is well posed with $u^*: \mathbb{R}^d \to \mathbb{R}^p$ as the true solution. Henceforth, we refer to $\Omega \cup \partial \Omega$ as $\overline{\Omega}$.
 
-We want to train a neural network to solve equation \ref{eq:dq}. We call this neural network $u(t,x;\theta)$. $\theta$ denotes the parameters of the neural net. We often drop the inputs or parameters of $u(t,x;\theta)$ for simplicity of notation, opting to call it $u(t,x)$ or $u$ instead. We would like this network to achieve a low loss in the following sense.\footnote{For now we ignore the regularization of the network through parameter magnitude penalization and the incorporation of solution data into the model. I will probably revisit the problem with these considerations later on.}
+We want to train a neural network to solve Equation \ref{eq:dq}. We call this neural network $u(t,x;\theta)$. $\theta$ denotes the parameters of the neural net. We often drop the inputs or parameters of $u(t,x;\theta)$ for simplicity of notation, opting to call it $u(t,x)$ or $u$ instead. We would like this network to achieve a low loss in the following sense.\footnote{For now we ignore the regularization of the network through parameter magnitude penalization and the incorporation of solution data into the model. We will probably revisit the problem with these considerations later on.}
 \begin{equation}
 \mathcal{L_{\text{sup}}} = \sup_{(t,x) \in T \times\Omega} \| u_t + N[u] \|_{\infty} + \sup_{(t,x) \in T \times \partial \Omega} \| B[u] \|_{\infty} + \sup_{(t,x) \in \{0\} \times \overline{\Omega}} \| u - u_0 \|_{\infty}
 \end{equation}
@@ -153,7 +153,7 @@ We want to train a neural network to solve equation \ref{eq:dq}. We call this ne
     \mathcal{L_{\t{int}}} = \int_{T} \int_{\Omega} \| u_t + N[u] \|_2^2 \t dx \t dt + \int_{T} \int_{\partial \Omega} \|B[u] \|_2^2 \t dx \t dt + \int_{\overline{\Omega}} \|u(0,x) - u_0(x) \|_2^2 \t dx
 \end{equation} 
 
-\noindent This loss function is differentiable.\footnote{I believe that I can bound $\mathcal{L}_{\t{sup}}$ in terms of $\mathcal{L}_{\t{int}}$ assuming that our objective function is Lipschitz. If I can do this I can achieve a type of uniform convergence of the solution which would be very nice.} However, these integrals cannot be computed analytically. In practice researchers sample collocation points separately from the sets $T \times \Omega$, $T \times \partial \Omega$, and $\{0\} \times \overline{\Omega}$. We refer to these as the solution, boundary, and initial domains respectively. These mini-batches of collocation points are used to update the neural network parameters, $\theta$. For now, let us assume that the points are sampled uniformly at random from each of domains. The process we have just described culminates in algorithm \ref{alg:pinn}. 
+\noindent This loss function is differentiable.\footnote{I believe that we can bound $\mathcal{L}_{\t{sup}}$ in terms of $\mathcal{L}_{\t{int}}$ assuming that our objective function is Lipschitz. If we can do this we can achieve a type of uniform convergence of the solution which would be very nice.} However, these integrals cannot be computed analytically. In practice researchers sample collocation points separately from the sets $T \times \Omega$, $T \times \partial \Omega$, and $\{0\} \times \overline{\Omega}$. We refer to these as the solution, boundary, and initial domains respectively. These minibatches of collocation points are used to update the neural network parameters, $\theta$. For now, let us assume $(t,x)$ are sampled uniformly at random from each of the domains. The process we have just described culminates in algorithm \ref{alg:pinn}. 
 
 \begin{algorithm}
 \caption{Physics Informed Neural Network Training Process}\label{alg:pinn}
@@ -174,7 +174,7 @@ We want to train a neural network to solve equation \ref{eq:dq}. We call this ne
 \end{algorithmic}
 \end{algorithm}
 
-In this paper we study when we can expect algorithm \ref{alg:pinn} to converge in the sense of $\mathcal{L_{\t{int}}}$ and therefore (I believe) $\mathcal{L_{\text{sup}}}$. Algorithm \ref{alg:pinn} is optimizing a highly non-linear function which makes analysis of the entire training process intractable. However, if we restrict our analysis to parts of the loss landscape that are locally convex--where we will find minima--we can begin to understand the convergence behavior.
+In this paper we study when we can expect Algorithm \ref{alg:pinn} to converge in the sense of $\mathcal{L_{\t{int}}}$ and $\mathcal{L_{\text{sup}}}$. Algorithm \ref{alg:pinn} is optimizing a highly non-linear function which makes analysis of the entire training process intractable. However, if we restrict our analysis to parts of the loss landscape that are locally convex--where we will find minima--we can begin to understand the convergence behavior.
 
 \subsection{Minibatching Stochastic Gradient Descent}
 
@@ -183,33 +183,45 @@ Before we dive into the analysis of PINN convergence, we first give a synopsis o
 \begin{problem} \label{prob:sum}
     (Finite sum of functions) We want to minimize $f: \mathbb{R}^d \to \mathbb{R}$
     where
-    \begin{equation}
-        f(x) \equiv \frac{1}{M} \sum_{i=1}^{M} f_i(x)
+    \begin{equation} \label{eq:f}
+        f(\theta) \equiv \frac{1}{M} \sum_{i=1}^{M} f_i(\theta)
     \end{equation}
-    and $f_i: \mathbb{R}^d \to \mathbb{R}$. Furthermore, we assume that each $f_i$ is convex and $L_i$-smooth. We define $L_{max} \equiv \max_{i \in \mathbb{N}_{\leq M}} L_i$ where $\mathbb{N}_{\leq M} \equiv \{1,2,\hdots, M \}$. Furthermore, we denote the Lipschitz 
+    and $f_i: \mathbb{R}^d \to \mathbb{R}$. Furthermore, we assume that each $f_i$ is convex and $L_i$-smooth. We define $L_{max} \equiv \max_{i \in \mathbb{N}_{\leq M}} L_i$ where $\mathbb{N}_{\leq M} \equiv \{1,2,\hdots, M \}$.
 \end{problem}
 
-The framework from loss equation \ref{eq:Lint} does not exactly fit into this framework. However, we will come back to this issue later. Suppose that $M$ is large and instead of performing gradient descent on all of $f$, we would prefer to perform minibatching stochastic gradient descent (MiniSGD) to find the optimum. Let $B_t \subset \mathbb{N}_{\leq M}$, $|B_t| = m < M$. Every iteration of MiniSGD the indices, $B_t$, are resampled. The subscript $t$ denotes the MiniSGD iteration. The MiniSGD step is defined as follows.
+The minimization of Equation \ref{eq:Lint} does not exactly fit into this framework. However, we will come back to this issue later. Suppose that $M$ is large and instead of performing gradient descent on all of $f$, we would prefer to perform minibatching stochastic gradient descent (MiniSGD) to find the optimum. Let $B_t \subset \mathbb{N}_{\leq M}$, $|B_t| = m < M$. Every iteration of MiniSGD the indices, $B_t$, are resampled. The subscript $t$ denotes the MiniSGD iteration. The MiniSGD step is defined as follows.
 
 \begin{align}
-    \nabla f_{B_t}(x_t) &\equiv \frac{1}{m} \sum_{i \in B_t} \nabla f_i(x_t)\\
-    x_{t+1} &= x_t - \gamma_t \nabla f_{B_t}(x_t)
+    \nabla f_{B_t}(\theta_t) &\equiv \frac{1}{m} \sum_{i \in B_t} \nabla f_i(\theta_t)\\
+    \theta_{t+1} &= x_t - \gamma_t \nabla f_{B_t}(\theta_t)
 \end{align}
 
-We define the following things.
+Garrigos et al. \cite{gd} provide the following convergence bound for the application of MiniSGD to Problem \ref{prob:sum}.
 
-
-Garrigos et al. \cite{gd} provide the following convergence bound for the application of MiniSGD to problem \ref{prob:sum}.
-
-\begin{theorem}
-    Consider a sequence $(x_t)_{t \in \mathbb{N}}$ generated by the MiniSGD algorithm with stepsizes $0 < \gamma_t < \frac{1}{2 \tilde{L}}$. It follows that
+\begin{theorem} \label{thm:sgd}
+    Let $f(\theta_*) = \inf f$. Consider a sequence $(\theta_t)_{t \in \mathbb{N}}$ generated by the MiniSGD algorithm with stepsizes $0 < \gamma_t < \frac{1}{2 \tilde{L}}$. It follows that
 
     \begin{equation}
-        \mathbb{E}[f(\overline{x}_t) - \inf f] \leq \frac{\|x_0 - x_*\|^2}{2 \sum_{k=0}^{t-1} \gamma_k(1-2\gamma_k \tilde{L})} + \frac{\sigma_b^* \sum_{k=0}^{t-1} \gamma_k^2}{\sum_{k=0}^{t-1} \gamma_k (1 - 2 \gamma_k \tilde{L})} 
+        \mathbb{E}[f(\overline{\theta}_t) - \inf f] \leq \frac{\|\theta_0 - \theta_*\|^2}{2 \sum_{k=0}^{t-1} \gamma_k(1-2\gamma_k \tilde{L})} + \frac{\sigma_b^* \sum_{k=0}^{t-1} \gamma_k^2}{\sum_{k=0}^{t-1} \gamma_k (1 - 2 \gamma_k \tilde{L})} 
     \end{equation}
 
-    where $\overline{x}_t \equiv \sum_{k=0}^{t-1} p_{t,k} x_k$, with $p_{t,k} \equiv \frac{\gamma_k (1 - 2 \gamma_k \tilde{L})}{\sum_{i=0}^{t-1} \gamma_i (1 - 2 \gamma_i \tilde{L})}$. $\tilde{L}$ is the expected smoothness constant of the minibatch and $\sigma_b^*$ is the minibatch gradient noise.
+    where $\overline{\theta}_t \equiv \sum_{k=0}^{t-1} p_{t,k} \theta_k$, with $p_{t,k} \equiv \frac{\gamma_k (1 - 2 \gamma_k \tilde{L})}{\sum_{i=0}^{t-1} \gamma_i (1 - 2 \gamma_i \tilde{L})}$. $\tilde{L}$ is the expected smoothness constant of $f_B$ and $\sigma_b^*$ is the variance of the loss gradient at the optimum point, $\theta_*$.
 \end{theorem}
+
+We don't want to dive into too much detail about the above theorem. A detailed explanation can be found in section 6 of Garrigos et al. \cite{gd}. The important part to take away from Theorem \ref{thm:sgd} is that the convergence rate is highly dependent on the smoothness of the objective function, the noisiness of the gradient, and the step sizes. 
+
+As mentioned before, this framework does not directly apply to the optimization of PINNs. The difference between MiniSGD as described above and the PINN learning process is that there are a countable number of potential batches in the normal MiniSGD algorithm whereas during the PINN training process there are an uncountably infinite number of collocation points (and hence batches) that can be selected at each step. We want to derive an analog of Theorem \ref{thm:sgd} that applies to Equation \ref{eq:Lint} so that we may analyze the relationship between the density of collocation points used in each batch of Algorithm \ref{alg:pinn} and the rate of convergence. Once this new convergence bound is derived we plan to use PDE theory to find bounds on the smoothness and gradient noise. With this theory we will derive stipulations on the learning rate and number of collocation points that should be used for minimizing Equation \ref{eq:Lint} under the assumption that $\theta$ is convex. Our assumptions of convexity are not true globally, but they may hold near $\theta_*$. This analysis may help us understand how to improve the accuracy of PINNs given that we are able to get close enough to $\theta_*$. We will also do experiments to see whether the theory that comes from the MiniSGD analysis helps convergence.
+
+% However, if we consider an objective function $f$ that is composed of the sum of an uncountably infinite number of functions as opposed to a countable number we can begin to study equation \ref{eq:Lint} in a similar manner that Garrigos et al. \cite{gd} study equation \ref{eq:f}. More precisely, we are interested in the following set up.
+
+% \begin{problem} \label{prob:sum2}
+%     (Finite sum of functions) We want to minimize $f: \mathbb{R}^d \to \mathbb{R}$
+%     where
+%     \begin{equation} \label{eq:f2}
+%         g(\theta) \equiv \int_{\Gamma_i} \tilde{g}(u; \theta) \emph{d}u
+%     \end{equation}
+%     and $\tilde{g}: \mathbb{R}^l \times \mathbb{R}^d \to \mathbb{R}$. Furthermore, we assume that each $\tilde{g}$ is convex in $\theta$ and $L(u)$-smooth. We define $L_{max} \equiv \sup_{u \in \Gamma} L(u)$.
+% \end{problem}
 
 \bibliographystyle{plain}
 \bibliography{refs}
